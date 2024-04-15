@@ -1,0 +1,96 @@
+<div class="container">
+    <h1>Create New Asignatura</h1>
+  
+    <a href="/profesor/index-profe" routerLink="/profesor/index-profe" class="btn btn-primary">Back</a>
+        
+    <form [formGroup]="form" (ngSubmit)="submit()">
+  
+        <div class="form-group">
+            <label for="idProfesor">Rut:</label>
+            <input 
+                formControlName="idProfesor"
+                id="idProfesor" 
+                type="text" 
+                class="form-control">
+            <div *ngIf="f['idProfesor'].touched && f['idProfesor'].invalid" class="alert alert-danger">
+                <div *ngIf="f['idProfesor'].errors && f['idProfesor'].errors['required']">rut is required.</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Nombre">Nombre:</label>
+            <input 
+                formControlName="Nombre"
+                id="Nombre" 
+                type="text" 
+                class="form-control">
+            <div *ngIf="f['Nombre'].touched && f['Nombre'].invalid" class="alert alert-danger">
+                <div *ngIf="f['Nombre'].errors && f['Nombre'].errors['required']">Nombre is required.</div>
+            </div>
+        </div>
+  
+        <div class="form-group">
+            <label for="Tipo">Tipo</label>
+            <input 
+                formControlName="Tipo"
+                id="Tipo" 
+                type="text" 
+                class="form-control">
+            
+            <div *ngIf="f['Tipo'].touched && f['Tipo'].invalid" class="alert alert-danger">
+                <div *ngIf="f['Tipo'].errors && f['Tipo'].errors['required']">Tipo is required.</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Profesion">Profesion</label>
+            <input 
+                formControlName="Profesion"
+                id="Profesion" 
+                type="text" 
+                class="form-control">
+            
+            <div *ngIf="f['Profesion'].touched && f['Profesion'].invalid" class="alert alert-danger">
+                <div *ngIf="f['Profesion'].errors && f['Profesion'].errors['required']">Profesion is required.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Horas">Horas</label>
+            <input 
+                formControlName="Horas"
+                id="Horas" 
+                type="text" 
+                class="form-control">
+            
+            <div *ngIf="f['Horas'].touched && f['Horas'].invalid" class="alert alert-danger">
+                <div *ngIf="f['Horas'].errors && f['Horas'].errors['required']">Horas is required.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ValorHora">ValorHora</label>
+            <input 
+                formControlName="ValorHora"
+                id="ValorHora" 
+                type="text" 
+                class="form-control">
+            
+            <div *ngIf="f['ValorHora'].touched && f['ValorHora'].invalid" class="alert alert-danger">
+                <div *ngIf="f['ValorHora'].errors && f['ValorHora'].errors['required']">ValorHora is required.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="idJerarquia">idJerarquia</label>
+            <input 
+                formControlName="idJerarquia"
+                id="idJerarquia" 
+                type="text" 
+                class="form-control">
+           
+            <div *ngIf="f['idJerarquia'].touched && f['idJerarquia'].invalid" class="alert alert-danger">
+                <div *ngIf="f['idJerarquia'].errors && f['idJerarquia'].errors['required']">idJerarquia is required.</div>
+            </div>
+        </div>
+  
+        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Submit</button>
+    </form>
+</div>
