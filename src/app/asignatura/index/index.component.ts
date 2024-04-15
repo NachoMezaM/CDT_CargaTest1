@@ -26,11 +26,9 @@ export class IndexComponent {
    * @return response()
    */
   ngOnInit(): void {
-    console.log(this.router.url);
-    console.log( window.location.href);
     this.asignaturaService.getAll().subscribe((data: asignatura[])=>{
       this.asignatura = data;
-      console.log(this.asignatura);
+     
     })  
   }
     
