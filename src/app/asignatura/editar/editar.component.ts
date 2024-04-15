@@ -1,22 +1,22 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
   
-import { PostService } from '../post.service';
+import { asignaturaService } from '../asignatura.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Post } from '../post';
+import { asignatura } from '../asignatura';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
   
 @Component({
   selector: 'app-edit',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './edit.component.html',
-  styleUrl: './edit.component.css'
+  templateUrl: './editar.component.html',
+  styleUrl: './editar.component.css'
 })
-export class EditComponent {
+export class EditarComponent {
   
   id!: number;
-  post!: Post;
+  asignatura!: asignatura;
   form!: FormGroup;
       
   /*------------------------------------------
@@ -25,7 +25,7 @@ export class EditComponent {
   --------------------------------------------
   --------------------------------------------*/
   constructor(
-    public postService: PostService,
+    public asignaturaService: asignaturaService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -36,9 +36,9 @@ export class EditComponent {
    * @return response()
    */
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['postId'];
-    this.postService.find(this.id).subscribe((data: Post)=>{
-      this.post = data;
+    this.id = this.route.snapshot.params['asignaturaId'];
+    this.asignaturaService.find(this.id).subscribe((data: asignatura)=>{
+      this.asignatura = data;
     }); 
         
     this.form = new FormGroup({
@@ -63,9 +63,9 @@ export class EditComponent {
    */
   submit(){
     console.log(this.form.value);
-    this.postService.update(this.id, this.form.value).subscribe((res:any) => {
-         console.log('Post updated successfully!');
-         this.router.navigateByUrl('post/index');
+    this.asignaturaService.update(this.id, this.form.value).subscribe((res:any) => {
+         console.log('asignatura updated successfully!');
+         this.router.navigateByUrl('asignatura/index');
     })
   }
   
