@@ -50,41 +50,34 @@ export class CargaHorariaComponent {
             if (data) {
               // Concatenar nombre y apellido
               const nombreCompleto = data.Nombre + ' ' + data.Apellido;
+              let jerarquia = '';
+              switch (data.idJerarquia) {
+                case 1:
+                  console.log('Caso: MAGISTER');
+                  jerarquia = 'Instructor';
+                  break;
+                case 2:
+                  console.log('Caso: LICENCIADO');
+                  jerarquia = 'Asistente';
+                  break;
+                case 3:
+                  console.log('Caso: DOCTORADO');
+                  jerarquia = 'Asociado';
+                  break;
+                case 4:
+                  console.log('Caso: Default');
+                  jerarquia = 'Titular';
+                  break;                
+              }
               // Actualizar los campos del formulario con los datos encontrados
               (document.getElementById('nombre') as HTMLInputElement).value =
                 nombreCompleto;
               (document.getElementById('rut') as HTMLInputElement).value =
                 data.idProfesor;
-
-              console.log('Grado obtenido de la base de datos:', data.Grado);
-              console.log('Valor de data.Grado antes del switch:', data.Grado);
-              console.log('Tipo de data.Grado:', typeof data.Grado);
-              console.log('Contenido de data.Grado:', data.Grado);
-              // Actualizar el campo "Grado" según el valor obtenido de la base de datos
-              let grado = '';
-              switch (data.Grado.toUpperCase()) {
-                case 'M':
-                  console.log('Caso: MAGISTER');
-                  grado = 'Magister';
-                  break;
-                case 'L':
-                  console.log('Caso: LICENCIADO');
-                  grado = 'Licenciado';
-                  break;
-                case 'D':
-                  console.log('Caso: DOCTORADO');
-                  grado = 'Doctorado';
-                  break;
-                default:
-                  console.log('Caso: Default');
-                  grado = 'No especificado';
-                  break;
-              }
-              console.log('Grado actualizado:', grado);
-
-              document.getElementById('grado')!.innerText = grado;
+                document.getElementById('grado')!.innerText =
+                data.Grado;
               document.getElementById('jerarquizacion')!.innerText =
-                data.Nombre;
+                jerarquia;
               document.getElementById('horascontrato')!.innerText = data.Horas;
               // Aquí obtenemos las horas máximas de docencia desde la tabla jerarquia
               this.obtenerHoraMaximaDocencia(data.idJerarquia);

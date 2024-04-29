@@ -183,11 +183,21 @@ app.post('/buscar-datos', (req, res) => {
   
   // Realizar la consulta en la base de datos, uniendo con la tabla de jerarquías para obtener el nombre de la jerarquía
   const query = `
-    SELECT Profesor.*, Jerarquia.Nombre
+    SELECT Profesor.*
     FROM Profesor
     JOIN Jerarquia ON Profesor.idJerarquia = Jerarquia.idJerarquia
     WHERE CONCAT(Profesor.Nombre, ' ', Profesor.Apellido) LIKE ? OR Profesor.idProfesor = ?
   `;
+
+  const query1 = `
+  SELECT concat(Profesor.Nombre,' ',Profesor.Apellido ) As NombreCompleto,
+  Profesor.Grado,
+  Profesor.idJerarquia
+  from cargaacademica.Profesor 
+  JOIN cargaacademica.Jerarquia  ON Profesor.idJerarquia = Jerarquia.idJerarquia
+  WHERE Profesor.idProfesor = "`+ rut+ `"`;
+
+  console.log(query)
   const values = [`%${nombre}%`, rut];
 
   db.query(query, values, (err, result) => {
