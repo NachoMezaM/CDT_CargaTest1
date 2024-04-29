@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
   
 import { PostService } from '../post.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Post } from '../post';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
@@ -12,7 +12,7 @@ import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.
     standalone: true,
     templateUrl: './edit.component.html',
     styleUrl: './edit.component.css',
-    imports: [CommonModule, ReactiveFormsModule, BarranavegacionComponent]
+    imports: [CommonModule, ReactiveFormsModule, BarranavegacionComponent, RouterOutlet, RouterLink]
 })
 export class EditComponent {
   

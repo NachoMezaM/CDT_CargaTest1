@@ -51,8 +51,6 @@ export class PostService {
    * @return response()
    */
   create(post:Post): Observable<any> {
-
-   
     return this.httpClient.post(this.apiURL + '/posts/create', JSON.stringify(post), this.httpOptions)
     .pipe(
       catchError(this.errorHandler)
@@ -108,8 +106,10 @@ export class PostService {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {
       errorMessage = error.error.message;
+      
     } else {
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      console.log("No funca")
     }
     return throwError(errorMessage);
  }

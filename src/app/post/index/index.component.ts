@@ -38,8 +38,7 @@ onSearch(event: any) {
    * @return response()
    */
   ngOnInit(): void {
-    console.log(this.router.url);
-    console.log( window.location.href);
+   
     this.postService.getAll().subscribe((data: Post[])=>{
       this.posts = data;
       console.log(this.posts);
