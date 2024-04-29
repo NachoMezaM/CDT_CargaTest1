@@ -183,7 +183,7 @@ app.post('/buscar-datos', (req, res) => {
   
   // Realizar la consulta en la base de datos, uniendo con la tabla de jerarquías para obtener el nombre de la jerarquía
   const query = `
-    SELECT Profesor.*, Jerarquia.NombreJ
+    SELECT Profesor.*, Jerarquia.Nombre
     FROM Profesor
     JOIN Jerarquia ON Profesor.idJerarquia = Jerarquia.idJerarquia
     WHERE CONCAT(Profesor.Nombre, ' ', Profesor.Apellido) LIKE ? OR Profesor.idProfesor = ?

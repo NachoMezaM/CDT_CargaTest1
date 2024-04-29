@@ -64,15 +64,15 @@ export class CargaHorariaComponent {
               let grado = '';
               switch (data.Grado.toUpperCase()) {
                 case 'M':
-                  console.log('Caso: M');
+                  console.log('Caso: MAGISTER');
                   grado = 'Magister';
                   break;
                 case 'L':
-                  console.log('Caso: L');
+                  console.log('Caso: LICENCIADO');
                   grado = 'Licenciado';
                   break;
                 case 'D':
-                  console.log('Caso: D');
+                  console.log('Caso: DOCTORADO');
                   grado = 'Doctorado';
                   break;
                 default:
@@ -84,7 +84,7 @@ export class CargaHorariaComponent {
 
               document.getElementById('grado')!.innerText = grado;
               document.getElementById('jerarquizacion')!.innerText =
-                data.NombreJ;
+                data.Nombre;
               document.getElementById('horascontrato')!.innerText = data.Horas;
               // Aquí obtenemos las horas máximas de docencia desde la tabla jerarquia
               this.obtenerHoraMaximaDocencia(data.idJerarquia);
