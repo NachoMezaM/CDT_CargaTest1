@@ -11,7 +11,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'cargaacademica'
+  database: 'asignatura'
 });
   
 /* Connect to MySQL */
@@ -21,15 +21,15 @@ db.connect(err => {
   }
   console.log('Connected to MySQL');
 });
-  
+
 /* Middleware */
 app.use(bodyParser.json());
 app.use(cors());
-  
+
 /* Routes */
 /* List all posts */
-app.get('/asignatura', (req, res) => {
-  db.query('SELECT * FROM posts', (err, results) => {
+app.get('/posts', (req, res) => {
+  db.query('SELECT * FROM crear', (err, results) => {
     if (err) {
       res.status(500).send('Error fetching posts');
       return;
@@ -37,65 +37,23 @@ app.get('/asignatura', (req, res) => {
     res.json(results);
   });
 });
-app.get('/profesor', (req, res) => {
-  db.query('SELECT * FROM profesor', (err, results) => {
-    if (err) {
-      res.status(500).send('Error fetching posts');
-      return;
-    }
-    res.json(results);
-  });
-});
-   
+
 /* Create a new post */
-app.post('/asignatura/crear', (req, res) => {
-  const { title, body } = req.body;
-  console.log(req.body)
-  db.query('INSERT INTO posts (title, body) VALUES (?, ?)', [title, body], (err, result) => {
+app.post('/posts/create', (req, res) => {
+  const { idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado } = req.body;
+  db.query('INSERT INTO crear (idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado) VALUES (?,?,?,?,?,?)', [idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, "Activo"], (err, result) => {
     if (err) {
       res.status(500).send('Error creating post');
-      
       return;
     }
-    const postId = result.insertId;
-    db.query('SELECT * FROM posts WHERE id = ?', postId, (err, result) => {
-      if (err) {
-        res.status(500).send('Error fetching created post');
-        return;
-      }
-      res.status(201).json(result[0]);
-    });
+    res.status(201).json(req.body);
   });
 });
-/* Crear un nuevo profesor */
-app.post('/profesor/crear-profe', (req, res) => {
-  
-  const { idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia } = req.body;
-  console.log(req.body)
-  db.query('INSERT INTO profesor (idProfesor ,Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia) VALUES (?, ?, ?, ?, ?,?,?)', [idProfesor ,Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia], (err, result) => {
-    console.log(err)
-    if (err) {
-      res.status(500).send('Error creating profesor');
-      console.log(result)
-      return;
-    }
-    console.log('aqui no funca')
-    const idProfesor = result.insertId;
-    db.query('SELECT * FROM profesor WHERE idProfesor = ?', idProfesor, (err, result) => {
-      console.log('aqui no funca1')
-      if (err) {
-        res.status(500).send('Error fetching created profesor');
-        return;
-      }
-      res.status(201).json(result[0]);
-    });
-  });
-});
-  
-/* Get a specific post 
-app.get('/asignatura/view/asignaturaId', (req, res) => {
+
+/* Get a specific post */
+app.get('/posts/:id', (req, res) => {
   const postId = req.params.id;
-  db.query('SELECT * FROM posts WHERE id = ?', postId, (err, result) => {
+  db.query('SELECT * FROM crear WHERE idAsignatura =?', [postId], (err, result) => {
     if (err) {
       res.status(500).send('Error fetching post');
       return;
@@ -106,18 +64,18 @@ app.get('/asignatura/view/asignaturaId', (req, res) => {
     }
     res.json(result[0]);
   });
-});*/
-  
-/* Update a post 
-app.put('/asignatura/editar/asignaturaId', (req, res) => {
+});
+
+/* Update a post */
+app.put('/posts/:id', (req, res) => {
   const postId = req.params.id;
-  const { title, body } = req.body;
-  db.query('UPDATE posts SET title = ?, body = ? WHERE id = ?', [title, body, postId], err => {
+  const { idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado } = req.body;
+  db.query('UPDATE crear SET Nombre =?, TipoAsignatura =?, NumeroAlumnos =?, Horas = ?, Estado = ? WHERE idAsignatura =?', [Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado, postId], err => {
     if (err) {
       res.status(500).send('Error updating post');
       return;
     }
-    db.query('SELECT * FROM posts WHERE id = ?', postId, (err, result) => {
+    db.query('SELECT * FROM crear WHERE idAsignatura =?', postId, (err, result) => {
       if (err) {
         res.status(500).send('Error fetching updated post');
         return;
@@ -125,21 +83,9 @@ app.put('/asignatura/editar/asignaturaId', (req, res) => {
       res.json(result[0]);
     });
   });
-});*/
-  
-/* Delete a post 
-app.delete('/asignatura/id', (req, res) => {
-  console.log('Connected to MySQL');
-  const postId = req.params.id;
-  db.query('DELETE FROM posts WHERE id = ?', postId, err => {
-    if (err) {
-      res.status(500).send('Error deleting post');
-      return;
-    }
-    res.status(200).json({ msg: 'Post deleted successfully' });
-  });
-});*/
-  
+});
+
+
 /* Start server */
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

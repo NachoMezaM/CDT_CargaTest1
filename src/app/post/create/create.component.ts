@@ -1,28 +1,28 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
   
-import { asignaturaService } from '../asignatura.service';
+import { PostService } from '../post.service';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
   
 @Component({
-  selector: 'app-crear',
+  selector: 'app-create',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './crear.component.html',
-  styleUrl: './crear.component.css'
+  templateUrl: './create.component.html',
+  styleUrl: './create.component.css'
 })
-export class CrearComponent {
+export class CreateComponent {
   
   form!: FormGroup;
       
   /*------------------------------------------
   --------------------------------------------
-  Crear constructor
+  Created constructor
   --------------------------------------------
   --------------------------------------------*/
   constructor(
-    public asignaturaService: asignaturaService,
+    public postService: PostService,
     private router: Router
   ) { }
       
@@ -33,8 +33,11 @@ export class CrearComponent {
    */
   ngOnInit(): void {
     this.form = new FormGroup({
-      title: new FormControl('', [Validators.required]),
-      body: new FormControl('', Validators.required)
+      idAsignatura: new FormControl('', [Validators.required]),
+      Nombre: new FormControl('', [Validators.required]),
+      TipoAsignatura: new FormControl('', Validators.required),
+      NumeroAlumnos: new FormControl('', Validators.required),
+      Horas: new FormControl('', [Validators.required])
     });
   }
       
@@ -54,9 +57,9 @@ export class CrearComponent {
    */
   submit(){
     console.log(this.form.value);
-    this.asignaturaService.create(this.form.value).subscribe((res:any) => {
-         console.log('asignatura creada successfully!');
-         this.router.navigateByUrl('asignatura/index');
+    this.postService.create(this.form.value).subscribe((res:any) => {
+         console.log('Post created successfully!');
+         this.router.navigateByUrl('post/index');
     })
   }
   

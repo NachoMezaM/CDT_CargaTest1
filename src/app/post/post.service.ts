@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';      
-import { throwError } from 'rxjs';
+      
+import {  Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
    
-import { asignatura } from './asignatura';
+import { Post } from './post';
     
 @Injectable({
   providedIn: 'root'
 })
-export class asignaturaService {
+export class PostService {
     
   private apiURL = "http://localhost:3000";
       
@@ -36,10 +36,10 @@ export class asignaturaService {
    *
    * @return response()
    */
-  getAll(): Observable<any> {
+  getAll(): Observable<any>{
 
    
-    return this.httpClient.get(this.apiURL + '/asignatura/')
+    return this.httpClient.get(this.apiURL + '/posts/')
     .pipe(
       catchError(this.errorHandler)
     )
@@ -50,10 +50,10 @@ export class asignaturaService {
    *
    * @return response()
    */
-  create(asignatura:asignatura): Observable<any> {
+  create(post:Post): Observable<any> {
 
    
-    return this.httpClient.post(this.apiURL + '/asignatura/crear', JSON.stringify(asignatura), this.httpOptions)
+    return this.httpClient.post(this.apiURL + '/posts/create', JSON.stringify(post), this.httpOptions)
     .pipe(
       catchError(this.errorHandler)
     )
@@ -67,7 +67,7 @@ export class asignaturaService {
   find(id:number): Observable<any> {
 
   
-    return this.httpClient.get(this.apiURL + '/asignatura/' + id)
+    return this.httpClient.get(this.apiURL + '/posts/' + id)
     .pipe(
       catchError(this.errorHandler)
     )
@@ -78,10 +78,10 @@ export class asignaturaService {
    *
    * @return response()
    */
-  update(id:number, asignatura:asignatura): Observable<any> {
+  update(id:number, post:Post): Observable<any> {
 
   
-    return this.httpClient.put(this.apiURL + '/asignatura/' + id, JSON.stringify(asignatura), this.httpOptions)
+    return this.httpClient.put(this.apiURL + '/posts/' + id, JSON.stringify(post), this.httpOptions)
     .pipe( 
       catchError(this.errorHandler)
     )
@@ -93,7 +93,7 @@ export class asignaturaService {
    * @return response()
    */
   delete(id:number){
-    return this.httpClient.delete(this.apiURL + '/asignatura/' + id, this.httpOptions)
+    return this.httpClient.delete(this.apiURL + '/posts/' + id, this.httpOptions)
     .pipe(
       catchError(this.errorHandler)
     )
