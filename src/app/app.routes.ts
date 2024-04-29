@@ -12,15 +12,6 @@ import { MenuComponent } from './menu/menu.component';
 import { BarranavegacionComponent } from './barranavegacion/barranavegacion.component';
 export const routes: Routes = [
       { path: '', redirectTo: 'menu', pathMatch: 'full'},
-    
-
-
-
-
-
-
-
-
       { path: 'profesor/crear-profe', component: CrearProfeComponent },
       { path: 'profesor/index-profe', component: IndexProfeComponent},
       { path: 'profesor/:profesoridProfesor/view-profe', component: ViewProfeComponent},
