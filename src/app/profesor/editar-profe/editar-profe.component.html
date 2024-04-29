@@ -1,1 +1,177 @@
-<p>editar-profe works!</p>
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Crear Profesor</title>
+    <!-- Coloca aquí tus etiquetas de estilo CSS y enlaces a scripts JS si los tienes -->
+</head>
+<app-barranavegacion></app-barranavegacion>
+
+<body>
+
+
+    <div class="container">
+        <h1>Crear Profesor</h1>
+        <br>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col1">
+                        <label for="idProfesor">Rut:</label>
+                        <input formControlName="idProfesor" id="idProfesor" type="text" class="form-control1" [(ngModel)]=" profesor.idProfesor" readonly>
+                        <div *ngIf="f['idProfesor'].touched && f['idProfesor'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['idProfesor'].errors && f['idProfesor'].errors['required']">Es necesario agregar rut.</div>
+                        </div>
+                    </div>
+
+                    <div class="col21 ">
+                        <label for="Nombre">Nombre:</label>
+                        <input formControlName="Nombre" id="Nombre" type="text" class="form-control2" [(ngModel)]=" profesor.Nombre">
+                        <div *ngIf="f['Nombre'].touched && f['Nombre'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['Nombre'].errors && f['Nombre'].errors['required']">Es necesario agregar Nombre.</div>
+                        </div>
+                    </div>
+                    <div class="col21">
+
+                        <label for="Apellido">Apellido:</label>
+                        <input formControlName="Apellido" id="Apellido" type="text" class="form-control2" [(ngModel)]=" profesor.Apellido">
+                        <div *ngIf="f['Apellido'].touched && f['Apellido'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['Apellido'].errors && f['Apellido'].errors['required']">Es necesario argregar Apellido .</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col1">
+                    <div class="form-group">
+                        <label for="Telefono">Teléfono:</label>
+                        <input formControlName="Telefono" id="Telefono" type="text" class="form-control1" [(ngModel)]=" profesor.Telefono">
+                        <div *ngIf="f['Telefono'].touched && f['Telefono'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['Telefono'].errors && f['Telefono'].errors['required']">Es necesario agregar Teléfono.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col21">
+                    <div class="form-group">
+                        <label for="Direccion">Dirección:</label>
+                        <input formControlName="Direccion" id="Direccion" type="text" class="form-control2" [(ngModel)]=" profesor.Direccion">
+                        <div *ngIf="f['Direccion'].touched && f['Direccion'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['Direccion'].errors && f['Direccion'].errors['required']">Es necesario agregar Dirección.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col21">
+                    <div class="form-group">
+                        <label for="Profesion">Profesión</label>
+                        <input formControlName="Profesion" id="Profesion" type="text" class="form-control" [(ngModel)]=" profesor.Profesion">
+
+                        <div *ngIf="f['Profesion'].touched && f['Profesion'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['Profesion'].errors && f['Profesion'].errors['required']">Es necesario argregar Profesion .</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col1">
+
+                    <div class="form-group">
+                        <label for="Tipo">Tipo: </label>
+                        <select id="Tipo" class="form-control2" formControlName="Tipo" [(ngModel)]=" profesor.Tipo">
+                            <option value="C">Contrato</option>
+                            <option value="H">Horario</option>
+                        </select>
+
+                        <div *ngIf="f['Tipo'].touched && f['Tipo'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['Tipo'].errors && f['Tipo'].errors['required']">Es necesario argregar Tipo .</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col21">
+                    <div class="form-group">
+                        <label for="Grado">Grado Académico</label>
+                        <input formControlName="Grado" id="Grado" type="text" class="form-control" [(ngModel)]=" profesor.Grado">
+
+                        <div *ngIf="f['Grado'].touched && f['Grado'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['Grado'].errors && f['Grado'].errors['required']">Es necesario argregar Grado.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col21">
+                    <div class="form-group">
+                        <label for="TituloGrado">Titulo de Grado</label>
+                        <input formControlName="TituloGrado" id="TituloGrado" type="text" class="form-control" [(ngModel)]=" profesor.TituloGrado">
+
+                        <div *ngIf="f['TituloGrado'].touched && f['TituloGrado'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['TituloGrado'].errors && f['TituloGrado'].errors['required']">Es necesario argregar TituloGrado .</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col1">
+                    <div class="form-group">
+                        <label for="Horas"> Horas semanales</label>
+                        <input formControlName="Horas" id="Horas" type="text" class="form-control" [(ngModel)]=" profesor.Horas">
+
+                        <div *ngIf="f['Horas'].touched && f['Horas'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['Horas'].errors && f['Horas'].errors['required']">Es necesario argregar Horas.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col1">
+                    <div class="form-group">
+                        <label for="ValorHora">Valor/Hora</label>
+                        <input formControlName="ValorHora" id="ValorHora" type="text" class="form-control" [(ngModel)]=" profesor.ValorHora">
+
+                        <div *ngIf="f['ValorHora'].touched && f['ValorHora'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['ValorHora'].errors && f['ValorHora'].errors['required']">Es necesario argregar ValorHora .</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col1">
+                    <div class="form-group">
+                        <label for="idJerarquia">Jerarquia</label>
+                        <select id="idJerarquia" class="form-control" formControlName="idJerarquia" [(ngModel)]="profesor.idJerarquia">
+                            <option  value="1">Instructor</option>
+                            <option  value="2">Asistente</option>
+                            <option  value="3">Asociado</option>
+                            <option  value="4">Titular</option>
+                        </select>
+
+                        <div *ngIf="f['idJerarquia'].touched && f['idJerarquia'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['idJerarquia'].errors && f['idJerarquia'].errors['required']">Es necesario argregar una Jerarquia .</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col1">
+                    <div class="form-group">
+                        <label for="Estado">Estado</label>
+                        <select id="Estado" class="form-control" formControlName="Estado" [(ngModel)]=" profesor.Estado">
+                            <option value="A">Activo</option>
+                            <option value="I">Inactivo</option>
+                        </select>
+                        <div *ngIf="f['Estado'].touched && f['Estado'].invalid" class="alert alert-danger">
+                            <div *ngIf="f['Estado'].errors && f['Estado'].errors['required']">Es necesario argregar Estado .</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="mensajeRespuesta" class="mensaje">
+                {{ mensajeRespuesta }}
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="button1">
+                <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Crear Profesor</button>
+            </div>
+        </form>
+    </div>
+</body>

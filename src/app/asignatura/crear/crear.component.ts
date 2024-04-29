@@ -4,13 +4,14 @@ import { CommonModule } from '@angular/common';
 import { asignaturaService } from '../asignatura.service';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
   
 @Component({
-  selector: 'app-crear',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './crear.component.html',
-  styleUrl: './crear.component.css'
+    selector: 'app-crear',
+    standalone: true,
+    templateUrl: './crear.component.html',
+    styleUrl: './crear.component.css',
+    imports: [CommonModule, ReactiveFormsModule, BarranavegacionComponent]
 })
 export class CrearComponent {
   

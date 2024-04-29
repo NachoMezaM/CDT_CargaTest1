@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, RouterOutlet, RouterLink } from '@angular/router';
 import { asignaturaService } from '../asignatura.service';
 import { asignatura } from '../asignatura';
+import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
 @Component({
-  selector: 'app-index',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './index.component.html',
-  styleUrl: './index.component.css'
+    selector: 'app-index',
+    standalone: true,
+    templateUrl: './index.component.html',
+    styleUrl: './index.component.css',
+    imports: [CommonModule, RouterModule, RouterOutlet, RouterLink, BarranavegacionComponent]
 })
 export class IndexComponent {
   asignatura: asignatura[] = [];

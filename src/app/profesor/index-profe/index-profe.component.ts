@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, RouterOutlet, RouterLink } from '@angular/router';
 import { ProfesorService } from '../profesor.service';
 import { Profesor } from '../profesor';
+import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
 @Component({
-  selector: 'app-index-profe',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './index-profe.component.html',
-  styleUrl: './index-profe.component.css'
+    selector: 'app-index-profe',
+    standalone: true,
+    templateUrl: './index-profe.component.html',
+    styleUrl: './index-profe.component.css',
+    imports: [CommonModule, RouterModule, RouterOutlet, RouterLink, BarranavegacionComponent]
 })
 export class IndexProfeComponent {
   profesor: Profesor[] = [];

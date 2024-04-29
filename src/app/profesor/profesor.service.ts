@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';      
-import { throwError } from 'rxjs';
+import {  Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
    
 import { Profesor } from './profesor';
@@ -54,6 +53,7 @@ export class ProfesorService {
    * @return response()
    */
   find(idProfesor:number): Observable<any> {
+    console.log(this.httpClient.get(this.apiURL + '/profesor/' + idProfesor))
     return this.httpClient.get(this.apiURL + '/profesor/' + idProfesor)
     .pipe(
       catchError(this.errorHandler)
@@ -90,10 +90,9 @@ export class ProfesorService {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {
       errorMessage = error.error.message;
-      console.log('no funca')
+
     } else {
-      console.log('no funca1')
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message} hola`;
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message} `;
     }
     return throwError(errorMessage);
  }

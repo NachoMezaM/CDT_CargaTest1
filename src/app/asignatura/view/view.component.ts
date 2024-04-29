@@ -3,13 +3,14 @@ import { Component } from '@angular/core';
 import { asignaturaService } from '../asignatura.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { asignatura } from '../asignatura';
+import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
   
 @Component({
-  selector: 'app-view',
-  standalone: true,
-  imports: [],
-  templateUrl: './view.component.html',
-  styleUrl: './view.component.css'
+    selector: 'app-view',
+    standalone: true,
+    templateUrl: './view.component.html',
+    styleUrl: './view.component.css',
+    imports: [BarranavegacionComponent]
 })
 export class ViewComponent {
   

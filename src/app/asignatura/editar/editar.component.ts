@@ -5,13 +5,14 @@ import { asignaturaService } from '../asignatura.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { asignatura } from '../asignatura';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
   
 @Component({
-  selector: 'app-edit',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './editar.component.html',
-  styleUrl: './editar.component.css'
+    selector: 'app-edit',
+    standalone: true,
+    templateUrl: './editar.component.html',
+    styleUrl: './editar.component.css',
+    imports: [CommonModule, ReactiveFormsModule, BarranavegacionComponent]
 })
 export class EditarComponent {
   
