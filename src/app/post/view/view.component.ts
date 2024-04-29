@@ -3,13 +3,14 @@ import { Component } from '@angular/core';
 import { PostService } from '../post.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../post';
+import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
   
 @Component({
-  selector: 'app-view',
-  standalone: true,
-  imports: [],
-  templateUrl: './view.component.html',
-  styleUrl: './view.component.css'
+    selector: 'app-view',
+    standalone: true,
+    templateUrl: './view.component.html',
+    styleUrl: './view.component.css',
+    imports: [BarranavegacionComponent]
 })
 export class ViewComponent {
   

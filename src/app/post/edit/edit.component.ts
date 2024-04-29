@@ -5,13 +5,14 @@ import { PostService } from '../post.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../post';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
   
 @Component({
-  selector: 'app-edit',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './edit.component.html',
-  styleUrl: './edit.component.css'
+    selector: 'app-edit',
+    standalone: true,
+    templateUrl: './edit.component.html',
+    styleUrl: './edit.component.css',
+    imports: [CommonModule, ReactiveFormsModule, BarranavegacionComponent]
 })
 export class EditComponent {
   
