@@ -8,15 +8,15 @@ const port = 3000;
   
 /* MySQL Connection */
 const db = mysql.createConnection({
-  // host: '144.22.57.157',
-  // user: 'cargaacademica',
-  // password: 'Carga2024-',
-  // database: 'cargaacademica'
-  
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'carga_academica'
+   host: '144.22.57.157', //host de la base de datos
+   user: 'cargaacademica',
+   password: 'Carga2024-',
+   database: 'cargaacademica'
+
+  // host: 'localhost',
+  // user: 'root',
+  // password: '',
+  // database: 'carga_academica'
 });
   
 /* Connect to MySQL */
@@ -43,7 +43,7 @@ app.get('/asignatura/', (req, res) => {
   });
 });
 app.get('/profesor/', (req, res) => {
-  db.query('SELECT * FROM Profesor', (err, results) => {
+  db.query('SELECT * FROM cargaacademica.Profesor', (err, results) => {
     if (err) {
       res.status(500).send('Error fetching posts');
       return;
@@ -56,7 +56,7 @@ app.get('/profesor/', (req, res) => {
 app.post('/profesor/crear-profe', (req, res) => {
   const { idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
     // Si no existe, insertar el nuevo profesor en la base de datos
-    db.query('INSERT INTO Profesor (idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+    db.query('INSERT INTO cargaacademica.Profesor (idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
       [idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido], 
       (err, result) => {
         if (err) {
@@ -67,7 +67,7 @@ app.post('/profesor/crear-profe', (req, res) => {
         const nuevoProfesorId = result.insertId;
 
         // Obtener los datos del profesor recién creado
-        db.query('SELECT * FROM Profesor WHERE idProfesor = ?', nuevoProfesorId, (err, result) => {
+        db.query('SELECT * FROM cargaacademica.Profesor WHERE idProfesor = ?', nuevoProfesorId, (err, result) => {
           if (err) {
             console.error('Error al obtener el Profesor creado:', err);
             return res.status(500).send('Error al obtener el Profesor creado');
@@ -83,7 +83,7 @@ app.post('/profesor/crear-profe', (req, res) => {
 /* Get a specific post */
 app.get('/profesor/:idProfesor', (req, res) => {
   const profesoridProfesor = req.params.idProfesor;
-  db.query('SELECT * FROM Profesor WHERE idProfesor = ?', profesoridProfesor, (err, result) => {
+  db.query('SELECT * FROM cargaacademica.Profesor WHERE idProfesor = ?', profesoridProfesor, (err, result) => {
     if (err) {
       res.status(500).send('Error fetching Profesor');
       return;
@@ -102,13 +102,13 @@ app.put('/profesor/:idProfesor', (req, res) => {
   const profesoridProfesor = req.params.idProfesor;
   console.log("Funca")
   const { Nombre,Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido} = req.body;
-  db.query('UPDATE Profesor SET Nombre=? ,Tipo = ?, Profesion = ?, Horas = ?, ValorHora = ?, idJerarquia = ?, Direccion = ?, Telefono = ?, Grado = ?, TituloGrado = ?, Estado = ?, Apellido = ? WHERE idProfesor = ?'
+  db.query('UPDATE cargaacademica.Profesor SET Nombre=? ,Tipo = ?, Profesion = ?, Horas = ?, ValorHora = ?, idJerarquia = ?, Direccion = ?, Telefono = ?, Grado = ?, TituloGrado = ?, Estado = ?, Apellido = ? WHERE idProfesor = ?'
   , [Nombre,Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido,profesoridProfesor], err => {
     if (err) {
       res.status(500).send('Error updating Profesor');
       return;
     }
-    db.query('SELECT * FROM Profesor WHERE idProfesor = ?', profesoridProfesor, (err, result) => {
+    db.query('SELECT * FROM cargaacademica.Profesor WHERE idProfesor = ?', profesoridProfesor, (err, result) => {
       if (err) {
         res.status(500).send('Error fetching updated Profesor');
         return;
@@ -122,7 +122,7 @@ app.put('/profesor/:idProfesor', (req, res) => {
 app.delete('/asignatura/id', (req, res) => {
   console.log('Connected to MySQL');
   const postId = req.params.id;
-  db.query('DELETE FROM posts WHERE id = ?', postId, err => {
+  db.query('DELETE FROM cargaacademica.Profesor WHERE id = ?', postId, err => {
     if (err) {
       res.status(500).send('Error deleting post');
       return;

@@ -8,7 +8,7 @@ import { Profesor } from './profesor';
   providedIn: 'root'
 })
 export class ProfesorService {
-  private apiURL = "http://localhost:3000";   
+  private apiURL = "http://localhost:3000";   //donde sirve el endpoint donde esta conectado
   /*------------------------------------------
   --------------------------------------------
   Http Header Options

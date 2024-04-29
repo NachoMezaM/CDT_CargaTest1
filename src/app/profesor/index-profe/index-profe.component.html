@@ -21,11 +21,11 @@
               <tr *ngFor="let profesor of profesor">
                 <td>{{ profesor.idProfesor }}</td>
                 <td>{{ profesor.Nombre }}</td>
-                <td>{{ profesor.Tipo }}</td>
+                <td>{{ obtenerTipo(profesor.Tipo)}}</td>
                 <td>{{ profesor.Profesion }}</td>
                 <td>{{ profesor.Horas }}</td>
                 <td>{{ profesor.ValorHora }}</td>
-                <td>{{ profesor.idJerarquia }}</td>
+                <td>{{ obtenerJerarquia(profesor.idJerarquia) }}</td>
                 <td>
                   <a href="#" [routerLink]="['/profesor/', profesor.idProfesor, 'view-profe']" class="btn btn-info">VER</a>
                   <a href="#" [routerLink]="['/profesor/', profesor.idProfesor, 'editar-profe']" class="btn btn-primary">EDITAR</a>

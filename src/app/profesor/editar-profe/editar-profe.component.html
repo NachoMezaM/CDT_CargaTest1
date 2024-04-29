@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Crear Profesor</title>
+    <title>Editar Profesor</title>
     <!-- Coloca aquí tus etiquetas de estilo CSS y enlaces a scripts JS si los tienes -->
 </head>
 <app-barranavegacion></app-barranavegacion>
@@ -12,8 +12,10 @@
 
 
     <div class="container">
-        <h1>Crear Profesor</h1>
+        <h1>Editar Profesor</h1>
         <br>
+        <a href="#" routerLink="/profesor/index-profe" class="btn btn-primary mb-4">Atrás</a>
+<br>
         <form [formGroup]="form" (ngSubmit)="submit()">
 
             <div class="form-group">

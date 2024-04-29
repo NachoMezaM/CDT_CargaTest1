@@ -36,4 +36,39 @@ export class ViewProfeComponent {
       this.profesor=data;
     });
     }
+
+    obtenerJerarquia(Jerarquia: number): string {
+      switch (Jerarquia) {
+          case 1:
+              return 'Instructor';
+          case 2:
+              return 'Asistente';
+          case 3:
+              return 'Asociado';
+          case 4:
+              return 'Titular';
+          default:
+              return 'Opción no válida';
+      }
+  }
+  obtenerTipo(Tipo: string): string {
+    switch (Tipo) {
+        case "C" :
+            return 'Contrato';
+        case "H":
+            return 'Honorario';
+        default:
+            return 'Opción no válida';
+    }
+  }
+  obtenerEstado(Estado: string): string {
+    switch (Estado) {
+        case "A" :
+            return 'Activo';
+        case "I":
+            return 'Inactivo';
+        default:
+            return 'Opción no válida';
+    }
+  }
 }
