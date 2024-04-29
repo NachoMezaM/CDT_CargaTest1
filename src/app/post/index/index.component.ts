@@ -15,11 +15,11 @@ export class IndexComponent {
   filteredPosts: any[] = [];  
   busqueda: string = '';
 
-
+  //Busqueda por estado || Activo = "Activo" / Inactivo = "Inactivo"
   filterByEstado(estado: string) {
     this.filteredPosts = this.posts.filter(post => post.Estado === estado);
 }
-
+ //Busqueda por letras, Busca por (Todo Mayuscula, Todo Minuscula, Mayusculas y Minusculas)
 onSearch(event: any) {
   this.busqueda = event.target.value;
 

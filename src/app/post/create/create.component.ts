@@ -16,11 +16,7 @@ export class CreateComponent {
   
   form!: FormGroup;
       
-  /*------------------------------------------
-  --------------------------------------------
-  Created constructor
-  --------------------------------------------
-  --------------------------------------------*/
+
   constructor(
     public postService: PostService,
     private router: Router

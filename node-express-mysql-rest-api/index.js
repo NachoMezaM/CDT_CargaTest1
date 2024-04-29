@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 /* Routes */
-/* List all posts */
+/* Listar todas las Asignaturas */
 app.get('/posts', (req, res) => {
   db.query('SELECT * FROM crear', (err, results) => {
     if (err) {
@@ -38,7 +38,7 @@ app.get('/posts', (req, res) => {
   });
 });
 
-/* Create a new post */
+/* Crear asignatura */
 app.post('/posts/create', (req, res) => {
   const { idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado } = req.body;
   db.query('INSERT INTO crear (idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado) VALUES (?,?,?,?,?,?)', [idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, "Activo"], (err, result) => {
@@ -50,7 +50,7 @@ app.post('/posts/create', (req, res) => {
   });
 });
 
-/* Get a specific post */
+/* Visualizar asignatura */
 app.get('/posts/:id', (req, res) => {
   const postId = req.params.id;
   db.query('SELECT * FROM crear WHERE idAsignatura =?', [postId], (err, result) => {
@@ -66,7 +66,7 @@ app.get('/posts/:id', (req, res) => {
   });
 });
 
-/* Update a post */
+/* Actualizar una asignatura */
 app.put('/posts/:id', (req, res) => {
   const postId = req.params.id;
   const { idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado } = req.body;
@@ -86,7 +86,7 @@ app.put('/posts/:id', (req, res) => {
 });
 
 
-/* Start server */
+/* Iniciar coneccion */
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
