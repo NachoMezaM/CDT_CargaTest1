@@ -8,10 +8,10 @@ const port = 3000;
   
 /* MySQL Connection */
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'asignatura'
+  host: '144.22.57.157', //host de la base de datos
+  user: 'cargaacademica',
+  password: 'Carga2024-',
+  database: 'cargaacademica'
 });
   
 /* Connect to MySQL */
