@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
-import { BarnavComponent } from '../barnav/barnav.component';
 import { HttpClient } from '@angular/common/http';
 import { HostListener } from '@angular/core';
-// import { BackendService } from './cargadocente';
+import { BarranavegacionComponent } from "../barranavegacion/barranavegacion.component";
 
 @Component({
-  selector: 'app-carga-horaria',
-  templateUrl: './carga-horaria.component.html',
-  styleUrls: ['./carga-horaria.component.css'],
-  standalone: true,
-  imports: [BarnavComponent],
+    selector: 'app-carga-horaria',
+    templateUrl: './carga-horaria.component.html',
+    styleUrls: ['./carga-horaria.component.css'],
+    standalone: true,
+    imports: [BarranavegacionComponent]
 })
 export class CargaHorariaComponent {
   asignaturas: any[] = [];
