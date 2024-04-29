@@ -8,10 +8,10 @@ const port = 3000;
   
 /* MySQL Connection */
 const db = mysql.createConnection({
-  host: '144.22.57.157', //host de la base de datos
-  user: 'cargaacademica',
-  password: 'Carga2024-',
-  database: 'cargaacademica'
+  host: 'localhost', //host de la base de datos
+  user: 'root',
+  password: '',
+  database: 'asignatura'
 });
   
 /* Connect to MySQL */
@@ -60,10 +60,28 @@ app.get('/posts/:id', (req, res) => {
     }
     if (result.length === 0) {
       res.status(404).send('Post not found');
-
-
+      return;
     }
-    res.json(results);
+    res.json(result[0]);
+  });
+});
+
+/* Actualizar una asignatura */
+app.put('/posts/:id', (req, res) => {
+  const postId = req.params.id;
+  const { idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado } = req.body;
+  db.query('UPDATE crear SET Nombre =?, TipoAsignatura =?, NumeroAlumnos =?, Horas = ?, Estado = ? WHERE idAsignatura =?', [Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado, postId], err => {
+    if (err) {
+      res.status(500).send('Error updating post');
+      return;
+    }
+    db.query('SELECT * FROM crear WHERE idAsignatura =?', postId, (err, result) => {
+      if (err) {
+        res.status(500).send('Error fetching updated post');
+        return;
+      }
+      res.json(result[0]);
+    });
   });
 });
 

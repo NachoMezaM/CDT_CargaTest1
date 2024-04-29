@@ -13,9 +13,9 @@ export const routes: Routes = [
     
       { path: '', redirectTo: 'menu', pathMatch: 'full'},
       { path: 'post/index', component: IndexComponent },
-      { path: 'post/postId/view', component: ViewComponent },
+      { path: 'post/:postId/view', component: ViewComponent },
       { path: 'post/create', component: CreateComponent },
-      { path: 'post/postId/edit', component: EditComponent },
+      { path: 'post/:postId/edit', component: EditComponent },
       { path: 'profesor/crear-profe', component: CrearProfeComponent },
       { path: 'profesor/index-profe', component: IndexProfeComponent},
       { path: 'profesor/:profesoridProfesor/view-profe', component: ViewProfeComponent},
