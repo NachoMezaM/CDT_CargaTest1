@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #003366">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,user-scalable=none, initial-scale=1.0"
+    />
+    <title>Buscador con Imágenes</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+  </head>
+
+  <body style="background-color: #003366">
+    <app-barranavegacion></app-barranavegacion>
+    <title>Carga Academica</title>
+    <form>
+      <div class="containerflex">
+        <h1>Ingresar Carga</h1>
+
+        <div class="rut-item">
+          <label for="rut">Rut:</label>
+          <input
+            type="text"
+            id="rut"
+            class="form-control"
+            placeholder="12345678-9"
+            required
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="nombre-item">
+          <label for="nombre">Nombre:</label>
+          <input
+            type="text"
+            id="nombre"
+            class="form-control"
+            placeholder="Nombre y apellidos"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="año-item">
+          <label for="año-item">Año:</label>
+          <input
+            type="text"
+            id="año"
+            class="form-control"
+            placeholder="2024"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="grado-item">
+          <label for="grado">Grado:</label>
+          <div
+            id="grado"
+            class="form-control"
+            style="background-color: #ffffff"
+          >
+            Magister
+          </div>
+        </div>
+
+        <div class="jerarquizacion-item">
+          <label for="jerarquizacion">Jerarquizacion:</label>
+          <div
+            id="jerarquizacion"
+            class="form-control"
+            style="background-color: #ffffff"
+          >
+            Instructor
+          </div>
+        </div>
+
+        <div class="horascontrato-item">
+          <label for="horascontrato">Horas Contrato:</label>
+          <div
+            id="horascontrato"
+            class="form-control"
+            style="background-color: #ffffff"
+          >
+            44
+          </div>
+        </div>
+
+        <div class="PosibleHorasDeDocencia-item">
+          <label for="PosibleHorasDeDocencia-item"
+            >Posible Horas de Docencia:</label
+          >
+          <div
+            id="PosibleHorasDeDocencia"
+            class="form-control"
+            style="background-color: #ffffff"
+          >
+          22
+          </div>
+        </div>
+        <!-- Agrega un botón para ejecutar la función buscarDatos -->
+        <!-- <button type="button" (click)="buscarDatos()">Buscar</button> -->
+      </div>
+    </form>
+
+    <div class="flex-container">
+      <!-- Docencia Directa -->
+      <form>
+        <div class="containerflex1">
+          <h2>Docencia Directa</h2>
+
+          <div class="codigo-item">
+            <label for="codigo">Codigo:</label>
+            <input
+              type="text"
+              id="codigo"
+              class="form-control"
+              placeholder="Codigo Asignatura"
+              required
+              autocomplete="off"
+            />
+          </div>
+
+          <!-- Actualiza el llamado a la función agregarFilaTabla() para pasar el ID del tbody -->
+          <div class="seccion-item">
+            <label for="seccion">Seccion:</label>
+            <select
+            id="seccion"
+            class="form-control"
+            (change)="agregarFila()"
+          ></select>
+          </div>
+
+          <div class="boton-item">
+
+            <!-- Agregar un botón para buscar las secciones -->
+            <button type="button" (click)="buscarSecciones()">
+              Buscar codigo
+            </button>
+            
+          </div>
+          
+          <table id="asignaturasTable">
+            <thead>
+                <tr>
+                    <td class="cell-box">Codigo</td>
+                    <td class="cell-box">Sección</td>
+                    <td class="cell-box">Nombre</td>
+                    <td class="cell-box">Horas 45'</td>
+                    <td class="cell-box">Minutos</td>
+                </tr>
+            </thead>
+            <tbody id="asignaturas-body">
+              <!-- Aquí se agregarán las filas dinámicamente -->
+            </tbody>
+          </table>
+          <div id="totalHoras">
+            Total Horas: <span id="totalHorasValor">0</span>
+          </div>
+          <div id="totalMinutos">
+            Total Minutos: <span id="totalMinutosValor">0</span>
+          </div>
+          <!-- <input type="text" name="asignatura" (input)="buscarAsignaturas($event.target.value)"> -->
+          <!-- <button
+            type="button"
+            class="add-btn"
+            (click)="agregarFila('asignaturasTable')"
+          >
+            Agregar Fila
+          </button> -->
+        </div>
+      </form>
+
+      <form>
+        <!-- Docencia Indirecta -->
+        <div class="containerflex2">
+          <h3>Docencia Indirecta</h3>
+          <table id="asignaturasTable1">
+            <thead>
+              <tr>
+                <td class="cell-box">Concepto</td>
+                <td class="cell-box">Horas</td>
+                <td class="cell-box">Minutos</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody id="asignaturas-body-indirecta">
+              <!-- Aquí se agregarán las filas dinámicamente -->
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>Total</td>
+                <td id="totalHorasIndirecta">0</td>
+                <td id="totalMinutosIndirecta">0</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+          
+          <!-- <div id="totalHoras">
+            Total Horas: <span id="totalHorasValor">0</span>
+          </div>
+          <div id="totalMinutos">
+            Total Minutos: <span id="totalMinutosValor">0</span>
+          </div> -->
+          <!-- <button type="button" (click)="agregarFilaIndirecta()">
+            Agregar Fila
+          </button> -->
+        </div>
+      </form>
+
+      <form>
+        <div class="containerflex3">
+          <h3>Otros Trabajos de Gestión Académica</h3>
+          <table id="asignaturasTable2">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Horas 60'</th>
+                <th>Minutos</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="asignaturas-body">
+              <!-- Aquí se agregarán las filas dinámicamente -->
+            </tbody>
+          </table>
+          <div id="totalHoras">
+            Total Horas: <span id="totalHorasValor">0</span>
+          </div>
+          <div id="totalMinutos">
+            Total Minutos: <span id="totalMinutosValor">0</span>
+          </div>
+          <!-- <button
+            type="button"
+            class="add-btn"
+            (click)="agregarFila('asignaturasTable2')"
+          >
+            Agregar Fila
+          </button> -->
+        </div>
+      </form>
+
+      <form>
+        <div class="containerflex4">
+          <h3>Notas</h3>
+          <textarea
+            rows="4"
+            cols="50"
+            placeholder="Escribe tus notas aquí"
+          ></textarea>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

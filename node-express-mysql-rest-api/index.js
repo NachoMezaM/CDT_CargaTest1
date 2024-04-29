@@ -177,6 +177,118 @@ app.delete('/asignatura/id', (req, res) => {
   });
 });
 
+// Ruta para buscar los datos en la base de datos
+app.post('/buscar-datos', (req, res) => {
+  const { rut, nombre, año } = req.body;
+  
+  // Realizar la consulta en la base de datos, uniendo con la tabla de jerarquías para obtener el nombre de la jerarquía
+  const query = `
+    SELECT Profesor.*, Jerarquia.Nombre
+    FROM Profesor
+    JOIN Jerarquia ON Profesor.idJerarquia = Jerarquia.idJerarquia
+    WHERE CONCAT(Profesor.Nombre, ' ', Profesor.Apellido) LIKE ? OR Profesor.idProfesor = ?
+  `;
+  const values = [`%${nombre}%`, rut];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al buscar datos:', err);
+      res.status(500).send('Error interno del servidor');
+      return;
+    }
+    console.log('Datos encontrados:', result);
+    res.status(200).json(result);
+  });
+})
+
+// Ruta para obtener las hora máximas de docencia desde la tabla jerarquia
+app.get('/obtener-hora-maxima-docencia/:idJerarquia', (req, res) => {
+  const idJerarquia = req.params.idJerarquia;
+
+  // Realizar la consulta en la base de datos para obtener las horas máximas de docencia
+  const query = `
+    SELECT horaMaximaDeDocencia
+    FROM Jerarquia
+    WHERE idJerarquia = ?
+  `;
+  const values = [idJerarquia];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al obtener las horas máximas de docencia:', err);
+      res.status(500).send('Error interno del servidor');
+      return;
+    }
+
+    if (result && result.length > 0) {
+      const horaMaximaDeDocencia = result[0].horaMaximaDeDocencia;
+      res.status(200).json({ horaMaximaDeDocencia });
+    } else {
+      console.error('No se encontraron las horas máximas de docencia.');
+      res.status(404).send('No se encontraron las horas máximas de docencia');
+    }
+  });
+});
+
+//Docencia Directa
+
+// Ruta para obtener las secciones disponibles para un código de asignatura
+app.get('/obtener-secciones/:codigo', (req, res) => {
+  const codigo = req.params.codigo;
+
+  // Consulta para obtener las secciones disponibles para el código de asignatura proporcionado
+  const query = `
+    SELECT idSeccion
+    FROM AsignaturaSeccion
+    WHERE idAsignatura = ? 
+  `;
+  const values = [codigo];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al obtener secciones:', err);
+      res.status(500).send('Error interno del servidor');
+      return;
+    }
+
+    res.status(200).json(result);
+  });
+});
+
+// Ruta para obtener los detalles de una asignatura según el código y la sección
+app.get('/detalles-asignatura/:codigo/:seccion', (req, res) => {
+  const codigo = req.params.codigo;
+  const seccion = req.params.seccion;
+
+  // Consulta para obtener los detalles de la asignatura según el código y la sección proporcionados,
+  // incluyendo el nombre y la hora de la asignatura
+  const query = `
+    SELECT Asignatura.Nombre AS nombre, Asignatura.Horas AS hora,
+           AsignaturaSeccion.*, Asignatura.*
+    FROM AsignaturaSeccion
+    JOIN Asignatura ON AsignaturaSeccion.idAsignatura = Asignatura.idAsignatura
+    WHERE AsignaturaSeccion.idAsignatura = ? AND AsignaturaSeccion.idSeccion = ? 
+  `;
+  const values = [codigo, seccion];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al obtener los detalles de la asignatura:', err);
+      res.status(500).send('Error interno del servidor');
+      return;
+    }
+
+    if (result && result.length > 0) {
+      // Si se encontraron detalles de la asignatura, devolverlos como respuesta
+      res.status(200).json(result[0]);
+    } else {
+      // Si no se encontraron detalles de la asignatura, devolver un mensaje de error
+      console.error('No se encontraron detalles de la asignatura.');
+      res.status(404).send('No se encontraron detalles de la asignatura');
+    }
+  });
+});
+
 /* Start server */
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
