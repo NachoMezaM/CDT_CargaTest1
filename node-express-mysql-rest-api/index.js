@@ -84,6 +84,69 @@ app.put('/posts/:id', (req, res) => {
     });
   });
 });
+  // -------------------------------------------------------------------------Profesor-------------------------------------------------------------------------
+/* Crear un nuevo profesor */
+app.post('/profesor/crear-profe', (req, res) => {
+  const { idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
+    // Si no existe, insertar el nuevo profesor en la base de datos
+    db.query('INSERT INTO cargaacademica.Profesor (idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+      [idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido], 
+      (err, result) => {
+        if (err) {
+          console.error('Error al crear Profesor:', err);
+          return res.status(500).send('Error al crear Profesor');
+        }
+        
+        const nuevoProfesorId = result.insertId;
+
+        // Obtener los datos del profesor recién creado
+        db.query('SELECT * FROM cargaacademica.Profesor WHERE idProfesor = ?', nuevoProfesorId, (err, result) => {
+          if (err) {
+            console.error('Error al obtener el Profesor creado:', err);
+            return res.status(500).send('Error al obtener el Profesor creado');
+          }
+          res.status(201).json(result[0]);
+        });
+      }
+    );
+  });
+
+
+
+/* Get a specific post */
+app.get('/profesor/:idProfesor', (req, res) => {
+  const profesoridProfesor = req.params.idProfesor;
+  db.query('SELECT * FROM cargaacademica.Profesor WHERE idProfesor = ?', profesoridProfesor, (err, result) => {
+    if (err) {
+      res.status(500).send('Error fetching Profesor');
+      return;
+    }
+    if (result.length === 0) {
+      res.status(404).send('Profesor not found');
+      return;
+    }
+    res.json(result[0]);
+  });
+});
+
+/* Actualizar una asignatura */
+app.put('/posts/:id', (req, res) => {
+  const postId = req.params.id;
+  const { idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado } = req.body;
+  db.query('UPDATE crear SET Nombre =?, TipoAsignatura =?, NumeroAlumnos =?, Horas = ?, Estado = ? WHERE idAsignatura =?', [Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado, postId], err => {
+    if (err) {
+      res.status(500).send('Error updating post');
+      return;
+    }
+    db.query('SELECT * FROM crear WHERE idAsignatura =?', postId, (err, result) => {
+      if (err) {
+        res.status(500).send('Error fetching updated post');
+        return;
+      }
+      res.json(result[0]);
+    });
+  });
+});
 
 
 /* Iniciar coneccion */
