@@ -10,19 +10,9 @@
         
  
 
-        <div class="form-group">
-            <label for="idAsignatura">Codigo de Asignatura</label>
-            <input 
-                formControlName="idAsignatura"
-                id="idAsignatura" 
-                type="text" 
-                class="form-control">
-            <div *ngIf="f['idAsignatura'].touched && f['idAsignatura'].invalid" class="alert alert-danger">
-                <div *ngIf="f['idAsignatura'].errors && f['idAsignatura'].errors['required']">Se requiere un Codigo de Asignatura.</div>
-            </div>
-        </div>
-
-        <div class="form-group">
+    <div class="form-group">
+        <div class="row">  
+        <div class="col21">
             <label for="Nombre">Nombre</label>
             <input 
                 formControlName="Nombre"
@@ -34,7 +24,7 @@
             </div>
         </div>
         
-        <div class="form-group">
+        <div class="col21">
             <label for="TipoAsignatura">Tipo de Asignatura</label>
             <select 
             formControlName="TipoAsignatura"
@@ -51,8 +41,25 @@
                 <div *ngIf="f['TipoAsignatura'].errors && f['TipoAsignatura'].errors['required']">Se requiere un tipo de asignatura.</div>
             </div>
         </div>
+    </div> 
 
-        <div class="form-group">
+
+            
+        <div class="row">
+
+            <div class="col1"> 
+                <label for="idAsignatura">Codigo de Asignatura</label>
+                <input 
+                    formControlName="idAsignatura"
+                    id="idAsignatura" 
+                    type="text" 
+                    class="form-control">
+                <div *ngIf="f['idAsignatura'].touched && f['idAsignatura'].invalid" class="alert alert-danger">
+                    <div *ngIf="f['idAsignatura'].errors && f['idAsignatura'].errors['required']">Se requiere un Codigo de Asignatura.</div>
+                </div>
+            </div> 
+
+            <div class="col1">
             <label for="NumeroAlumnos">Numero de Alumnos</label>
             <input 
                 formControlName="NumeroAlumnos"
@@ -63,9 +70,10 @@
                 <div *ngIf="f['NumeroAlumnos'].errors && f['NumeroAlumnos'].errors['required']">Se requiere una cantidad de alumnos.</div>
             </div>
         </div>
+        
 
-        <div class="form-group">
-            <label for="Horas">Horas:</label>
+        <div class="col1">
+            <label for="Horas">Total de Horas Lectivas:</label>
             <input 
                 formControlName="Horas"
                 id="Horas" 
@@ -75,7 +83,8 @@
                 <div *ngIf="f['Horas'].errors && f['Horas'].errors['required']">Se requiere una cantidad de horas.</div>
             </div>
         </div>
-  
+    </div>
+</div>
         <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Crear</button>
     </form>
 </div>
