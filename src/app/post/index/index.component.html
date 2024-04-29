@@ -1,13 +1,13 @@
 <app-barranavegacion></app-barranavegacion>
-
-
+<html>
+<body>
 <div class="container">
-    <h1>Carga Academica UNACH</h1>
+    <h1 style="color: white; margin-top: 10px;">Carga Academica UNACH</h1>
     <div class="btn-group" role="group" aria-label="Basic example">
   </div>
 
-  <button (click)="filterByEstado('Activo')">Mostrar Activos</button>
-  <button (click)="filterByEstado('Inactivo')">Mostrar Inactivos</button>
+  <button class="boton" (click)="filterByEstado('Activo')">Mostrar Activos</button>
+  <button class="boton" (click)="filterByEstado('Inactivo')">Mostrar Inactivos</button>
   <input type="text" class="search" placeholder="Buscar Asignatura" (keyup)="onSearch($event)">
     <table class="table table-striped table-bordered">
         <thead>
@@ -37,3 +37,5 @@
         </tbody>
     </table>
 </div>
+</body>
+</html>
