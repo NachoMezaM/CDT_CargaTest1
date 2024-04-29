@@ -1,22 +1,22 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
   
-import { asignaturaService } from '../asignatura.service';
+import { PostService } from '../post.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { asignatura } from '../asignatura';
+import { Post } from '../post';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
   
 @Component({
   selector: 'app-edit',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './editar.component.html',
-  styleUrl: './editar.component.css'
+  templateUrl: './edit.component.html',
+  styleUrl: './edit.component.css'
 })
-export class EditarComponent {
+export class EditComponent {
   
   id!: number;
-  asignatura!: asignatura;
+  post!: Post;
   form!: FormGroup;
       
   /*------------------------------------------
@@ -25,7 +25,7 @@ export class EditarComponent {
   --------------------------------------------
   --------------------------------------------*/
   constructor(
-    public asignaturaService: asignaturaService,
+    public postService: PostService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -36,14 +36,17 @@ export class EditarComponent {
    * @return response()
    */
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['asignaturaId'];
-    this.asignaturaService.find(this.id).subscribe((data: asignatura)=>{
-      this.asignatura = data;
+    this.id = this.route.snapshot.params['postId'];
+    this.postService.find(this.id).subscribe((data: Post)=>{
+      this.post = data;
     }); 
         
     this.form = new FormGroup({
-      title: new FormControl('', [Validators.required]),
-      body: new FormControl('', Validators.required)
+      Nombre: new FormControl('', [Validators.required]),
+      TipoAsignatura: new FormControl('', Validators.required),
+      NumeroAlumnos: new FormControl('', Validators.required),
+      Horas: new FormControl('', [Validators.required]),
+      Estado: new FormControl('', [Validators.required])
     });
   }
       
@@ -55,7 +58,6 @@ export class EditarComponent {
   get f(){
     return this.form.controls;
   }
-      
   /**
    * Write code on Method
    *
@@ -63,9 +65,9 @@ export class EditarComponent {
    */
   submit(){
     console.log(this.form.value);
-    this.asignaturaService.update(this.id, this.form.value).subscribe((res:any) => {
-         console.log('asignatura updated successfully!');
-         this.router.navigateByUrl('asignatura/index');
+    this.postService.update(this.id, this.form.value).subscribe((res:any) => {
+         console.log('Post updated successfully!');
+         this.router.navigateByUrl('post/index');
     })
   }
   

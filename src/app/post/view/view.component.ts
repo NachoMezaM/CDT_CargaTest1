@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
   
-import { asignaturaService } from '../asignatura.service';
+import { PostService } from '../post.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { asignatura } from '../asignatura';
+import { Post } from '../post';
   
 @Component({
   selector: 'app-view',
@@ -14,7 +14,7 @@ import { asignatura } from '../asignatura';
 export class ViewComponent {
   
   id!: number;
-  asignatura!: asignatura;
+  post!: Post;
       
   /*------------------------------------------
   --------------------------------------------
@@ -22,7 +22,7 @@ export class ViewComponent {
   --------------------------------------------
   --------------------------------------------*/
   constructor(
-    public asignaturaService: asignaturaService,
+    public postService: PostService,
     private route: ActivatedRoute,
     private router: Router
    ) { }
@@ -33,10 +33,10 @@ export class ViewComponent {
    * @return response()
    */
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['asignaturaId'];
+    this.id = this.route.snapshot.params['postId'];
           
-    this.asignaturaService.find(this.id).subscribe((data: asignatura)=>{
-      this.asignatura = data;
+    this.postService.find(this.id).subscribe((data: Post)=>{
+      this.post = data;
     });
   }
   

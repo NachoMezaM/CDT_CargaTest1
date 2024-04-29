@@ -1,0 +1,78 @@
+<div class="container">
+    <h1>Crear Asignatura</h1>
+  
+    <a href="#" routerLink="/post/index" class="btn btn-primary">Volver</a>
+        
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        
+ 
+
+        <div class="form-group">
+            <label for="idAsignatura">Codigo de Asignatura</label>
+            <input 
+                formControlName="idAsignatura"
+                id="idAsignatura" 
+                type="text" 
+                class="form-control">
+            <div *ngIf="f['idAsignatura'].touched && f['idAsignatura'].invalid" class="alert alert-danger">
+                <div *ngIf="f['idAsignatura'].errors && f['idAsignatura'].errors['required']">Se requiere un Codigo de Asignatura.</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Nombre">Nombre</label>
+            <input 
+                formControlName="Nombre"
+                id="Nombre" 
+                type="text" 
+                class="form-control">
+            <div *ngIf="f['Nombre'].touched && f['Nombre'].invalid" class="alert alert-danger">
+                <div *ngIf="f['Nombre'].errors && f['Nombre'].errors['required']">Se requiere un Nombre.</div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="TipoAsignatura">Tipo de Asignatura</label>
+            <select 
+            formControlName="TipoAsignatura"
+            id="TipoAsignatura"
+            class="form-control" >
+            <option value="">Seleccione Opcion</option>
+            <option value="Complementario"> Asignatura Complementaria</option>
+            <option value="Profesional"> Asignatura Profesional</option>
+            <option value="Espiritual"> Asignatura Espiritual</option>
+            <option value="Electivo"> Asignatura Electiva</option>
+            <option value="Disciplinar"> Asignatura Disciplinar</option>
+             </select>
+            <div *ngIf="f['TipoAsignatura'].touched && f['TipoAsignatura'].invalid" class="alert alert-danger">
+                <div *ngIf="f['TipoAsignatura'].errors && f['TipoAsignatura'].errors['required']">Se requiere un tipo de asignatura.</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="NumeroAlumnos">Numero de Alumnos</label>
+            <input 
+                formControlName="NumeroAlumnos"
+                id="NumeroAlumnos" 
+                type="text" 
+                class="form-control">
+            <div *ngIf="f['NumeroAlumnos'].touched && f['NumeroAlumnos'].invalid" class="alert alert-danger">
+                <div *ngIf="f['NumeroAlumnos'].errors && f['NumeroAlumnos'].errors['required']">Se requiere una cantidad de alumnos.</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Horas">Horas:</label>
+            <input 
+                formControlName="Horas"
+                id="Horas" 
+                type="text" 
+                class="form-control">
+            <div *ngIf="f['Horas'].touched && f['Horas'].invalid" class="alert alert-danger">
+                <div *ngIf="f['Horas'].errors && f['Horas'].errors['required']">Se requiere una cantidad de horas.</div>
+            </div>
+        </div>
+  
+        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Crear</button>
+    </form>
+</div>
