@@ -42,19 +42,6 @@ body {
   border-radius: 15px;
 }
 
-.containerflex2 {
-  margin: 15px;
-  margin-left: 855px;
-  margin-top: -185px;
-  width: 80%;
-  max-width: 800px; /* Añadido un ancho máximo */
-  min-width: 760px; /* Añadido un ancho mínimo */
-  background-color: #f2f2f2;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 15px;
-}
-
 .containerflex3 {
   margin: 15px;
   width: 80%;

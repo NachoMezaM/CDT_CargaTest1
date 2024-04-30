@@ -49,7 +49,6 @@
             type="text"
             id="año"
             class="form-control"
-            placeholder="2024"
             autocomplete="off"
           />
         </div>
@@ -72,7 +71,6 @@
             class="form-control"
             style="background-color: #ffffff"
           >
-           
           </div>
         </div>
 
@@ -83,7 +81,6 @@
             class="form-control"
             style="background-color: #ffffff"
           >
-            44
           </div>
         </div>
 
@@ -96,7 +93,6 @@
             class="form-control"
             style="background-color: #ffffff"
           >
-          22
           </div>
         </div>
       </div>
@@ -117,6 +113,7 @@
               placeholder="Codigo Asignatura"
               required
               autocomplete="off"
+              (change)="buscarSecciones()"
             />
           </div>
 
@@ -129,15 +126,6 @@
             (change)="agregarFila()"
           ></select>
           </div>
-
-          <div class="boton-item">
-
-            <!-- Agregar un botón para buscar las secciones -->
-            <button type="button" (click)="buscarSecciones()">
-              Buscar codigo
-            </button>
-            
-          </div>
           
           <table id="asignaturasTable">
             <thead>
@@ -147,6 +135,7 @@
                     <td class="cell-box">Nombre</td>
                     <td class="cell-box">Horas 45'</td>
                     <td class="cell-box">Minutos</td>
+                    <td class="cell-box">Planificacion</td>
                 </tr>
             </thead>
             <tbody id="asignaturas-body">
@@ -162,8 +151,8 @@
         </div>
       </form>
 
-      <form>
-        <!-- Docencia Indirecta -->
+      <!-- <form>
+        
         <div class="containerflex2">
           <h3>Docencia Indirecta</h3>
           <table id="asignaturasTable1">
@@ -176,7 +165,7 @@
               </tr>
             </thead>
             <tbody id="asignaturas-body-indirecta">
-              <!-- Aquí se agregarán las filas dinámicamente -->
+              
             </tbody>
             <tfoot>
               <tr>
@@ -188,7 +177,7 @@
             </tfoot>
           </table>
         </div>
-      </form>
+      </form> -->
 
       <form>
         <div class="containerflex3">
@@ -196,22 +185,15 @@
           <table id="asignaturasTable2">
             <thead>
               <tr>
-                <th>Concepto</th>
-                <th>Horas 60'</th>
-                <th>Minutos</th>
-                <th></th>
+                  <td class="cell-box">Concepto</td>
+                  <td class="cell-box">Horas 60'</td>
+                  <td class="cell-box">Minutos</td>
               </tr>
-            </thead>
+          </thead>
             <tbody id="asignaturas-body">
               <!-- Aquí se agregarán las filas dinámicamente -->
             </tbody>
           </table>
-          <div id="totalHoras">
-            Total Horas: <span id="totalHorasValor">0</span>
-          </div>
-          <div id="totalMinutos">
-            Total Minutos: <span id="totalMinutosValor">0</span>
-          </div>
         </div>
       </form>
 

@@ -243,8 +243,8 @@ app.get('/obtener-hora-maxima-docencia/:idJerarquia', (req, res) => {
 //Docencia Directa
 
 // Ruta para obtener las secciones disponibles para un código de asignatura
-app.get('/obtener-secciones/:codigo', (req, res) => {
-  const codigo = req.params.codigo;
+app.post('/obtener-secciones', (req, res) => {
+  const codigo = req.body.codigo;
 
   // Consulta para obtener las secciones disponibles para el código de asignatura proporcionado
   const query = `
@@ -264,6 +264,7 @@ app.get('/obtener-secciones/:codigo', (req, res) => {
     res.status(200).json(result);
   });
 });
+
 
 // Ruta para obtener los detalles de una asignatura según el código y la sección
 app.get('/detalles-asignatura/:codigo/:seccion', (req, res) => {
