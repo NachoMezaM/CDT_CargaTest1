@@ -300,6 +300,24 @@ app.get('/detalles-asignatura/:codigo/:seccion', (req, res) => {
   });
 });
 
+// Ruta para guardar la planificación y los minutos en la tabla CargaDocente
+app.post('/guardar-carga-docente', (req, res) => {
+  const { idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio } = req.body;
+
+  db.query('INSERT INTO CargaDocente (idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio) VALUES (?, ?, ?, ?, ?)', 
+    [idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio], 
+    (err, result) => {
+      if (err) {
+        console.error('Error al guardar la carga docente:', err);
+        res.status(500).send('Error interno del servidor');
+        return;
+      }
+      res.status(200).json({ message: 'Carga docente guardada exitosamente' });
+    }
+  );
+});
+
+
 /* Start server */
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

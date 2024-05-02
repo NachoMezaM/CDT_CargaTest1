@@ -30,6 +30,32 @@ export class CargaHorariaComponent {
     }
   }
 
+  limpiarPagina() {
+    // Limpiar los campos del formulario
+    (document.getElementById('nombre') as HTMLInputElement).value = '';
+    (document.getElementById('rut') as HTMLInputElement).value = '';
+    (document.getElementById('grado') as HTMLElement).innerText = '';
+    (document.getElementById('jerarquizacion') as HTMLElement).innerText = '';
+    (document.getElementById('horascontrato') as HTMLElement).innerText = '';
+    (document.getElementById('PosibleHorasDeDocencia') as HTMLElement).innerText = '';
+  
+    // Limpiar la tabla de asignaturas
+    const tbody = document.getElementById('asignaturas-body');
+    if (tbody) {
+      tbody.innerHTML = '';
+    }
+  
+    // Reiniciar los totales
+    this.totalHoras = 0;
+    this.totalMinutos = 0;
+    const totalHorasSpan = document.getElementById('totalHorasValor');
+    const totalMinutosSpan = document.getElementById('totalMinutosValor');
+    if (totalHorasSpan && totalMinutosSpan) {
+      totalHorasSpan.textContent = '0';
+      totalMinutosSpan.textContent = '0';
+    }
+  }
+
   buscarDatos() {
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
     const nombre = (
@@ -99,6 +125,9 @@ export class CargaHorariaComponent {
           console.error('Error al buscar datos:', error);
         }
       );
+
+        // Después de buscar los datos exitosamente, llamar a la función limpiarPagina()
+  this.limpiarPagina();
   }
 
   obtenerHoraMaximaDocencia(idJerarquia: string) {
@@ -132,6 +161,8 @@ export class CargaHorariaComponent {
 agregarFila() {
   const codigo = (document.getElementById('codigo') as HTMLInputElement).value;
   const seccion = (document.getElementById('seccion') as HTMLSelectElement).value;
+  const rut = (document.getElementById('rut') as HTMLInputElement).value;
+  const año = (document.getElementById('año') as HTMLInputElement).value;
 
   this.http.get<any>(`http://localhost:3000/detalles-asignatura/${codigo}/${seccion}`)
     .subscribe(
@@ -182,10 +213,10 @@ agregarFila() {
       totalHorasSpan.textContent = this.totalHoras.toString();
       totalMinutosSpan.textContent = this.totalMinutos.toString();
     }
-        }
 
-        // // Llamar a la función para agregar fila y calcular en la tabla de docencia indirecta
-        // this.agregarFilaIndirecta(data.Nombre, minutos);
+    // Enviar los datos al backend para guardar la carga docente
+    this.guardarCargaDocente(rut, data.idAsignaturaSeccion, planificacion, minutos, año);
+        }
       },
       (error) => {
         console.error('Error al obtener los detalles de la asignatura:', error);
@@ -194,54 +225,18 @@ agregarFila() {
     );
 }
 
-  //Docencia Indirecta
-
-// // Método para agregar una fila a la tabla de docencia indirecta
-// agregarFilaIndirecta(concepto: string, minutos: number) {
-//   const horas = Math.floor(minutos / 60); // Calcular las horas
-//   const Minutos = minutos ; // Calcular los minutos restantes
-  
-//   // Crear la fila HTML con los datos obtenidos
-//   const newRow = document.createElement('tr');
-//   newRow.innerHTML = `
-//     <td>${concepto}</td>
-//     <td>${horas}</td>
-//     <td>${Minutos}</td>
-//     <td><button type="button" class="remove-btn">Eliminar</button></td>
-//   `;
-  
-//   // Agregar la fila a la tabla de docencia indirecta
-//   const tbody = document.getElementById('asignaturas-body-indirecta');
-//   if (tbody) {
-//     tbody.appendChild(newRow);
-//   } else {
-//     console.error('No se encontró el elemento tbody de la tabla de docencia indirecta.');
-//   }
-  
-//   // Centrar el texto en todas las celdas de la nueva fila
-//   const cells = newRow.querySelectorAll('td');
-//   cells.forEach(cell => {
-//     cell.style.textAlign = 'center';
-//   });
-  
-//   // Agregar el evento de clic al botón de eliminación
-//   const deleteButton = newRow.querySelector('.remove-btn');
-//   if (deleteButton) {
-//     deleteButton.addEventListener('click', () => {
-//       this.eliminarFila(newRow);
-//     });
-//   }
-// }
-
-//   eliminarFilaIndirecta(index: number) {
-//     try {
-//       console.log('Eliminando fila:', index);
-//       this.filasIndirecta.splice(index, 1);
-//       console.log('Filas actualizadas:', this.filasIndirecta);
-//     } catch (error) {
-//       console.error('Error al eliminar fila:', error);
-//     }
-//   }
+guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificacion: number, minutos: number, año: string) {
+  this.http.post<any>('http://localhost:3000/guardar-carga-docente', { idProfesor, idAsignaturaSeccion, HorasPlanificacion: planificacion, Horas_Minutos: minutos, Anio: año})
+    .subscribe(
+      (data) => {
+        console.log('Carga docente guardada exitosamente:', data);
+      },
+      (error) => {
+        console.error('Error al guardar la carga docente:', error);
+        alert('Ocurrió un error al guardar la carga docente. Por favor, inténtalo de nuevo más tarde.');
+      }
+    );
+}
 
   eliminarFila(row: HTMLElement) {
     // Verifica si la fila es válida
