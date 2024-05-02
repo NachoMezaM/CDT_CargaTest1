@@ -1,21 +1,27 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HostListener } from '@angular/core';
-import { BarranavegacionComponent } from "../barranavegacion/barranavegacion.component";
+import { BarranavegacionComponent } from '../barranavegacion/barranavegacion.component';
 
 @Component({
-    selector: 'app-carga-horaria',
-    templateUrl: './carga-horaria.component.html',
-    styleUrls: ['./carga-horaria.component.css'],
-    standalone: true,
-    imports: [BarranavegacionComponent]
+  selector: 'app-carga-horaria',
+  templateUrl: './carga-horaria.component.html',
+  styleUrls: ['./carga-horaria.component.css'],
+  standalone: true,
+  imports: [BarranavegacionComponent],
 })
 export class CargaHorariaComponent {
   asignaturas: any[] = [];
   totalHoras: number = 0;
   totalMinutos: number = 0;
+  currentYear: number | undefined;
 
   constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    // Obtener el año actual al inicializar el componente
+    this.currentYear = new Date().getFullYear();
+  }
 
   @HostListener('document:keydown.enter', ['$event'])
   handleEnterKey(event: KeyboardEvent) {
@@ -37,14 +43,16 @@ export class CargaHorariaComponent {
     (document.getElementById('grado') as HTMLElement).innerText = '';
     (document.getElementById('jerarquizacion') as HTMLElement).innerText = '';
     (document.getElementById('horascontrato') as HTMLElement).innerText = '';
-    (document.getElementById('PosibleHorasDeDocencia') as HTMLElement).innerText = '';
-  
+    (
+      document.getElementById('PosibleHorasDeDocencia') as HTMLElement
+    ).innerText = '';
+
     // Limpiar la tabla de asignaturas
     const tbody = document.getElementById('asignaturas-body');
     if (tbody) {
       tbody.innerHTML = '';
     }
-  
+
     // Reiniciar los totales
     this.totalHoras = 0;
     this.totalMinutos = 0;
@@ -96,17 +104,15 @@ export class CargaHorariaComponent {
                 case 4:
                   console.log('Caso: Default');
                   jerarquia = 'Titular';
-                  break;                
+                  break;
               }
               // Actualizar los campos del formulario con los datos encontrados
               (document.getElementById('nombre') as HTMLInputElement).value =
                 nombreCompleto;
               (document.getElementById('rut') as HTMLInputElement).value =
                 data.idProfesor;
-                document.getElementById('grado')!.innerText =
-                data.Grado;
-              document.getElementById('jerarquizacion')!.innerText =
-                jerarquia;
+              document.getElementById('grado')!.innerText = data.Grado;
+              document.getElementById('jerarquizacion')!.innerText = jerarquia;
               document.getElementById('horascontrato')!.innerText = data.Horas;
               // Aquí obtenemos las horas máximas de docencia desde la tabla jerarquia
               this.obtenerHoraMaximaDocencia(data.idJerarquia);
@@ -126,8 +132,8 @@ export class CargaHorariaComponent {
         }
       );
 
-        // Después de buscar los datos exitosamente, llamar a la función limpiarPagina()
-  this.limpiarPagina();
+    // Después de buscar los datos exitosamente, llamar a la función limpiarPagina()
+    this.limpiarPagina();
   }
 
   obtenerHoraMaximaDocencia(idJerarquia: string) {
@@ -157,86 +163,128 @@ export class CargaHorariaComponent {
 
   //Docencia Directa
 
-// Método para agregar una fila a la tabla de docencia directa
-agregarFila() {
-  const codigo = (document.getElementById('codigo') as HTMLInputElement).value;
-  const seccion = (document.getElementById('seccion') as HTMLSelectElement).value;
-  const rut = (document.getElementById('rut') as HTMLInputElement).value;
-  const año = (document.getElementById('año') as HTMLInputElement).value;
+  // Método para agregar una fila a la tabla de docencia directa
+  agregarFila() {
+    const codigo = (document.getElementById('codigo') as HTMLInputElement)
+      .value;
+    const seccion = (document.getElementById('seccion') as HTMLSelectElement)
+      .value;
+    const rut = (document.getElementById('rut') as HTMLInputElement).value;
+    const año = (document.getElementById('año') as HTMLInputElement).value;
 
-  this.http.get<any>(`http://localhost:3000/detalles-asignatura/${codigo}/${seccion}`)
-    .subscribe(
-      (data) => {
-        const tbody = document.getElementById('asignaturas-body');
-        if (!tbody) {
-          console.error('No se encontró el elemento tbody.');
-          return;
-        }
-        const newRow = document.createElement('tr');
-        const horas = parseInt(data.Horas);
-        const minutos = horas * 45; // Calcular los minutos
-        const planificacion = Math.floor(minutos / 60); // Calcular las horas
+    // Verificar si el checkbox de confirmación está marcado
+    const confirmacionCheckbox = document.getElementById(
+      'confirmacion'
+    ) as HTMLInputElement;
+    if (!confirmacionCheckbox.checked) {
+      alert('Debes confirmar antes de guardar los datos.');
+      return;
+    }
 
-        newRow.innerHTML = `
+    this.http
+      .get<any>(
+        `http://localhost:3000/detalles-asignatura/${codigo}/${seccion}`
+      )
+      .subscribe(
+        (data) => {
+          const tbody = document.getElementById('asignaturas-body');
+          if (!tbody) {
+            console.error('No se encontró el elemento tbody.');
+            return;
+          }
+          const newRow = document.createElement('tr');
+          const horas = parseInt(data.Horas);
+          const minutos = horas * 45; // Calcular los minutos
+          const planificacion = Math.floor(minutos / 60); // Calcular las horas
+
+          newRow.innerHTML = `
           <td>${codigo}</td>
           <td>${seccion}</td>
           <td>${data.Nombre}</td>
           <td>${data.Horas}</td>
           <td>${minutos}</td>
           <td>${planificacion}</td>
+          <td></td>
           <td><button type="button" class="remove-btn">Eliminar</button></td>
         `;
-        tbody.appendChild(newRow);
+          tbody.appendChild(newRow);
 
-        // Centrar el texto en todas las celdas de la nueva fila
-        const cells = newRow.querySelectorAll('td');
-        cells.forEach(cell => {
-          cell.style.textAlign = 'center';
-        });
-
-        // Agregar el evento de clic al botón de eliminación
-        const deleteButton = newRow.querySelector('.remove-btn');
-        if (deleteButton) {
-          deleteButton.addEventListener('click', () => {
-            this.eliminarFila(newRow);
-            this.calcularTotalHorasMinutos();
+          // Centrar el texto en todas las celdas de la nueva fila
+          const cells = newRow.querySelectorAll('td');
+          cells.forEach((cell) => {
+            cell.style.textAlign = 'center';
           });
 
-          // Calcular las horas de esta fila y sumarlas al total
-    const planificacion = Math.floor(minutos / 60); // Calcula las horas
-    this.totalHoras += planificacion;
+          // Agregar el evento de clic al botón de eliminación
+          const deleteButton = newRow.querySelector('.remove-btn');
+          if (deleteButton) {
+            deleteButton.addEventListener('click', () => {
+              this.eliminarFila(newRow);
+              this.calcularTotalHorasMinutos();
+            });
 
-    // Actualizar los elementos span con los totales calculados
-    const totalHorasSpan = document.getElementById('totalHorasValor');
-    const totalMinutosSpan = document.getElementById('totalMinutosValor');
-    if (totalHorasSpan && totalMinutosSpan) {
-      totalHorasSpan.textContent = this.totalHoras.toString();
-      totalMinutosSpan.textContent = this.totalMinutos.toString();
-    }
+            // Calcular las horas de esta fila y sumarlas al total
+            const planificacion = Math.floor(minutos / 60); // Calcula las horas
+            this.totalHoras += planificacion;
 
-    // Enviar los datos al backend para guardar la carga docente
-    this.guardarCargaDocente(rut, data.idAsignaturaSeccion, planificacion, minutos, año);
+            // Actualizar los elementos span con los totales calculados
+            const totalHorasSpan = document.getElementById('totalHorasValor');
+            const totalMinutosSpan =
+              document.getElementById('totalMinutosValor');
+            if (totalHorasSpan && totalMinutosSpan) {
+              totalHorasSpan.textContent = this.totalHoras.toString();
+              totalMinutosSpan.textContent = this.totalMinutos.toString();
+            }
+
+            // Enviar los datos al backend para guardar la carga docente
+            this.guardarCargaDocente(
+              rut,
+              data.idAsignaturaSeccion,
+              planificacion,
+              minutos,
+              año
+            );
+          }
+        },
+        (error) => {
+          console.error(
+            'Error al obtener los detalles de la asignatura:',
+            error
+          );
+          alert(
+            'Ocurrió un error al obtener los detalles de la asignatura. Por favor, inténtalo de nuevo más tarde.'
+          );
         }
-      },
-      (error) => {
-        console.error('Error al obtener los detalles de la asignatura:', error);
-        alert('Ocurrió un error al obtener los detalles de la asignatura. Por favor, inténtalo de nuevo más tarde.');
-      }
-    );
-}
+      );
+  }
 
-guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificacion: number, minutos: number, año: string) {
-  this.http.post<any>('http://localhost:3000/guardar-carga-docente', { idProfesor, idAsignaturaSeccion, HorasPlanificacion: planificacion, Horas_Minutos: minutos, Anio: año})
-    .subscribe(
-      (data) => {
-        console.log('Carga docente guardada exitosamente:', data);
-      },
-      (error) => {
-        console.error('Error al guardar la carga docente:', error);
-        alert('Ocurrió un error al guardar la carga docente. Por favor, inténtalo de nuevo más tarde.');
-      }
-    );
-}
+  guardarCargaDocente(
+    idProfesor: string,
+    idAsignaturaSeccion: string,
+    planificacion: number,
+    minutos: number,
+    año: string
+  ) {
+    this.http
+      .post<any>('http://localhost:3000/guardar-carga-docente', {
+        idProfesor,
+        idAsignaturaSeccion,
+        HorasPlanificacion: planificacion,
+        Horas_Minutos: minutos,
+        Anio: año,
+      })
+      .subscribe(
+        (data) => {
+          console.log('Carga docente guardada exitosamente:', data);
+        },
+        (error) => {
+          console.error('Error al guardar la carga docente:', error);
+          alert(
+            'Ocurrió un error al guardar la carga docente. Por favor, inténtalo de nuevo más tarde.'
+          );
+        }
+      );
+  }
 
   eliminarFila(row: HTMLElement) {
     // Verifica si la fila es válida
@@ -244,6 +292,7 @@ guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificaci
       console.error('Fila no válida o no tiene un nodo padre.');
       return;
     }
+
     // Elimina la fila del DOM
     row.parentNode.removeChild(row);
 
@@ -280,35 +329,40 @@ guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificaci
       totalHorasSpan.textContent = this.totalHoras.toString();
       totalMinutosSpan.textContent = this.totalMinutos.toString();
     }
-    
   }
 
   //Docencia Directa
 
- // Método para buscar las secciones disponibles para un código de asignatura dado
- buscarSecciones() {
-  const codigo = (document.getElementById('codigo') as HTMLInputElement).value;
+  // Método para buscar las secciones disponibles para un código de asignatura dado
+  buscarSecciones() {
+    const codigo = (document.getElementById('codigo') as HTMLInputElement)
+      .value;
 
-  this.http.post<any>('http://localhost:3000/obtener-secciones', { codigo })
-    .subscribe(
-      (data) => {
-        const seccionSelect = document.getElementById('seccion') as HTMLSelectElement;
-        seccionSelect.innerHTML = ''; // Limpiar opciones anteriores
-        if (Array.isArray(data)) {
-          data.forEach((Seccion) => {
-            const option = document.createElement('option');
-            option.value = Seccion.idSeccion;
-            option.textContent = Seccion.idSeccion;
-            seccionSelect.appendChild(option);
-          });
-        } else {
-          console.error('La respuesta del servidor no es un array:', data);
+    this.http
+      .post<any>('http://localhost:3000/obtener-secciones', { codigo })
+      .subscribe(
+        (data) => {
+          const seccionSelect = document.getElementById(
+            'seccion'
+          ) as HTMLSelectElement;
+          seccionSelect.innerHTML = ''; // Limpiar opciones anteriores
+          if (Array.isArray(data)) {
+            data.forEach((Seccion) => {
+              const option = document.createElement('option');
+              option.value = Seccion.idSeccion;
+              option.textContent = Seccion.idSeccion;
+              seccionSelect.appendChild(option);
+            });
+          } else {
+            console.error('La respuesta del servidor no es un array:', data);
+          }
+        },
+        (error) => {
+          console.error('Error al obtener secciones:', error);
+          alert(
+            'Ocurrió un error al obtener las secciones. Por favor, inténtalo de nuevo más tarde.'
+          );
         }
-      },
-      (error) => {
-        console.error('Error al obtener secciones:', error);
-        alert('Ocurrió un error al obtener las secciones. Por favor, inténtalo de nuevo más tarde.');
-      }
-    );
-}
+      );
+  }
 }
