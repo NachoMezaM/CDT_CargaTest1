@@ -35,6 +35,7 @@ onSearch(event: any) {
   ngOnInit(): void {
     this.profesorService.getAll().subscribe((data: Profesor[])=>{
       this.profesor = data;
+      this.filteredProfesor=this.profesor
      
     })  
   }
