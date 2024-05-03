@@ -43,6 +43,7 @@ export class EditComponent {
     }); 
         
     this.form = new FormGroup({
+      idAsignatura: new FormControl('', [Validators.required]),
       Nombre: new FormControl('', [Validators.required]),
       TipoAsignatura: new FormControl('', Validators.required),
       NumeroAlumnos: new FormControl('', Validators.required),
