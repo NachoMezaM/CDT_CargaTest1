@@ -1,19 +1,16 @@
-
+<body>
 <app-barranavegacion></app-barranavegacion>
 
 <div class="container">
-    <h1>Crear Asignatura</h1>
-  
-    <a href="#" routerLink="/post/index" class="btn btn-primary">Volver</a>
-        
+    <h1 class="titulo">Crear Asignatura</h1>
     <form [formGroup]="form" (ngSubmit)="submit()">
         
  
 
-    <div class="form-group">
+    <div class="border">
         <div class="row">  
         <div class="col21">
-            <label for="Nombre">Nombre</label>
+            <label for="Nombre"><strong>Nombre:</strong></label>
             <input 
                 formControlName="Nombre"
                 id="Nombre" 
@@ -25,7 +22,7 @@
         </div>
         
         <div class="col21">
-            <label for="TipoAsignatura">Tipo de Asignatura</label>
+            <label for="TipoAsignatura"><strong>Tipo de Asignatura:</strong></label>
             <select 
             formControlName="TipoAsignatura"
             id="TipoAsignatura"
@@ -48,7 +45,7 @@
         <div class="row">
 
             <div class="col1"> 
-                <label for="idAsignatura">Codigo de Asignatura</label>
+                <label for="idAsignatura"><strong>Codigo de Asignatura:</strong></label>
                 <input 
                     formControlName="idAsignatura"
                     id="idAsignatura" 
@@ -60,7 +57,7 @@
             </div> 
 
             <div class="col1">
-            <label for="NumeroAlumnos">Numero de Alumnos</label>
+            <label for="NumeroAlumnos"><strong>Numero de Alumnos:</strong></label>
             <input 
                 formControlName="NumeroAlumnos"
                 id="NumeroAlumnos" 
@@ -73,7 +70,7 @@
         
 
         <div class="col1">
-            <label for="Horas">Total de Horas Lectivas:</label>
+            <label for="Horas"><strong>Cantidad de Horas Lectivas:</strong></label>
             <input 
                 formControlName="Horas"
                 id="Horas" 
@@ -84,7 +81,13 @@
             </div>
         </div>
     </div>
+    <div class="linea">
+        <button routerLink="/post/index" class="boton">Volver</button>
+        <button class="boton" type="submit" [disabled]="!form.valid">Crear</button>
+    </div>
+
 </div>
-        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Crear</button>
+        
     </form>
 </div>
+</body>
