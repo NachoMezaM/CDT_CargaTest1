@@ -1,5 +1,5 @@
 export interface Profesor {
-    idProfesor : number;
+    idProfesor : string;
     Nombre: string;
     Apellido:string;
     Tipo: string;

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {  Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Profesor } from './profesor';
+import { VisualizarCA } from './visualizar-carga';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProfesorService {
+export class VisualizarCargaService {
   private apiURL = "http://localhost:3000";   //donde sirve el endpoint donde esta conectado
   /*------------------------------------------
   --------------------------------------------
@@ -31,7 +31,7 @@ export class ProfesorService {
    * @return response()
    */
   getAll(): Observable<any> {
-    return this.httpClient.get(this.apiURL + '/profesor/')
+    return this.httpClient.get(this.apiURL + '/VisualizarCA/')
     .pipe(
       catchError(this.errorHandler)
     )
@@ -41,8 +41,8 @@ export class ProfesorService {
    *
    * @return response()
    */
-  create(profesor:Profesor): Observable<any> {
-    return this.httpClient.post(this.apiURL + '/profesor/crear-profe', JSON.stringify(profesor), this.httpOptions)
+  create(cargaDocente:VisualizarCA): Observable<any> {
+    return this.httpClient.post(this.apiURL + '/VisualizarCA/crear-profe', JSON.stringify(cargaDocente), this.httpOptions)
     .pipe(
       catchError(this.errorHandler)
     )
@@ -53,8 +53,8 @@ export class ProfesorService {
    * @return response()
    */
   find(idProfesor:number): Observable<any> {
-    console.log(this.httpClient.get(this.apiURL + '/profesor/' + idProfesor))
-    return this.httpClient.get(this.apiURL + '/profesor/' + idProfesor)
+    console.log(this.httpClient.get(this.apiURL + '/VisualizarCA/' + idProfesor))
+    return this.httpClient.get(this.apiURL + '/VisualizarCA/' + idProfesor)
     .pipe(
       catchError(this.errorHandler)
     )
@@ -64,8 +64,8 @@ export class ProfesorService {
    *
    * @return response()
    */
-  update(idProfesor:number, profesor:Profesor): Observable<any> {
-    return this.httpClient.put(this.apiURL + '/profesor/' + idProfesor, JSON.stringify(profesor), this.httpOptions)
+  update(idProfesor:number, cargaDocente:VisualizarCA): Observable<any> {
+    return this.httpClient.put(this.apiURL + '/cargaDocente/' + idProfesor, JSON.stringify(cargaDocente), this.httpOptions)
     .pipe( 
       catchError(this.errorHandler)
     )
@@ -76,7 +76,7 @@ export class ProfesorService {
    * @return response()
    */
   delete(idProfesor:number){
-    return this.httpClient.delete(this.apiURL + '/profesor/' + idProfesor, this.httpOptions)
+    return this.httpClient.delete(this.apiURL + '/cargaDocente/' + idProfesor, this.httpOptions)
     .pipe(
       catchError(this.errorHandler)
     )

@@ -13,14 +13,20 @@ import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.
 })
 export class IndexProfeComponent {
   profesor: Profesor[] = [];
-    
-  /*------------------------------------------
-  --------------------------------------------
-  Created constructor
-  --------------------------------------------
-  --------------------------------------------*/
-  constructor(public profesorService: ProfesorService, private router: Router) { }
-    
+  filteredProfesor: any[] = [];  
+  busqueda: string = '';
+
+ //Busqueda por letras, Busca por (Todo Mayuscula, Todo Minuscula, Mayusculas y Minusculas)
+onSearch(event: any) {
+  this.busqueda = event.target.value;
+  this.filteredProfesor = this.profesor.filter(profesor => profesor.Nombre.toLocaleLowerCase().includes(this.busqueda) 
+  ||  profesor.Nombre.toLocaleUpperCase().includes(this.busqueda) || profesor.Nombre.includes(this.busqueda) || profesor.idProfesor.includes(this.busqueda) )
+}
+
+  constructor(public profesorService: ProfesorService, private router: Router) {
+    this.filteredProfesor = this.profesor;
+   }
+  
   /**
    * Write code on Method
    *
@@ -46,6 +52,7 @@ export class IndexProfeComponent {
             return 'Opción no válida';
     }
 }
+
 obtenerTipo(Tipo: string): string {
   switch (Tipo) {
       case "C" :
@@ -64,10 +71,4 @@ obtenerTipo(Tipo: string): string {
    *
    * @return response()
    */
-  deleteprofesor(idProfesor:number){
-    this.profesorService.delete(idProfesor).subscribe(res => {
-         this.profesor = this.profesor.filter(item => item.idProfesor !== idProfesor);
-         console.log('profesor deleted successfully!');
-    })
-  }
 }

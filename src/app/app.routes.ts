@@ -10,6 +10,8 @@ import {EditarProfeComponent} from './profesor/editar-profe/editar-profe.compone
 import { MenuComponent } from './menu/menu.component';
 import { BarranavegacionComponent } from './barranavegacion/barranavegacion.component';
 import { CargaHorariaComponent } from './carga-horaria/carga-horaria.component';
+import { VisualizarCargaComponent } from './carga-horaria/visualizar-carga/visualizar-carga.component';
+
 export const routes: Routes = [
     
       { path: '', redirectTo: 'menu', pathMatch: 'full'},
@@ -23,7 +25,8 @@ export const routes: Routes = [
       { path: 'profesor/:profesoridProfesor/editar-profe', component: EditarProfeComponent },
       { path: 'menu', component: MenuComponent  },
       { path: 'barranavegacion', component: BarranavegacionComponent},
-      { path: 'carga-horaria/carga-horaria', component: CargaHorariaComponent}
+      { path: 'carga-horaria/carga-horaria', component: CargaHorariaComponent},
+      { path: 'carga-horaria/visualizar-carga', component: VisualizarCargaComponent}
 
   ];
 
