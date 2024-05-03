@@ -117,38 +117,11 @@ app.get("/profesor/", (req, res) => {
 /* Crear un nuevo profesor */
 app.post("/profesor/crear-profe", (req, res) => {
   const {
-    idProfesor,
-    Nombre,
-    Tipo,
-    Profesion,
-    Horas,
-    ValorHora,
-    idJerarquia,
-    Direccion,
-    Telefono,
-    Grado,
-    TituloGrado,
-    Estado,
-    Apellido,
-  } = req.body;
+    idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
   // Si no existe, insertar el nuevo profesor en la base de datos
   db.query(
     "INSERT INTO cargaacademica.Profesor (idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    [
-      idProfesor,
-      Nombre,
-      Tipo,
-      Profesion,
-      Horas,
-      ValorHora,
-      idJerarquia,
-      Direccion,
-      Telefono,
-      Grado,
-      TituloGrado,
-      Estado,
-      Apellido,
-    ],
+    [idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido],
     (err, result) => {
       if (err) {
         console.error("Error al crear Profesor:", err);
@@ -197,37 +170,10 @@ app.get("/profesor/:idProfesor", (req, res) => {
 app.put("/profesor/:idProfesor", (req, res) => {
   const profesoridProfesor = req.params.idProfesor;
   console.log("Funca");
-  const {
-    Nombre,
-    Tipo,
-    Profesion,
-    Horas,
-    ValorHora,
-    idJerarquia,
-    Direccion,
-    Telefono,
-    Grado,
-    TituloGrado,
-    Estado,
-    Apellido,
-  } = req.body;
+  const { Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
   db.query(
     "UPDATE cargaacademica.Profesor SET Nombre=? ,Tipo = ?, Profesion = ?, Horas = ?, ValorHora = ?, idJerarquia = ?, Direccion = ?, Telefono = ?, Grado = ?, TituloGrado = ?, Estado = ?, Apellido = ? WHERE idProfesor = ?",
-    [
-      Nombre,
-      Tipo,
-      Profesion,
-      Horas,
-      ValorHora,
-      idJerarquia,
-      Direccion,
-      Telefono,
-      Grado,
-      TituloGrado,
-      Estado,
-      Apellido,
-      profesoridProfesor,
-    ],
+    [Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido, profesoridProfesor],
     (err) => {
       if (err) {
         res.status(500).send("Error updating Profesor");
@@ -247,24 +193,6 @@ app.put("/profesor/:idProfesor", (req, res) => {
     }
   );
 });
-
-//Delete a post
-app.delete("/asignatura/id", (req, res) => {
-  console.log("Connected to MySQL");
-  const postId = req.params.id;
-  db.query(
-    "DELETE FROM cargaacademica.Profesor WHERE id = ?",
-    postId,
-    (err) => {
-      if (err) {
-        res.status(500).send("Error deleting post");
-        return;
-      }
-      res.status(200).json({ msg: "Post deleted successfully" });
-    }
-  );
-});
-
 // Ruta para buscar los datos en la base de datos
 app.post("/buscar-datos", (req, res) => {
   const { rut, nombre, año } = req.body;
@@ -276,18 +204,6 @@ app.post("/buscar-datos", (req, res) => {
     JOIN Jerarquia ON Profesor.idJerarquia = Jerarquia.idJerarquia
     WHERE CONCAT(Profesor.Nombre, ' ', Profesor.Apellido) LIKE ? OR Profesor.idProfesor = ?
   `;
-
-  const query1 =
-    `
-  SELECT concat(Profesor.Nombre,' ',Profesor.Apellido ) As NombreCompleto,
-  Profesor.Grado,
-  Profesor.idJerarquia
-  from cargaacademica.Profesor 
-  JOIN cargaacademica.Jerarquia  ON Profesor.idJerarquia = Jerarquia.idJerarquia
-  WHERE Profesor.idProfesor = "` +
-    rut +
-    `"`;
-
   console.log(query);
   const values = [`%${nombre}%`, rut];
 
@@ -410,6 +326,37 @@ app.post("/guardar-carga-docente", (req, res) => {
         return;
       }
       res.status(200).json({ message: "Carga docente guardada exitosamente" });
+    }
+  );
+});
+
+
+/* Listar todas las Cargas Academicas */
+app.get("/VisualizarCA", (req, res) => {
+  db.query("SELECT * FROM cargaacademica.Asignatura", (err, results) => {
+    if (err) {
+      res.status(500).send("Error fetching posts");
+      return;
+    }
+    res.json(results);
+  });
+});
+/* Visualizar VisualizarCA */
+app.get("/VisualizarCA/:id", (req, res) => {
+  const cargarAc = req.params.ideCargaDocente;
+  db.query(
+    "SELECT * FROM cargaacademica.CargaDocente WHERE ideCargaDocente =?",
+    [cargarAc],
+    (err, result) => {
+      if (err) {
+        res.status(500).send("Error fetching post");
+        return;
+      }
+      if (result.length === 0) {
+        res.status(404).send("Post not found");
+        return;
+      }
+      res.json(result[0]);
     }
   );
 });
