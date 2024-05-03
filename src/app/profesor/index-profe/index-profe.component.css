@@ -1,3 +1,27 @@
 body{
     background-color: #0062C4;
 }
+.busqueda{
+    color: #003366;
+    background-color: white;
+    padding: 5px 20px;
+    text-align: left;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 0px;
+}
+.boton{
+    color: white;
+    background-color: #003366;
+    text-align: center;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 0px;
+}
+.boton:hover{
+    background-color: #002244;
+    color: white;
+}

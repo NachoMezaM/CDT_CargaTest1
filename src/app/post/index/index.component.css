@@ -26,5 +26,6 @@ body{
     background-color: white;
     padding: 5px 20px;
     text-align: left;
-    
+    border-radius: 10px;
+    border: 0px;
 }
