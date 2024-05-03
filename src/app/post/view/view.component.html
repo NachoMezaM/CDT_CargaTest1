@@ -1,33 +1,36 @@
+<html>
+<body>
 <app-barranavegacion></app-barranavegacion>
+        <div class="titulo">
+     <h1>Visualizar Asignatura</h1>
+         </div>
+  <div class="Border">   
 
-<div class="container">
-    <h1>Visualizar Asignatura</h1>
-  
-    <a href="#" routerLink="/post/index" class="btn btn-primary">Volver</a>
-   
+    <div class="col1">
+        <p><strong>Codigo Asignatura: </strong>{{ post.idAsignatura }}</p>
+        </div>
 
-    <div>
-        <strong>Codigo Asignatura:</strong>
-        <p>{{ post.idAsignatura }}</p>
-    </div>
 
-    <div>
-        <strong>Nombre:</strong>
-        <p>{{ post.Nombre }}</p>
+    <div class="col1">
+        <p><strong>Nombre: </strong>{{ post.Nombre }}</p>
     </div>
    
-    <div>
-        <strong>Tipo de Asignatura:</strong>
-        <p>{{ post.TipoAsignatura }}</p>
+    <div class="col1">  
+        <p><strong>Tipo de Asignatura: </strong>{{ post.TipoAsignatura }}</p>
     </div>
 
-    <div>
-        <strong>Cantidad de Alumnos:</strong>
-        <p>{{ post.NumeroAlumnos }}</p>
+    <div class="col1">  
+        <p><strong>Cantidad de Alumnos: </strong>{{ post.NumeroAlumnos }}</p>
     </div>
    
-    <div>
-        <strong>Horas lectivas:</strong>
-        <p>{{ post.Horas }}</p>
+    <div class="col1">   
+        <p><strong>Horas lectivas: </strong>{{ post.Horas }}</p>
     </div>
+
+    <div class="col1">     
+        <p><strong>Estado de la asignatura: </strong>{{ post.Estado }}</p>
+    </div>
+    <button routerLink="/post/index" class="boton">Volver</button>
 </div>
+</body>
+</html>

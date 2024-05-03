@@ -8,9 +8,22 @@
     <form [formGroup]="form" (ngSubmit)="submit()">
     
         <div class="form-group">
-    
+           
+            <div class="col2">
+                <label for="idAsignatura" class="nombre">Código:</label>
+                <input 
+                    formControlName="idAsignatura"
+                    id="idAsignatura" 
+                    type="text" 
+                    [(ngModel)]="post.idAsignatura"
+                    class="form-control">
+                <div *ngIf="f['idAsignatura'].touched && f['idAsignatura'].invalid" class="alert alert-danger">
+                    <div *ngIf="f['idAsignatura'].errors && f['idAsignatura'].errors['required']">Se requiere un idAsignatura.</div>
+                </div>
+            </div>       
+
         <div class="col2">
-            <label for="Nombre" class="nombre">Nombre:</label>
+            <label for="Nombre" class="subtitulo">Nombre:</label>
             <input 
                 formControlName="Nombre"
                 id="Nombre" 
@@ -22,7 +35,6 @@
             </div>
         </div>       
 
-
                 <div class="col2">
                     <label for="TipoAsignatura" class="subtitulo">Tipo de Asignatura</label>
                     <select 
@@ -31,6 +43,7 @@
                     class="form-control"
                     [ngModel]="post.TipoAsignatura" (ngModelChange)="post.TipoAsignatura = $event" >
                     <option value="">Seleccione Opcion</option>
+                    <option value="Complementario"> Asignatura Complementaria</option>
                     <option value="Profesional"> Asignatura Profesional</option>
                     <option value="Espiritual"> Asignatura Espiritual</option>
                     <option value="Electivo"> Asignatura Electiva</option>
