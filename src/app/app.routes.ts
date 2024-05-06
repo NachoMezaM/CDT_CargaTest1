@@ -6,10 +6,10 @@ import { EditComponent } from './post/edit/edit.component';
 import { CrearProfeComponent } from './profesor/crear-profe/crear-profe.component'
 import { IndexProfeComponent } from './profesor/index-profe/index-profe.component';
 import { ViewProfeComponent } from './profesor/view-profe/view-profe.component';
-import {EditarProfeComponent} from './profesor/editar-profe/editar-profe.component'
+import { EditarProfeComponent} from './profesor/editar-profe/editar-profe.component'
 import { MenuComponent } from './menu/menu.component';
 import { BarranavegacionComponent } from './barranavegacion/barranavegacion.component';
-import { CargaHorariaComponent } from './carga-horaria/carga-horaria.component';
+import { CargaHorariaComponent } from './carga-horaria/carga-horaria/carga-horaria.component';
 import { VisualizarCargaComponent } from './carga-horaria/visualizar-carga/visualizar-carga.component';
 
 export const routes: Routes = [

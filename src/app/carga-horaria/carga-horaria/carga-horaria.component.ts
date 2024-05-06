@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HostListener } from '@angular/core';
-import { BarranavegacionComponent } from "../barranavegacion/barranavegacion.component";
+import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
 
 @Component({
     selector: 'app-carga-horaria',

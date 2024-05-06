@@ -317,7 +317,7 @@ app.post("/guardar-carga-docente", (req, res) => {
   } = req.body;
 
   db.query(
-    "INSERT INTO CargaDocente (idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio) VALUES (?, ?, ?, ?, ?)",
+    "INSERT INTO cargaacademica.CargaDocente (idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio) VALUES (?, ?, ?, ?, ?)",
     [idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio],
     (err, result) => {
       if (err) {
@@ -333,7 +333,7 @@ app.post("/guardar-carga-docente", (req, res) => {
 
 /* Listar todas las Cargas Academicas */
 app.get("/VisualizarCA", (req, res) => {
-  db.query("SELECT * FROM cargaacademica.CargaDocente", (err, results) => {
+  db.query("SELECT CD.*, Pr.Nombre,Pr.Apellido, Pr.Grado FROM cargaacademica.CargaDocente as CD , cargaacademica.Profesor as Pr where CD.idProfesor= Pr.idProfesor", (err, results) => {
     if (err) {
       res.status(500).send("Error fetching posts");
       return;

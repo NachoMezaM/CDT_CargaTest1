@@ -12,23 +12,30 @@
     <table class="table table-striped table-bordered">
         <thead>
               <tr>   
-                <th>Codigo de Asignatura</th>        
+
+                <th>Codigo de Asignatura</th>
+                <th>Rut</th>
+                <th>Nombre </th>
+                <th>Grado </th>        
                 <th>Año</th>
                 <th>Horas de Planificacion</th>
                 <th>Horas Minutos</th>
-                <th>Rut</th>
                 <th>Sección </th>
+                
                 
               </tr>
         </thead>
         <tbody>
               <tr *ngFor="let visualizarCA of filteredPosts">
                 <td>{{ visualizarCA.idCargaDocente }}</td>
+                <td>{{ visualizarCA.idProfesor }}</td>
+                <td>{{ visualizarCA.Nombre +" " +visualizarCA.Apellido }}</td>
+                <td>{{ visualizarCA.Grado }}</td>
                 <td>{{ visualizarCA.Anio }}</td>
                 <td>{{ visualizarCA.HorasPlanificacion }}</td>
                 <td>{{ visualizarCA.Horas_Minutos }}</td>
-                <td>{{ visualizarCA.idProfesor }}</td>
                 <td>{{ visualizarCA.idAsignaturaSeccion }}</td>
+                
                 
               </tr>
         </tbody>
