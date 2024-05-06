@@ -52,4 +52,14 @@ export class SeccionComponent {
       return facultad? facultad.carreras : [];
     }
     return [];
-  }}
+
+    
+  }
+  submit(){
+    console.log(this.form.value);
+    this.postService.create(this.form.value).subscribe((res:any) => {
+         console.log('Post created successfully!');
+         this.router.navigateByUrl('post/index');
+    })
+  }
+}
