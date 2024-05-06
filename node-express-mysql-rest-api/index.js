@@ -333,7 +333,7 @@ app.post("/guardar-carga-docente", (req, res) => {
 
 /* Listar todas las Cargas Academicas */
 app.get("/VisualizarCA", (req, res) => {
-  db.query("SELECT * FROM cargaacademica.Asignatura", (err, results) => {
+  db.query("SELECT * FROM cargaacademica.CargaDocente", (err, results) => {
     if (err) {
       res.status(500).send("Error fetching posts");
       return;

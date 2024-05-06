@@ -52,9 +52,9 @@ export class VisualizarCargaService {
    *
    * @return response()
    */
-  find(idProfesor:number): Observable<any> {
-    console.log(this.httpClient.get(this.apiURL + '/VisualizarCA/' + idProfesor))
-    return this.httpClient.get(this.apiURL + '/VisualizarCA/' + idProfesor)
+  find(idCargaDocente:number): Observable<any> {
+    console.log(this.httpClient.get(this.apiURL + '/VisualizarCA/' + idCargaDocente))
+    return this.httpClient.get(this.apiURL + '/VisualizarCA/' + idCargaDocente)
     .pipe(
       catchError(this.errorHandler)
     )
@@ -64,8 +64,8 @@ export class VisualizarCargaService {
    *
    * @return response()
    */
-  update(idProfesor:number, cargaDocente:VisualizarCA): Observable<any> {
-    return this.httpClient.put(this.apiURL + '/cargaDocente/' + idProfesor, JSON.stringify(cargaDocente), this.httpOptions)
+  update(idCargaDocente:number, cargaDocente:VisualizarCA): Observable<any> {
+    return this.httpClient.put(this.apiURL + '/cargaDocente/' + idCargaDocente, JSON.stringify(cargaDocente), this.httpOptions)
     .pipe( 
       catchError(this.errorHandler)
     )
@@ -75,8 +75,8 @@ export class VisualizarCargaService {
    *
    * @return response()
    */
-  delete(idProfesor:number){
-    return this.httpClient.delete(this.apiURL + '/cargaDocente/' + idProfesor, this.httpOptions)
+  delete(idCargaDocente:number){
+    return this.httpClient.delete(this.apiURL + '/cargaDocente/' + idCargaDocente, this.httpOptions)
     .pipe(
       catchError(this.errorHandler)
     )
