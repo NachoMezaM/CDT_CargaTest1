@@ -82,8 +82,8 @@ app.put("/posts/:id", (req, res) => {
   const { idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado } =
     req.body;
   db.query(
-    "UPDATE cargaacademica.Asignatura SET Nombre =?, TipoAsignatura =?, NumeroAlumnos =?, Horas = ?, Estado = ? WHERE idAsignatura =?",
-    [Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado, postId],
+    "UPDATE cargaacademica.Asignatura SET idAsignatura=?, Nombre =?, TipoAsignatura =?, NumeroAlumnos =?, Horas = ?, Estado = ? WHERE idAsignatura =?",
+    [idAsignatura, Nombre, TipoAsignatura, NumeroAlumnos, Horas, Estado, postId],
     (err) => {
       if (err) {
         res.status(500).send("Error updating post");
