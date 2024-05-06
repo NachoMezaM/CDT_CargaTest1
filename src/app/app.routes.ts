@@ -3,6 +3,7 @@ import { IndexComponent } from './post/index/index.component';
 import { ViewComponent } from './post/view/view.component';
 import { CreateComponent } from './post/create/create.component';
 import { EditComponent } from './post/edit/edit.component';
+import { SeccionComponent } from './post/seccion/seccion.component';
 import { CrearProfeComponent } from './profesor/crear-profe/crear-profe.component'
 import { IndexProfeComponent } from './profesor/index-profe/index-profe.component';
 import { ViewProfeComponent } from './profesor/view-profe/view-profe.component';
@@ -19,6 +20,7 @@ export const routes: Routes = [
       { path: 'post/:postId/view', component: ViewComponent },
       { path: 'post/create', component: CreateComponent },
       { path: 'post/:postId/edit', component: EditComponent },
+      { path: 'post/:postId/seccion', component: SeccionComponent },
       { path: 'profesor/crear-profe', component: CrearProfeComponent },
       { path: 'profesor/index-profe', component: IndexProfeComponent},
       { path: 'profesor/:profesoridProfesor/view-profe', component: ViewProfeComponent},
