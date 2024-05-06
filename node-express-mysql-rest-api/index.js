@@ -26,7 +26,7 @@ db.connect((err) => {
 app.use(bodyParser.json());
 app.use(cors());
 
-/* Routes */
+/* --------------------------------------------------------------------- Asignaturas  ---------------------------------------------------------------------*/
 /* Listar todas las Asignaturas */
 app.get("/posts", (req, res) => {
   db.query("SELECT * FROM cargaacademica.Asignatura", (err, results) => {
@@ -103,7 +103,7 @@ app.put("/posts/:id", (req, res) => {
     }
   );
 });
-
+ //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 app.get("/profesor/", (req, res) => {
   db.query("SELECT * FROM cargaacademica.Profesor", (err, results) => {
     if (err) {
