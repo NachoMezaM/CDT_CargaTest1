@@ -1,0 +1,57 @@
+
+/* BORDE FORMULARIO */
+.border{
+    background-color: white;
+    padding: 40px 10px;
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
+.row {
+    margin-right: -8px;
+    margin-left: 50px; 
+    margin-top: 25px;
+    width:100%;
+ 
+}
+ /* BOTONES*/
+.boton{
+    color: white;
+    background-color: #003366;
+    text-align: center;
+    margin-right: 25px;
+    margin-top: 25px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 0px;
+}
+.boton:hover{
+    background-color: #002244;
+    color: white;
+}
+.linea{
+    align-items: center;
+    text-align: center;
+}
+/* CONTENIDO */
+.col1{
+   width:150px;
+
+}
+
+.col21, .col22{
+    width:43%;
+}
+
+.titulo{
+    text-align: center;
+    color: white;
+    margin-top: 25px;
+    margin-bottom: 30px;
+}
+
+body{
+    background-color: #0062C4;
+    height:100%;
+}

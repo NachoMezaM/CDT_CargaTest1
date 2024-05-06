@@ -1,0 +1,88 @@
+
+.row {
+    margin-right: -8px;
+    margin-left:-8px; 
+    margin-bottom: 20px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:100%;
+ 
+}
+/* BACKGROUND DEL FORMULARIO*/
+.form-group {
+    background-color: white;
+    padding: 40px 10px;
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+
+  }
+  /*MARGEN Y PADDING PARA TITULO, NOMBRE Y SUBTITULO*/
+
+.titulo{
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.nombre{
+    margin-top: 1px;
+}
+.subtitulo{
+    margin-top: 15px;
+}
+/*CAMPOS DE TEXTO*/
+.col1{
+   color: #003366; 
+   width: 200px;
+    margin-left: 0%;
+}
+
+.col2{
+    color:#003366;
+    width:50%;
+    margin: 0 auto;
+}
+ /* BOTONES */
+.botonsumbit{
+    margin-bottom: 90px;
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px 20px;
+    background-color: #003366;
+    border: 0px;
+    color: white;
+}
+
+.botonsumbit:hover{
+    background-color: #002244;
+    color: white;
+}
+.botonvolver{
+
+    text-align: center;
+    margin-left: 20px;
+    border-radius: 10px;
+    margin-bottom: 90px;
+    border: 0px;
+    padding: 10px 20px;
+    background-color: #003366;
+    color: white;
+}
+.botonvolver:hover{
+    background-color: #002244;
+    color: white;
+}
+.centrar{
+    margin-top: 10px;
+   
+    display: flex;
+  justify-content: center;
+}
+body{
+    background-color: #0062C4;
+    width: 100%;
+    height:100%;
+}
+

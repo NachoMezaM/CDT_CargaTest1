@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
   
 import { PostService } from '../post.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
   
@@ -11,7 +11,7 @@ import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.
     standalone: true,
     templateUrl: './create.component.html',
     styleUrl: './create.component.css',
-    imports: [CommonModule, ReactiveFormsModule, BarranavegacionComponent]
+    imports: [CommonModule, ReactiveFormsModule, BarranavegacionComponent,RouterLink]
 })
 export class CreateComponent {
   

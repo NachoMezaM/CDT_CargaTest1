@@ -16,6 +16,11 @@ export class IndexComponent {
   filteredPosts: any[] = [];  
   busqueda: string = '';
 
+  // inicio sin filtro
+  filter(){
+    this.filteredPosts = this.posts;
+  }
+
   //Busqueda por estado || Activo = "Activo" / Inactivo = "Inactivo"
   filterByEstado(estado: string) {
     this.filteredPosts = this.posts.filter(post => post.Estado === estado);
@@ -29,7 +34,7 @@ onSearch(event: any) {
 }
 
   constructor(public postService: PostService, private router: Router) { 
-    this.filteredPosts = this.posts;
+    
   }
     
   /**
@@ -38,10 +43,10 @@ onSearch(event: any) {
    * @return response()
    */
   ngOnInit(): void {
-    console.log(this.router.url);
-    console.log( window.location.href);
+   
     this.postService.getAll().subscribe((data: Post[])=>{
       this.posts = data;
+      this.filteredPosts = this.posts;
       console.log(this.posts);
     })  
   }

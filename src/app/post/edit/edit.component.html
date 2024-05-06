@@ -1,15 +1,29 @@
-
+<body>
 <app-barranavegacion></app-barranavegacion>
 
-<div class="container">
-    <h1>Actualizar Asignatura</h1>
-   
-    <a href="#" routerLink="/post/index" class="btn btn-primary">Volver</a>
-          
+<div class="container1">
+    <div class="titulo">
+    <h1 style="color: white; text-align: center; ">Actualizar Asignatura</h1>
+    </div>
     <form [formGroup]="form" (ngSubmit)="submit()">
     
         <div class="form-group">
-            <label for="Nombre">Nombre:</label>
+           
+            <div class="col2">
+                <label for="idAsignatura" class="nombre"><strong>Código:</strong></label>
+                <input 
+                    formControlName="idAsignatura"
+                    id="idAsignatura" 
+                    type="text" 
+                    [(ngModel)]="post.idAsignatura"
+                    class="form-control">
+                <div *ngIf="f['idAsignatura'].touched && f['idAsignatura'].invalid" class="alert alert-danger">
+                    <div *ngIf="f['idAsignatura'].errors && f['idAsignatura'].errors['required']">Se requiere un idAsignatura.</div>
+                </div>
+            </div>       
+
+        <div class="col2">
+            <label for="Nombre" class="subtitulo"><strong>Nombre:</strong></label>
             <input 
                 formControlName="Nombre"
                 id="Nombre" 
@@ -19,42 +33,30 @@
             <div *ngIf="f['Nombre'].touched && f['Nombre'].invalid" class="alert alert-danger">
                 <div *ngIf="f['Nombre'].errors && f['Nombre'].errors['required']">Se requiere un Nombre.</div>
             </div>
-        </div>
-           
-        <div class="form-group">
-            <label for="TipoAsignatura">Tipo de Asignatura</label>
-            <select 
-            formControlName="TipoAsignatura"
-            id="TipoAsignatura"
-            class="form-control"
-            [ngModel]="post.TipoAsignatura" (ngModelChange)="post.TipoAsignatura = $event" >
-            <option value="">Seleccione Opcion</option>
-            <option value="Profesional"> Asignatura Profesional</option>
-            <option value="Espiritual"> Asignatura Espiritual</option>
-            <option value="Electivo"> Asignatura Electiva</option>
-            <option value="Disciplinar"> Asignatura Disciplinar</option>
-             </select>
-             
-            <div *ngIf="f['TipoAsignatura'].touched && f['TipoAsignatura'].invalid" class="alert alert-danger">
-                <div *ngIf="f['TipoAsignatura'].errors && f['TipoAsignatura'].errors['required']">Se requiere un tipo de asignatura.</div>
-            </div>
-        </div>
+        </div>       
 
-        <div class="form-group">
-            <label for="NumeroAlumnos">Cantidad de Alumnos:</label>
-            <input 
-                formControlName="NumeroAlumnos"
-                id="NumeroAlumnos" 
-                type="text" 
-                [(ngModel)]="post.NumeroAlumnos"
-                class="form-control">
-            <div *ngIf="f['NumeroAlumnos'].touched && f['NumeroAlumnos'].invalid" class="alert alert-danger">
-                <div *ngIf="f['NumeroAlumnos'].errors && f['NumeroAlumnos'].errors['required']">Se requiere una cantidad de alumnos.</div>
-            </div>
-        </div>
+                <div class="col2">
+                    <label for="TipoAsignatura" class="subtitulo"><strong>Tipo de Asignatura</strong></label>
+                    <select 
+                    formControlName="TipoAsignatura"
+                    id="TipoAsignatura"
+                    class="form-control"
+                    [ngModel]="post.TipoAsignatura" (ngModelChange)="post.TipoAsignatura = $event" >
+                    <option value="">Seleccione Opcion</option>
+                    <option value="Complementario"> Asignatura Complementaria</option>
+                    <option value="Profesional"> Asignatura Profesional</option>
+                    <option value="Espiritual"> Asignatura Espiritual</option>
+                    <option value="Electivo"> Asignatura Electiva</option>
+                    <option value="Disciplinar"> Asignatura Disciplinar</option>
+                     </select>
+                     
+                    <div *ngIf="f['TipoAsignatura'].touched && f['TipoAsignatura'].invalid" class="alert alert-danger">
+                        <div *ngIf="f['TipoAsignatura'].errors && f['TipoAsignatura'].errors['required']">Se requiere un tipo de asignatura.</div>
+                    </div>
          
-        <div class="form-group">
-            <label for="Horas">Horas Lectivas:</label>
+
+            <label for="Horas" class="subtitulo"><strong>Total de Horas:</strong></label>
+            <div class="col1">
             <input 
                 formControlName="Horas"
                 id="Horas" 
@@ -66,8 +68,21 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="Estado">Estado de la Asignatura</label>
+            <label for="NumeroAlumnos" class="subtitulo"><strong>Total de Alumnos:</strong></label>
+            <div class="col1">
+            <input 
+                formControlName="NumeroAlumnos"
+                id="NumeroAlumnos" 
+                type="text" 
+                [(ngModel)]="post.NumeroAlumnos"
+                class="form-control">
+            <div *ngIf="f['NumeroAlumnos'].touched && f['NumeroAlumnos'].invalid" class="alert alert-danger">
+                <div *ngIf="f['NumeroAlumnos'].errors && f['NumeroAlumnos'].errors['required']">Se requiere una cantidad de alumnos.</div>
+            </div>
+
+        
+            <label for="Estado" class="subtitulo"><strong>Estado</strong></label>
+            <div class="col1">
             <select 
             formControlName="Estado"
             id="Estado"
@@ -81,8 +96,14 @@
                 <div *ngIf="f['Estado'].errors && f['Estado'].errors['required']">Se requiere un tipo de asignatura.</div>
             </div>
         </div>
-  
-
-        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Actualizar</button>
-    </form>
+    </div>
 </div>
+</div>  
+    <div class="centrar">
+        <button class="botonsumbit" type="submit" [disabled]="!form.valid">Actualizar</button>
+        <button routerLink="/post/index" class="botonvolver">Volver</button>
+    </div>
+    </form>
+
+</div>
+</body>

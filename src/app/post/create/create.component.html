@@ -1,29 +1,15 @@
-
+<body>
 <app-barranavegacion></app-barranavegacion>
 
 <div class="container">
-    <h1>Crear Asignatura</h1>
-  
-    <a href="#" routerLink="/post/index" class="btn btn-primary">Volver</a>
-        
+    <h1 class="titulo">Crear Asignatura</h1>
     <form [formGroup]="form" (ngSubmit)="submit()">
         
- 
 
-        <div class="form-group">
-            <label for="idAsignatura">Codigo de Asignatura</label>
-            <input 
-                formControlName="idAsignatura"
-                id="idAsignatura" 
-                type="text" 
-                class="form-control">
-            <div *ngIf="f['idAsignatura'].touched && f['idAsignatura'].invalid" class="alert alert-danger">
-                <div *ngIf="f['idAsignatura'].errors && f['idAsignatura'].errors['required']">Se requiere un Codigo de Asignatura.</div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="Nombre">Nombre</label>
+    <div class="border">
+        <div class="row">  
+        <div class="col21">
+            <label for="Nombre"><strong>Nombre:</strong></label>
             <input 
                 formControlName="Nombre"
                 id="Nombre" 
@@ -34,8 +20,8 @@
             </div>
         </div>
         
-        <div class="form-group">
-            <label for="TipoAsignatura">Tipo de Asignatura</label>
+        <div class="col21">
+            <label for="TipoAsignatura"><strong>Tipo de Asignatura:</strong></label>
             <select 
             formControlName="TipoAsignatura"
             id="TipoAsignatura"
@@ -51,9 +37,26 @@
                 <div *ngIf="f['TipoAsignatura'].errors && f['TipoAsignatura'].errors['required']">Se requiere un tipo de asignatura.</div>
             </div>
         </div>
+    </div> 
 
-        <div class="form-group">
-            <label for="NumeroAlumnos">Numero de Alumnos</label>
+
+            
+        <div class="row">
+
+            <div class="col1"> 
+                <label for="idAsignatura"><strong>Codigo de Asignatura:</strong></label>
+                <input 
+                    formControlName="idAsignatura"
+                    id="idAsignatura" 
+                    type="text" 
+                    class="form-control">
+                <div *ngIf="f['idAsignatura'].touched && f['idAsignatura'].invalid" class="alert alert-danger">
+                    <div *ngIf="f['idAsignatura'].errors && f['idAsignatura'].errors['required']">Se requiere un Codigo de Asignatura.</div>
+                </div>
+            </div> 
+
+            <div class="col1">
+            <label for="NumeroAlumnos"><strong>Numero de Alumnos:</strong></label>
             <input 
                 formControlName="NumeroAlumnos"
                 id="NumeroAlumnos" 
@@ -63,9 +66,10 @@
                 <div *ngIf="f['NumeroAlumnos'].errors && f['NumeroAlumnos'].errors['required']">Se requiere una cantidad de alumnos.</div>
             </div>
         </div>
+        
 
-        <div class="form-group">
-            <label for="Horas">Horas:</label>
+        <div class="col1">
+            <label for="Horas"><strong>Cantidad de Horas Lectivas:</strong></label>
             <input 
                 formControlName="Horas"
                 id="Horas" 
@@ -75,7 +79,14 @@
                 <div *ngIf="f['Horas'].errors && f['Horas'].errors['required']">Se requiere una cantidad de horas.</div>
             </div>
         </div>
-  
-        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Crear</button>
+    </div>
+    <div class="linea">
+        <button routerLink="/post/index" class="boton">Volver</button>
+        <button class="boton" type="submit" [disabled]="!form.valid">Crear</button>
+    </div>
+
+</div>
+        
     </form>
 </div>
+</body>

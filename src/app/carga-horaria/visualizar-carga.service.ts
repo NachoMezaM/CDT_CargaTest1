@@ -1,18 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-      
 import {  Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-   
-import { Post } from './post';
-    
+import { VisualizarCA } from './visualizar-carga';
+
 @Injectable({
   providedIn: 'root'
 })
-export class PostService {
-    
-  private apiURL = "http://localhost:3000";
-      
+export class VisualizarCargaService {
+  private apiURL = "http://localhost:3000";   //donde sirve el endpoint donde esta conectado
   /*------------------------------------------
   --------------------------------------------
   Http Header Options
@@ -23,80 +19,68 @@ export class PostService {
       'Content-Type': 'application/json'
     })
   }
-     
   /*------------------------------------------
   --------------------------------------------
   Created constructor
   --------------------------------------------
   --------------------------------------------*/
   constructor(private httpClient: HttpClient) { }
-      
   /**
    * Write code on Method
    *
    * @return response()
    */
-  getAll(): Observable<any>{
-
-   
-    return this.httpClient.get(this.apiURL + '/posts/')
+  getAll(): Observable<any> {
+    return this.httpClient.get(this.apiURL + '/VisualizarCA/')
     .pipe(
       catchError(this.errorHandler)
     )
-  }
-      
+  } 
   /**
    * Write code on Method
    *
    * @return response()
    */
-  create(post:Post): Observable<any> {
-    return this.httpClient.post(this.apiURL + '/posts/create', JSON.stringify(post), this.httpOptions)
+  create(cargaDocente:VisualizarCA): Observable<any> {
+    return this.httpClient.post(this.apiURL + '/VisualizarCA/crear-profe', JSON.stringify(cargaDocente), this.httpOptions)
     .pipe(
       catchError(this.errorHandler)
     )
   }  
-    
   /**
    * Write code on Method
    *
    * @return response()
    */
-  find(id:number): Observable<any> {
-
-  
-    return this.httpClient.get(this.apiURL + '/posts/' + id)
+  find(idProfesor:number): Observable<any> {
+    console.log(this.httpClient.get(this.apiURL + '/VisualizarCA/' + idProfesor))
+    return this.httpClient.get(this.apiURL + '/VisualizarCA/' + idProfesor)
     .pipe(
       catchError(this.errorHandler)
     )
   }
-    
   /**
    * Write code on Method
    *
    * @return response()
    */
-  update(id:number, post:Post): Observable<any> {
-
-  
-    return this.httpClient.put(this.apiURL + '/posts/' + id, JSON.stringify(post), this.httpOptions)
+  update(idProfesor:number, cargaDocente:VisualizarCA): Observable<any> {
+    return this.httpClient.put(this.apiURL + '/cargaDocente/' + idProfesor, JSON.stringify(cargaDocente), this.httpOptions)
     .pipe( 
       catchError(this.errorHandler)
     )
-  }
-       
+  } 
   /**
    * Write code on Method
    *
    * @return response()
    */
-  delete(id:number){
-    return this.httpClient.delete(this.apiURL + '/posts/' + id, this.httpOptions)
+  delete(idProfesor:number){
+    return this.httpClient.delete(this.apiURL + '/cargaDocente/' + idProfesor, this.httpOptions)
     .pipe(
       catchError(this.errorHandler)
     )
-  }
-      
+  }      
   /** 
    * Write code on Method
    *
@@ -106,10 +90,9 @@ export class PostService {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {
       errorMessage = error.error.message;
-      
+
     } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-      console.log("No funca")
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message} `;
     }
     return throwError(errorMessage);
  }
