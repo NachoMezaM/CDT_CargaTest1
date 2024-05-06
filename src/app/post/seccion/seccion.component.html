@@ -1,5 +1,5 @@
 <body>
-    <form [formGroup]="form" (ngSubmit)="submit()">
+    <form [formGroup]="form">
         <select formControlName="Facultad">
           <option *ngFor="let facultad of facultades" [value]="facultad.id">{{ facultad.nombre }}</option>
         </select>
