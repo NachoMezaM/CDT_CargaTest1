@@ -1,1 +1,15 @@
-<p>seccion works!</p>
+<body>
+
+<label for="idAsignatura" class=""><strong>Código:</strong></label>
+<td>{{ post.idAsignatura }}</td>
+
+<label for="idSeccion"><strong>Codigo de Seccion:</strong></label>
+            <input 
+                formControlName="idSeccion"
+                id="idSeccion" 
+                type="text" 
+                class="form-control">
+            <div *ngIf="f['idSeccion'].touched && f['idSeccion'].invalid" class="alert alert-danger">
+                <div *ngIf="f['idSeccion'].errors && f['idSeccion'].errors['required']">Se requiere un idSeccion.</div>
+            </div>
+</body>
