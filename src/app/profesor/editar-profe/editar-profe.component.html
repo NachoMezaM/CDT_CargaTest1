@@ -3,14 +3,14 @@
 <html>
 
 <head>
-    <title>Editar Profesor</title>
+    <title>Editar Docente</title>
     <!-- Coloca aquí tus etiquetas de estilo CSS y enlaces a scripts JS si los tienes -->
 </head>
 <app-barranavegacion></app-barranavegacion>
 
 <body>
 
-    <h1 class="titulo">Editar Profesor</h1>
+    <h1 class="titulo">Editar Docente</h1>
     <div class="border">   
         
         <form [formGroup]="form" (ngSubmit)="submit()">
@@ -173,6 +173,6 @@
     </div>
     <div class="centrar">
         <button routerLink="/profesor/index-profe" class="boton">Atrás</button>
-        <button class="boton" type="submit" [disabled]="!form.valid">Actualizar Profesor</button>
+        <button class="boton" type="submit" [disabled]="!form.valid">Actualizar Docente</button>
     </div>
 </body>
