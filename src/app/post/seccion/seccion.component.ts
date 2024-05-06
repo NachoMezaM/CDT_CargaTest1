@@ -18,6 +18,13 @@ export class SeccionComponent {
   id!: number;
   post!: Post;
   form!: FormGroup;
+  facultades = [
+    { id: 'FI', nombre: 'Facultad de Ingenieria y Negocios', carreras: ['Ingeniería en Sistemas', 'Ingeniería en Electrónica'] },
+    { id: 'FS', nombre: 'Facultad de Salud', carreras: ['Medicina', 'Enfermería'] },
+    { id: 'FE', nombre: 'Facultad de Educacion', carreras: ['Educación Primaria', 'Educación Secundaria'] },
+    { id: 'TE', nombre: 'Facultad de Teologia', carreras: ['Teología', 'Filosofía'] },
+    { id: 'DE', nombre: 'Facultad de Ciencias Juridicas y Sociales', carreras: ['Derecho', 'Ciencias Políticas'] },
+  ];
 
   constructor(
     public postService: PostService,
@@ -30,13 +37,19 @@ export class SeccionComponent {
     this.postService.find(this.id).subscribe((data: Post)=>{
       this.post = data;
     }); 
-    
     this.form = new FormGroup({
-      idAsignatura: new FormControl('', [Validators.required]),})
-    }
+      idAsignatura: new FormControl('', [Validators.required]),
+      Facultad: new FormControl('', [Validators.required]),
+      Carrera: new FormControl('', [Validators.required]),
+    });
+  }
 
-    get f(){
-      return this.form.controls;
+  get Carreras() {
+    const facultadControl = this.form.get('Facultad');
+    if (facultadControl && facultadControl.touched) {
+      const facultadId = facultadControl.value;
+      const facultad = this.facultades.find(f => f.id === facultadId);
+      return facultad? facultad.carreras : [];
     }
-
-}
+    return [];
+  }}
