@@ -1,11 +1,11 @@
 <body>
-    <form [formGroup]="form" (ngSubmit)="Submit()">
+    <form [formGroup]="form" (ngSubmit)="submit()">
         <select formControlName="Facultad">
           <option *ngFor="let facultad of facultades" [value]="facultad.id">{{ facultad.nombre }}</option>
         </select>
         <select formControlName="Carrera">
           <option *ngFor="let carrera of Carreras" [value]="carrera">{{ carrera }}</option>
         </select>
-        <button class="boton" type="submit" [disabled]="!form.valid">Crear</button>
+        <button class="boton" type="submit">Crear</button>
       </form>
 </body>
