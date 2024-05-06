@@ -3,5 +3,19 @@
 <label for="idAsignatura" class=""><strong>Código:</strong></label>
 <td>{{ post.idAsignatura }}</td>
 
-
+<label for="Facultad"><strong>Facultad</strong></label>
+            <select 
+            formControlName="Facultad"
+            id="Facultad"
+            class="form-control" >
+            <option value="">Seleccione Opcion</option>
+            <option value="FI"> Facultad de Ingenieria y Negocios</option>
+            <option value="FS"> Facultad de Salud </option>
+            <option value="FE"> Facultad de Educacion </option>
+            <option value="TE"> Facultad de Teologia</option>
+            <option value="DE"> Facultad de Ciencias Juridicas y Sociales</option>
+             </select>
+            <div *ngIf="f['Facultad'].touched && f['Facultad'].invalid" class="alert alert-danger">
+                <div *ngIf="f['Facultad'].errors && f['Facultad'].errors['required']">Se requiere un tipo de asignatura.</div>
+            </div>
 </body>
