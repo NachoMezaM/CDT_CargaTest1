@@ -3,25 +3,22 @@
 <html>
 
 <head>
-    <title>Editar Profesor</title>
+    <title>Editar Docente</title>
     <!-- Coloca aquí tus etiquetas de estilo CSS y enlaces a scripts JS si los tienes -->
 </head>
 <app-barranavegacion></app-barranavegacion>
 
 <body>
 
-
-    <div class="container">
-        <h1>Editar Profesor</h1>
-        <br>
-        <a href="#" routerLink="/profesor/index-profe" class="btn btn-primary mb-4">Atrás</a>
-<br>
+    <h1 class="titulo">Editar Docente</h1>
+    <div class="border">   
+        
         <form [formGroup]="form" (ngSubmit)="submit()">
 
             <div class="form-group">
                 <div class="row">
                     <div class="col1">
-                        <label for="idProfesor">Rut:</label>
+                        <label for="idProfesor"><strong>Rut:</strong></label>
                         <input formControlName="idProfesor" id="idProfesor" type="text" class="form-control1" [(ngModel)]=" profesor.idProfesor" readonly>
                         <div *ngIf="f['idProfesor'].touched && f['idProfesor'].invalid" class="alert alert-danger">
                             <div *ngIf="f['idProfesor'].errors && f['idProfesor'].errors['required']">Es necesario agregar rut.</div>
@@ -29,7 +26,7 @@
                     </div>
 
                     <div class="col21 ">
-                        <label for="Nombre">Nombre:</label>
+                        <label for="Nombre"><strong>Nombre:</strong></label>
                         <input formControlName="Nombre" id="Nombre" type="text" class="form-control2" [(ngModel)]=" profesor.Nombre">
                         <div *ngIf="f['Nombre'].touched && f['Nombre'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Nombre'].errors && f['Nombre'].errors['required']">Es necesario agregar Nombre.</div>
@@ -37,7 +34,7 @@
                     </div>
                     <div class="col21">
 
-                        <label for="Apellido">Apellido:</label>
+                        <label for="Apellido"><strong>Apellido:</strong></label>
                         <input formControlName="Apellido" id="Apellido" type="text" class="form-control2" [(ngModel)]=" profesor.Apellido">
                         <div *ngIf="f['Apellido'].touched && f['Apellido'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Apellido'].errors && f['Apellido'].errors['required']">Es necesario argregar Apellido .</div>
@@ -51,7 +48,7 @@
             <div class="row">
                 <div class="col1">
                     <div class="form-group">
-                        <label for="Telefono">Teléfono:</label>
+                        <label for="Telefono"><strong>Teléfono:</strong></label>
                         <input formControlName="Telefono" id="Telefono" type="text" class="form-control1" [(ngModel)]=" profesor.Telefono">
                         <div *ngIf="f['Telefono'].touched && f['Telefono'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Telefono'].errors && f['Telefono'].errors['required']">Es necesario agregar Teléfono.</div>
@@ -60,7 +57,7 @@
                 </div>
                 <div class="col21">
                     <div class="form-group">
-                        <label for="Direccion">Dirección:</label>
+                        <label for="Direccion"><strong>Dirección:</strong></label>
                         <input formControlName="Direccion" id="Direccion" type="text" class="form-control2" [(ngModel)]=" profesor.Direccion">
                         <div *ngIf="f['Direccion'].touched && f['Direccion'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Direccion'].errors && f['Direccion'].errors['required']">Es necesario agregar Dirección.</div>
@@ -69,7 +66,7 @@
                 </div>
                 <div class="col21">
                     <div class="form-group">
-                        <label for="Profesion">Profesión</label>
+                        <label for="Profesion"><strong>Profesión</strong></label>
                         <input formControlName="Profesion" id="Profesion" type="text" class="form-control" [(ngModel)]=" profesor.Profesion">
 
                         <div *ngIf="f['Profesion'].touched && f['Profesion'].invalid" class="alert alert-danger">
@@ -82,7 +79,7 @@
                 <div class="col1">
 
                     <div class="form-group">
-                        <label for="Tipo">Tipo: </label>
+                        <label for="Tipo"><strong>Tipo:</strong></label>
                         <select id="Tipo" class="form-control2" formControlName="Tipo" [(ngModel)]=" profesor.Tipo">
                             <option value="C">Contrato</option>
                             <option value="H">Horario</option>
@@ -96,7 +93,7 @@
 
                 <div class="col21">
                     <div class="form-group">
-                        <label for="Grado">Grado Académico</label>
+                        <label for="Grado"><strong>Grado Académico</strong></label>
                         <input formControlName="Grado" id="Grado" type="text" class="form-control" [(ngModel)]=" profesor.Grado">
 
                         <div *ngIf="f['Grado'].touched && f['Grado'].invalid" class="alert alert-danger">
@@ -106,7 +103,7 @@
                 </div>
                 <div class="col21">
                     <div class="form-group">
-                        <label for="TituloGrado">Titulo de Grado</label>
+                        <label for="TituloGrado"><strong>Titulo de Grado</strong></label>
                         <input formControlName="TituloGrado" id="TituloGrado" type="text" class="form-control" [(ngModel)]=" profesor.TituloGrado">
 
                         <div *ngIf="f['TituloGrado'].touched && f['TituloGrado'].invalid" class="alert alert-danger">
@@ -118,7 +115,7 @@
             <div class="row">
                 <div class="col1">
                     <div class="form-group">
-                        <label for="Horas"> Horas semanales</label>
+                        <label for="Horas"><strong>Horas semanales</strong></label>
                         <input formControlName="Horas" id="Horas" type="text" class="form-control" [(ngModel)]=" profesor.Horas">
 
                         <div *ngIf="f['Horas'].touched && f['Horas'].invalid" class="alert alert-danger">
@@ -128,7 +125,7 @@
                 </div>
                 <div class="col1">
                     <div class="form-group">
-                        <label for="ValorHora">Valor/Hora</label>
+                        <label for="ValorHora"><strong>Valor/Hora</strong></label>
                         <input formControlName="ValorHora" id="ValorHora" type="text" class="form-control" [(ngModel)]=" profesor.ValorHora">
 
                         <div *ngIf="f['ValorHora'].touched && f['ValorHora'].invalid" class="alert alert-danger">
@@ -138,7 +135,7 @@
                 </div>
                 <div class="col1">
                     <div class="form-group">
-                        <label for="idJerarquia">Jerarquia</label>
+                        <label for="idJerarquia"><strong>Jerarquia</strong></label>
                         <select id="idJerarquia" class="form-control" formControlName="idJerarquia" [(ngModel)]="profesor.idJerarquia">
                             <option  value="1">Instructor</option>
                             <option  value="2">Asistente</option>
@@ -153,7 +150,7 @@
                 </div>
                 <div class="col1">
                     <div class="form-group">
-                        <label for="Estado">Estado</label>
+                        <label for="Estado"><strong>Estado</strong></label>
                         <select id="Estado" class="form-control" formControlName="Estado" [(ngModel)]=" profesor.Estado">
                             <option value="A">Activo</option>
                             <option value="I">Inactivo</option>
@@ -171,9 +168,11 @@
             <br>
             <br>
             <br>
-            <div class="button1">
-                <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Actualizar Profesor</button>
-            </div>
+            
         </form>
+    </div>
+    <div class="centrar">
+        <button routerLink="/profesor/index-profe" class="boton">Atrás</button>
+        <button class="boton" type="submit" [disabled]="!form.valid">Actualizar Docente</button>
     </div>
 </body>
