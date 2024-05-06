@@ -1,1 +1,20 @@
-<p>seccion works!</p>
+<body>
+    <form [formGroup]="form">
+        <select formControlName="Facultad">
+          <option *ngFor="let facultad of facultades" [value]="facultad.id">{{ facultad.nombre }}</option>
+        </select>
+        <select formControlName="Carrera">
+          <option *ngFor="let carrera of Carreras" [value]="carrera">{{ carrera }}</option>
+        </select>
+
+
+        <select [(ngModel)]="Carreras" name="carreras">
+          <option value="carrera1">Carrera 1</option>
+          <option value="carrera2">Carrera 2</option>
+          <!-- más opciones -->
+        </select>
+
+        <td style="color: white;">{{ post.idAsignatura + '/' }}</td>
+        <button class="boton" type="submit">Crear</button>
+      </form>
+</body>

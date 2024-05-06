@@ -26,7 +26,7 @@ db.connect((err) => {
 app.use(bodyParser.json());
 app.use(cors());
 
-/* Routes */
+/* --------------------------------------------------------------------- Asignaturas  ---------------------------------------------------------------------*/
 /* Listar todas las Asignaturas */
 app.get("/posts", (req, res) => {
   db.query("SELECT * FROM cargaacademica.Asignatura", (err, results) => {
@@ -103,7 +103,7 @@ app.put("/posts/:id", (req, res) => {
     }
   );
 });
-
+ //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 app.get("/profesor/", (req, res) => {
   db.query("SELECT * FROM cargaacademica.Profesor", (err, results) => {
     if (err) {
@@ -113,6 +113,27 @@ app.get("/profesor/", (req, res) => {
     res.json(results);
   });
 });
+
+/* SECCION LLAMAR  */ 
+
+app.put("/posts/:id", (req, res) => {
+  const postId = req.params.id;
+  const { idAsignatura } =
+    req.body;
+  db.query(
+    "SELECT idAsignatura=? FROM cargaacademica.Asignatura  WHERE idAsignatura =?",
+    [idAsignatura, postId],
+    (err) => {
+      if (err) {
+        res.status(500).send("Error updating post");
+        return;
+      }
+    }
+  );
+});
+/* SECCION MANDAR */
+//-------------------------------------------------------------------------------------------------------------------//
+
 // -------------------------------------------------------------------------Profesor-------------------------------------------------------------------------
 /* Crear un nuevo profesor */
 app.post("/profesor/crear-profe", (req, res) => {
