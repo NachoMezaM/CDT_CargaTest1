@@ -19,11 +19,11 @@ export class SeccionComponent {
   post!: Post;
   form!: FormGroup;
   facultades = [
-    { id: 'FI', nombre: 'Facultad de Ingenieria y Negocios', carreras: ['Ingeniería en Sistemas', 'Ingeniería en Electrónica'] },
-    { id: 'FS', nombre: 'Facultad de Salud', carreras: ['Medicina', 'Enfermería'] },
-    { id: 'FE', nombre: 'Facultad de Educacion', carreras: ['Educación Primaria', 'Educación Secundaria'] },
-    { id: 'TE', nombre: 'Facultad de Teologia', carreras: ['Teología', 'Filosofía'] },
-    { id: 'DE', nombre: 'Facultad de Ciencias Juridicas y Sociales', carreras: ['Derecho', 'Ciencias Políticas'] },
+    { id: 'FI', nombre: 'Facultad de Ingenieria y Negocios', carreras: ['Facultad','Agronomia', 'Contador Auditor Online','Ingenieria Civil Industrial','Ingenieria Civil Informatica','Ingenieria Comercial'] },
+    { id: 'FS', nombre: 'Facultad de Salud', carreras: ['Facultad','Enfermería', 'Nutricion y Dietetica','Obstetricia y Puericultura','Quimica y Farmacia','Tecnico de Nivel Superior en Enfermeria','Terapia Ocupacional'] },
+    { id: 'FE', nombre: 'Facultad de Educacion', carreras: ['Facultad','Educación Parvularia', 'Licenciatura en Educacion','Pedagogía en Educación Diferencial','Pedagogía en Educación Física','Pedagogía en Educación General Básica','Pedagogía en Inglés','Pedagogía en Música'] },
+    { id: 'TE', nombre: 'Facultad de Teologia', carreras: ['Teología'] },
+    { id: 'DE', nombre: 'Facultad de Ciencias Juridicas y Sociales', carreras: ['Facultad','Derecho', 'Psicología','Trabajo Social','Licenciatura en Trabajo Social',] },
   ];
 
   constructor(
