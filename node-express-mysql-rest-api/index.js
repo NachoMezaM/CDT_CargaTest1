@@ -351,25 +351,6 @@ app.post("/guardar-carga-docente", (req, res) => {
   );
 });
 
-// Ruta para eliminar una carga docente
-app.delete("/eliminar-carga-docente/:idCargaDocente", (req, res) => {
-  const idCargaDocente = req.params.idCargaDocente;
-
-  // Realizar la eliminación de la carga docente en la base de datos
-  db.query(
-    "DELETE FROM cargaacademica.CargaDocente WHERE ideCargaDocente = ?",
-    [idCargaDocente],
-    (err, result) => {
-      if (err) {
-        console.error("Error al eliminar la carga docente:", err);
-        res.status(500).send("Error interno del servidor");
-        return;
-      }
-      res.status(200).json({ message: "Carga docente eliminada exitosamente" });
-    }
-  );
-});
-
 /* Listar todas las Cargas Academicas */
 app.get("/VisualizarCA", (req, res) => {
   db.query("SELECT CD.*, Pr.Nombre,Pr.Apellido, Pr.Grado FROM cargaacademica.CargaDocente as CD , cargaacademica.Profesor as Pr where CD.idProfesor= Pr.idProfesor", (err, results) => {
