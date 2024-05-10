@@ -1,8 +1,21 @@
 <body>
-    
 
-        
-
-        <td style="color: white;">{{ post.idAsignatura + '/' }}</td>
+ <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-group">      
+                <div class="col2">
+                    <label for="idAsignatura" class="nombre"><strong>Código:</strong></label>
+                    <input 
+                        formControlName="idAsignatura"
+                        id="idAsignatura" 
+                        type="text" 
+                        [(ngModel)]="post.idAsignatura"
+                        class="form-control"
+                        readonly>
+                    <div *ngIf="f['idAsignatura'].touched && f['idAsignatura'].invalid" class="alert alert-danger">
+                        <div *ngIf="f['idAsignatura'].errors && f['idAsignatura'].errors['required']">Se requiere un idAsignatura.</div>
+                    </div>
+                </div> 
+        </div>      
+</form>
         <button class="boton" type="submit">Crear</button>
 </body>

@@ -32,7 +32,26 @@ export class SeccionComponent {
       this.post = data;
     }); 
 
+    this.form = new FormGroup({
+      idAsignatura: new FormControl('', [Validators.required])
+    });
+  }
 
 
+
+
+
+
+  get f(){
+    return this.form.controls;
+  }
+
+
+  submit(){
+    console.log(this.form.value);
+    this.postService.create(this.form.value).subscribe((res:any) => {
+         console.log('seccion creada con exito!');
+         this.router.navigateByUrl('post/index');
+    })
   }
 }
