@@ -193,6 +193,7 @@ app.put("/profesor/:idProfesor", (req, res) => {
     }
   );
 });
+
 // Ruta para buscar los datos en la base de datos
 app.post("/buscar-datos", (req, res) => {
   const { rut, nombre, año } = req.body;
@@ -203,6 +204,7 @@ app.post("/buscar-datos", (req, res) => {
     FROM Profesor
     JOIN Jerarquia ON Profesor.idJerarquia = Jerarquia.idJerarquia
     WHERE CONCAT(Profesor.Nombre, ' ', Profesor.Apellido) LIKE ? OR Profesor.idProfesor = ?
+    
   `;
   console.log(query);
   const values = [`%${nombre}%`, rut];
@@ -330,6 +332,38 @@ app.post("/guardar-carga-docente", (req, res) => {
   );
 });
 
+// Ruta para buscar los datos en la base de datos relacionados con el idProfesor
+app.post("/buscar-datos-profesor", (req, res) => {
+  const { rut } = req.body;
+
+  // Realizar la consulta en la base de datos para obtener las filas relacionadas con el idProfesor
+  const query = `
+  SELECT CD.HorasPlanificacion, CD.Horas_Minutos, AS1.idAsignatura, AS1.idSeccion, AS1.Horas, AS1.Nombre
+FROM (
+    SELECT CD.*
+    FROM CargaDocente CD
+    JOIN AsignaturaSeccion AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion
+    JOIN Asignatura A ON AS1.idAsignatura = A.idAsignatura
+    WHERE CD.idProfesor = ?
+) AS CD
+JOIN (
+    SELECT AS2.*, A2.Nombre AS Nombre, A2.Horas AS Horas
+    FROM AsignaturaSeccion AS AS2
+    JOIN Asignatura A2 ON AS2.idAsignatura = A2.idAsignatura
+) AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion;
+  `;
+  const values = [rut];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error al buscar datos del profesor:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+    console.log("Datos encontrados:", result);
+    res.status(200).json(result);
+  });
+});
 
 /* Listar todas las Cargas Academicas */
 app.get("/VisualizarCA", (req, res) => {

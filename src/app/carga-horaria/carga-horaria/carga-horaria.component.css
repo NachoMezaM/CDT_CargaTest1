@@ -44,6 +44,7 @@ body {
 
 .containerflex3 {
   margin: 15px;
+  margin-right: 250px;
   width: 80%;
   max-width: 800px; /* Añadido un ancho máximo */
   min-width: 760px; /* Añadido un ancho mínimo */
@@ -55,8 +56,7 @@ body {
 
 .containerflex4 {
   margin: 15px;
-  margin-left: 855px;
-  margin-top: -180px;
+  margin-top: 30px;
   width: 80%;
   max-width: 800px; /* Añadido un ancho máximo */
   min-width: 760px; /* Añadido un ancho mínimo */

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HostListener } from '@angular/core';
 import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
+import { response } from 'express';
 
 @Component({
     selector: 'app-carga-horaria',
@@ -51,16 +52,7 @@ export class CargaHorariaComponent {
     if (tbody) {
       tbody.innerHTML = '';
     }
-  
-    // Reiniciar los totales
-    this.totalHoras = 0;
-    this.totalMinutos = 0;
-    const totalHorasSpan = document.getElementById('totalHorasValor');
-    const totalMinutosSpan = document.getElementById('totalMinutosValor');
-    if (totalHorasSpan && totalMinutosSpan) {
-      totalHorasSpan.textContent = '0';
-      totalMinutosSpan.textContent = '0';
-    }
+
   }
 
   buscarDatos() {
@@ -132,7 +124,7 @@ export class CargaHorariaComponent {
           console.error('Error al buscar datos:', error);
         }
       );
-
+this.buscarDatosProfesor();
         // Después de buscar los datos exitosamente, llamar a la función limpiarPagina()
   this.limpiarPagina();
   }
@@ -171,13 +163,6 @@ agregarFila() {
   const rut = (document.getElementById('rut') as HTMLInputElement).value;
   const año = (document.getElementById('año') as HTMLInputElement).value;
 
-    // Verificar si el checkbox de confirmación está marcado
-    const confirmacionCheckbox = (document.getElementById('confirmacion') as HTMLInputElement);
-    if (!confirmacionCheckbox.checked) {
-      alert('Debes confirmar antes de guardar los datos.');
-      return;
-    }
-
   this.http.get<any>(`http://localhost:3000/detalles-asignatura/${codigo}/${seccion}`)
     .subscribe(
       (data) => {
@@ -199,6 +184,7 @@ agregarFila() {
           <td>${minutos}</td>
           <td>${planificacion}</td>
           <td></td>
+          <td><input type="checkbox" class="confirm-checkbox"></td>
           <td><button type="button" class="remove-btn">Eliminar</button></td>
         `;
         tbody.appendChild(newRow);
@@ -214,23 +200,16 @@ agregarFila() {
         if (deleteButton) {
           deleteButton.addEventListener('click', () => {
             this.eliminarFila(newRow);
-            this.calcularTotalHorasMinutos();
+            this.actualizarBotonGuardar();
           });
+        }
 
-          // Calcular las horas de esta fila y sumarlas al total
-    const planificacion = Math.floor(minutos / 60); // Calcula las horas
-    this.totalHoras += planificacion;
-
-    // Actualizar los elementos span con los totales calculados
-    const totalHorasSpan = document.getElementById('totalHorasValor');
-    const totalMinutosSpan = document.getElementById('totalMinutosValor');
-    if (totalHorasSpan && totalMinutosSpan) {
-      totalHorasSpan.textContent = this.totalHoras.toString();
-      totalMinutosSpan.textContent = this.totalMinutos.toString();
-    }
-
-    // Enviar los datos al backend para guardar la carga docente
-    this.guardarCargaDocente(rut, data.idAsignaturaSeccion, planificacion, minutos, año);
+        // Agregar el evento de cambio al checkbox de confirmación
+        const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
+        if (confirmCheckbox) {
+          confirmCheckbox.addEventListener('change', () => {
+            this.actualizarBotonGuardar();
+          });
         }
       },
       (error) => {
@@ -238,6 +217,53 @@ agregarFila() {
         alert('Ocurrió un error al obtener los detalles de la asignatura. Por favor, inténtalo de nuevo más tarde.');
       }
     );
+}
+
+actualizarBotonGuardar() {
+  const checkboxes = document.querySelectorAll('.confirm-checkbox') as NodeListOf<HTMLInputElement>;
+  let alMenosUnoMarcado = false;
+  checkboxes.forEach(checkbox => {
+    if (checkbox.checked) {
+      alMenosUnoMarcado = true;
+    }
+  });
+
+  const guardarButton = document.getElementById('guardar-button') as HTMLButtonElement;
+  if (guardarButton) {
+    guardarButton.disabled = !alMenosUnoMarcado;
+  }
+}
+
+guardarDatos() {
+  const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
+  const año = (document.getElementById('año') as HTMLInputElement).value;
+
+  const filas = document.querySelectorAll('#asignaturas-body tr');
+  filas.forEach(fila => {
+    const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
+    if (checkbox.checked) {
+      const columnas = fila.querySelectorAll('td');
+      const codigo = columnas[0].innerText;
+      const seccion = columnas[1].innerText;
+      const planificacion = parseInt(columnas[5].innerText);
+      const minutos = parseInt(columnas[4].innerText);
+
+      this.guardarCargaDocente(idProfesor, `${codigo}${seccion}`, planificacion, minutos, año);
+    }
+  });
+
+  // Limpiar las filas guardadas después de guardar
+  this.limpiarFilasGuardadas();
+}
+
+limpiarFilasGuardadas() {
+  const filasGuardadas = document.querySelectorAll('#asignaturas-body tr');
+  filasGuardadas.forEach(fila => {
+    const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
+    if (checkbox.checked) {
+      fila.remove();
+    }
+  });
 }
 
 guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificacion: number, minutos: number, año: string) {
@@ -262,44 +288,81 @@ guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificaci
     
     // Elimina la fila del DOM
     row.parentNode.removeChild(row);
-
-    // Actualizar los totales después de eliminar la fila
-    this.calcularTotalHorasMinutos();
   }
 
-  // Nuevo código TypeScript para calcular el total de horas y minutos
-  calcularTotalHorasMinutos() {
-    let totalHoras = 0;
-    let totalMinutos = 0;
-    const filas = document.querySelectorAll('#asignaturasTable tbody tr');
-    filas.forEach((fila) => {
-      const horasInput = fila.querySelector(
-        'input[name="horas"]'
-      ) as HTMLInputElement;
-      const minutosInput = fila.querySelector(
-        'input[name="minutos"]'
-      ) as HTMLInputElement;
-      if (horasInput && minutosInput) {
-        totalHoras += parseInt(horasInput.value) || 0;
-        totalMinutos += parseInt(minutosInput.value) || 0;
-      }
-    });
+  buscarDatosProfesor() {
+    const rut = (document.getElementById('rut') as HTMLInputElement).value;
+  
+    this.http
+      .post<any>('http://localhost:3000/buscar-datos-profesor', { rut })
+      .subscribe(
+        (data) => {
+          const tbody = document.getElementById('asignaturas-body');
+          if (!tbody) {
+            console.error('No se encontró el elemento tbody.');
+            return;
+          }
+          // Limpiar la tabla antes de agregar nuevos datos
+          tbody.innerHTML = '';
+  
+          // Iterar sobre los datos y agregar una fila por cada resultado
+          data.forEach((profesor: { HorasPlanificacion: string; Horas_Minutos: string; idAsignatura: string; idSeccion: string; Nombre: any; Horas: any; }) => {
+            const newRow = document.createElement('tr');
+            const horas = parseInt(profesor.HorasPlanificacion);
+            const minutos = parseInt(profesor.Horas_Minutos); // Se obtienen los minutos directamente
+            const planificacion = Math.floor(minutos / 60); // Calcular las horas
+  
+            newRow.innerHTML = `
+              <td>${profesor.idAsignatura}</td>
+              <td>${profesor.idSeccion}</td>
+              <td>${profesor.Nombre}</td>
+              <td>${profesor.Horas}</td>
+              <td>${minutos}</td>
+              <td>${planificacion}</td>
+              <td></td>
+              <td><input type="checkbox" class="confirm-checkbox"></td>
+              <td><button type="button" class="remove-btn">Eliminar</button></td>
+            `;
+            tbody.appendChild(newRow);
+  
+            // Centrar el texto en todas las celdas de la nueva fila
+            const cells = newRow.querySelectorAll('td');
+            cells.forEach(cell => {
+              cell.style.textAlign = 'center';
+            });
+  
+            // Agregar el evento de clic al botón de eliminación
+            const deleteButton = newRow.querySelector('.remove-btn');
+            if (deleteButton) {
+              deleteButton.addEventListener('click', () => {
+                this.eliminarFila(newRow);
+                this.actualizarBotonGuardar();
+              });
+            }
+  
+            // Agregar el evento de cambio al checkbox de confirmación
+            const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
+            if (confirmCheckbox) {
+              confirmCheckbox.addEventListener('change', () => {
+                this.actualizarBotonGuardar();
+              });
+            }
+          });
+        },
+        (error) => {
+          console.error('Error al buscar datos del profesor:', error);
+        }
+      );
+  }
 
-    // Reiniciar los totales antes de recalcularlos
-    this.totalHoras = 0;
-    this.totalMinutos = 0;
-
-    // Actualizar los elementos span con los totales calculados
-    const totalHorasSpan = document.getElementById('totalHorasValor');
-    const totalMinutosSpan = document.getElementById('totalMinutosValor');
-    if (totalHorasSpan && totalMinutosSpan) {
-      totalHorasSpan.textContent = this.totalHoras.toString();
-      totalMinutosSpan.textContent = this.totalMinutos.toString();
+  limpiarTabla() {
+    const tbody = document.getElementById('asignaturas-body');
+    if (tbody) {
+      tbody.innerHTML = ''; // Limpiar el contenido del tbody
     }
-    
   }
-
-  //Docencia Directa
+  
+ //Docencia Directa
 
  // Método para buscar las secciones disponibles para un código de asignatura dado
  buscarSecciones() {
