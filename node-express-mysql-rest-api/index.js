@@ -193,6 +193,7 @@ app.put("/profesor/:idProfesor", (req, res) => {
     }
   );
 });
+
 // Ruta para buscar los datos en la base de datos
 app.post("/buscar-datos", (req, res) => {
   const { rut, nombre, año } = req.body;
@@ -203,6 +204,7 @@ app.post("/buscar-datos", (req, res) => {
     FROM Profesor
     JOIN Jerarquia ON Profesor.idJerarquia = Jerarquia.idJerarquia
     WHERE CONCAT(Profesor.Nombre, ' ', Profesor.Apellido) LIKE ? OR Profesor.idProfesor = ?
+    
   `;
   console.log(query);
   const values = [`%${nombre}%`, rut];
@@ -316,39 +318,51 @@ app.post("/guardar-carga-docente", (req, res) => {
     Anio,
   } = req.body;
 
-  // Verificar si ya existe un registro para la combinación de idProfesor, idAsignaturaSeccion y Anio
   db.query(
-    "SELECT * FROM cargaacademica.CargaDocente WHERE idProfesor = ? AND idAsignaturaSeccion = ? AND Anio = ?",
-    [idProfesor, idAsignaturaSeccion, Anio],
+    "INSERT INTO cargaacademica.CargaDocente (idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio) VALUES (?, ?, ?, ?, ?)",
+    [idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio],
     (err, result) => {
       if (err) {
-        console.error("Error al buscar la carga docente existente:", err);
+        console.error("Error al guardar la carga docente:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
-
-      // Si ya existe un registro, devolver un mensaje de error
-      if (result && result.length > 0) {
-        console.error("Ya existe un registro.");
-        res.status(409).json({ message: "Dato duplicado" });
-        return;
-      }
-
-      // Si no existe un registro, proceder con la inserción
-      db.query(
-        "INSERT INTO cargaacademica.CargaDocente (idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio) VALUES (?, ?, ?, ?, ?)",
-        [idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio],
-        (err, result) => {
-          if (err) {
-            console.error("Error al guardar la carga docente:", err);
-            res.status(500).send("Error interno del servidor");
-            return;
-          }
-          res.status(200).json({ message: "Carga docente guardada exitosamente" });
-        }
-      );
+      res.status(200).json({ message: "Carga docente guardada exitosamente" });
     }
   );
+});
+
+// Ruta para buscar los datos en la base de datos relacionados con el idProfesor
+app.post("/buscar-datos-profesor", (req, res) => {
+  const { rut } = req.body;
+
+  // Realizar la consulta en la base de datos para obtener las filas relacionadas con el idProfesor
+  const query = `
+  SELECT CD.HorasPlanificacion, CD.Horas_Minutos, AS1.idAsignatura, AS1.idSeccion, AS1.Horas, AS1.Nombre
+FROM (
+    SELECT CD.*
+    FROM CargaDocente CD
+    JOIN AsignaturaSeccion AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion
+    JOIN Asignatura A ON AS1.idAsignatura = A.idAsignatura
+    WHERE CD.idProfesor = ?
+) AS CD
+JOIN (
+    SELECT AS2.*, A2.Nombre AS Nombre, A2.Horas AS Horas
+    FROM AsignaturaSeccion AS AS2
+    JOIN Asignatura A2 ON AS2.idAsignatura = A2.idAsignatura
+) AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion;
+  `;
+  const values = [rut];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error al buscar datos del profesor:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+    console.log("Datos encontrados:", result);
+    res.status(200).json(result);
+  });
 });
 
 /* Listar todas las Cargas Academicas */

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HostListener } from '@angular/core';
 import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
+import { response } from 'express';
 
 @Component({
     selector: 'app-carga-horaria',
@@ -96,7 +97,6 @@ export class CargaHorariaComponent {
                   jerarquia = 'Titular';
                   break;                
               }
-              
               // Actualizar los campos del formulario con los datos encontrados
               (document.getElementById('nombre') as HTMLInputElement).value =
                 nombreCompleto;
@@ -124,7 +124,7 @@ export class CargaHorariaComponent {
           console.error('Error al buscar datos:', error);
         }
       );
-
+this.buscarDatosProfesor();
         // Después de buscar los datos exitosamente, llamar a la función limpiarPagina()
   this.limpiarPagina();
   }
@@ -274,7 +274,7 @@ guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificaci
       },
       (error) => {
         console.error('Error al guardar la carga docente:', error);
-        alert('dato duplicado.');
+        alert('Ocurrió un error al guardar la carga docente. Por favor, inténtalo de nuevo más tarde.');
       }
     );
 }
@@ -290,6 +290,78 @@ guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificaci
     row.parentNode.removeChild(row);
   }
 
+  buscarDatosProfesor() {
+    const rut = (document.getElementById('rut') as HTMLInputElement).value;
+  
+    this.http
+      .post<any>('http://localhost:3000/buscar-datos-profesor', { rut })
+      .subscribe(
+        (data) => {
+          const tbody = document.getElementById('asignaturas-body');
+          if (!tbody) {
+            console.error('No se encontró el elemento tbody.');
+            return;
+          }
+          // Limpiar la tabla antes de agregar nuevos datos
+          tbody.innerHTML = '';
+  
+          // Iterar sobre los datos y agregar una fila por cada resultado
+          data.forEach((profesor: { HorasPlanificacion: string; Horas_Minutos: string; idAsignatura: string; idSeccion: string; Nombre: any; Horas: any; }) => {
+            const newRow = document.createElement('tr');
+            const horas = parseInt(profesor.HorasPlanificacion);
+            const minutos = parseInt(profesor.Horas_Minutos); // Se obtienen los minutos directamente
+            const planificacion = Math.floor(minutos / 60); // Calcular las horas
+  
+            newRow.innerHTML = `
+              <td>${profesor.idAsignatura}</td>
+              <td>${profesor.idSeccion}</td>
+              <td>${profesor.Nombre}</td>
+              <td>${profesor.Horas}</td>
+              <td>${minutos}</td>
+              <td>${planificacion}</td>
+              <td></td>
+              <td><input type="checkbox" class="confirm-checkbox"></td>
+              <td><button type="button" class="remove-btn">Eliminar</button></td>
+            `;
+            tbody.appendChild(newRow);
+  
+            // Centrar el texto en todas las celdas de la nueva fila
+            const cells = newRow.querySelectorAll('td');
+            cells.forEach(cell => {
+              cell.style.textAlign = 'center';
+            });
+  
+            // Agregar el evento de clic al botón de eliminación
+            const deleteButton = newRow.querySelector('.remove-btn');
+            if (deleteButton) {
+              deleteButton.addEventListener('click', () => {
+                this.eliminarFila(newRow);
+                this.actualizarBotonGuardar();
+              });
+            }
+  
+            // Agregar el evento de cambio al checkbox de confirmación
+            const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
+            if (confirmCheckbox) {
+              confirmCheckbox.addEventListener('change', () => {
+                this.actualizarBotonGuardar();
+              });
+            }
+          });
+        },
+        (error) => {
+          console.error('Error al buscar datos del profesor:', error);
+        }
+      );
+  }
+
+  limpiarTabla() {
+    const tbody = document.getElementById('asignaturas-body');
+    if (tbody) {
+      tbody.innerHTML = ''; // Limpiar el contenido del tbody
+    }
+  }
+  
  //Docencia Directa
 
  // Método para buscar las secciones disponibles para un código de asignatura dado
