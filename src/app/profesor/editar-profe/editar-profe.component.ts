@@ -40,14 +40,13 @@ export class EditarProfeComponent {
   ngOnInit(): void {
     
     this.idProfesor = this.route.snapshot.params['profesoridProfesor'];
-   
     this.profesorService.find( this.idProfesor).subscribe((data:Profesor) =>{
       this.profesor=data;
     }); 
     
         
     this.form = new FormGroup({
-      idProfesor: new FormControl('', [Validators.required]),
+      idProfesor: new FormControl(),
       Nombre: new FormControl('', [Validators.required]),
       Tipo: new FormControl('', Validators.required),
       Profesion: new FormControl('', [Validators.required]),

@@ -39,7 +39,7 @@ export class CrearProfeComponent {
         Nombre: new FormControl('', [Validators.required]),
         Tipo: new FormControl('', Validators.required),
         Profesion: new FormControl('', [Validators.required]),
-        Horas: new FormControl('', [Validators.required]),
+        Horas: new FormControl('', [Validators.required, this.maxNumberValidator]),
         ValorHora: new FormControl('', [Validators.required]),
         idJerarquia: new FormControl('', [Validators.required]),
         Direccion: new FormControl('', [Validators.required]),
@@ -87,6 +87,15 @@ export class CrearProfeComponent {
       }
     }
   );
+    }
+    maxNumberValidator(control: FormControl): { [key: string]: boolean } | null {
+      const value = control.value;
+      if (value > 42 ) {
+        return { 'maxNumber': true };
+      }else if(value==0){
+        return{'minNumber':true };
+      }
+      return null;
     }
     
   }
