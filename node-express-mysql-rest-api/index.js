@@ -395,6 +395,24 @@ app.get("/VisualizarCA/:id", (req, res) => {
   );
 });
 
+/* Ruta para eliminar una fila de la tabla CargaDocente */
+app.post("/eliminar-fila", (req, res) => {
+  const { codigo, seccion } = req.body;
+
+  db.query(
+    'DELETE CargaDocente FROM CargaDocente JOIN AsignaturaSeccion ON CargaDocente.idAsignaturaSeccion = AsignaturaSeccion.idAsignaturaSeccion JOIN Asignatura ON AsignaturaSeccion.idAsignatura = Asignatura.idAsignatura JOIN Seccion ON AsignaturaSeccion.idSeccion = Seccion.idSeccion JOIN Profesor ON CargaDocente.idProfesor = Profesor.idProfesor WHERE AsignaturaSeccion.idAsignatura = ? AND AsignaturaSeccion.idSeccion = ?',
+    [codigo, seccion],
+    (err, result) => {
+      if (err) {
+        console.error("Error al eliminar la fila:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      res.status(200).json({ message: "Fila eliminada exitosamente" });
+    }
+  );
+});
+
 /* Start server */
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
