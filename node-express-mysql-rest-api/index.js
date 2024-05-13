@@ -118,10 +118,9 @@ app.get("/profesor/", (req, res) => {
 
 app.put("/posts/:id", (req, res) => {
   const postId = req.params.id;
-  const { idAsignatura } =
-    req.body;
+  const { idAsignatura } =req.body;
   db.query(
-    "SELECT idAsignatura=? FROM cargaacademica.Asignatura  WHERE idAsignatura =?",
+    "SELECT CA.idAsignatura, CS.idSeccion, CS.nombre FROM cargaacademica.Asignatura as CA, cargaacademica.Seccion as CS WHERE CA.idAsignatura =CS",
     [idAsignatura, postId],
     (err) => {
       if (err) {
