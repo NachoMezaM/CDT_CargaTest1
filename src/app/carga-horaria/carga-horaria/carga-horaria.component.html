@@ -1,54 +1,51 @@
 <!DOCTYPE html>
-<html lang="en" style="background-color: #003366">
+<html>
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,user-scalable=none, initial-scale=1.0" />
-  <title>Buscador con Imágenes</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+  <title>Carga Academica</title>
 </head>
 
-<body style="background-color: #003366">
+<body>
   <app-barranavegacion></app-barranavegacion>
   <title>Carga Academica</title>
   <form>
     <div class="containerflex">
-      <h1>Ingresar Carga</h1>
+      <h1 class="titulo">Ingresar Carga</h1>
 
-      <div class="rut-item">
-        <label for="rut">Rut:</label>
-        <input type="text" id="rut" class="form-control" placeholder="12345678-9" required autocomplete="off" />
+      <div class="rut-item row">
+        <label for="rut" class="col1"><strong>Rut:</strong></label>
+        <input type="text" id="rut" class="form-control1 col22" placeholder="12345678-9" required autocomplete="off" />
       </div>
 
-      <div class="nombre-item">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" class="form-control" placeholder="Nombre y apellidos" autocomplete="off" />
+      <div class="nombre-item row">
+        <label for="nombre" class="col1"><strong>Nombre:</strong></label>
+        <input type="text" id="nombre" class="form-control1 col22" placeholder="Nombre y apellidos" autocomplete="off" />
       </div>
 
-      <div class="año-item">
-        <label for="año-item">Año:</label>
-        <input type="text" id="año" class="form-control" autocomplete="off" [value]="currentYear" readonly
+      <div class="año-item row">
+        <label for="año" class="col1"><strong>Año:</strong></label>
+        <input type="text" id="año" class="form-control1 col22" autocomplete="off" [value]="currentYear" readonly
           style="background-color: #ffffff" />
       </div>
 
-      <div class="grado-item">
-        <label for="grado">Grado:</label>
-        <div id="grado" class="form-control" style="background-color: #ffffff"></div>
+      <div class="grado-item row">
+        <label for="grado" class="col1"><strong>Grado:</strong></label>
+        <div id="grado" class="form-control2 col22" style="background-color: #ffffff"></div>
       </div>
 
-      <div class="jerarquizacion-item">
-        <label for="jerarquizacion">Jerarquizacion:</label>
-        <div id="jerarquizacion" class="form-control" style="background-color: #ffffff"></div>
+      <div class="jerarquizacion-item row">
+        <label for="jerarquizacion" class="col1"><strong>Jerarquizacion:</strong></label>
+        <div id="jerarquizacion" class="form-control2 col22" style="background-color: #ffffff"></div>
       </div>
 
-      <div class="horascontrato-item">
-        <label for="horascontrato">Horas Contrato:</label>
-        <div id="horascontrato" class="form-control" style="background-color: #ffffff"></div>
+      <div class="horascontrato-item row">
+        <label for="horascontrato" class="col1"><strong>Horas Contrato:</strong></label>
+        <div id="horascontrato" class="form-control2 col22" style="background-color: #ffffff"></div>
       </div>
 
-      <div class="PosibleHorasDeDocencia-item">
-        <label for="PosibleHorasDeDocencia-item">Posible Horas de Docencia:</label>
-        <div id="PosibleHorasDeDocencia" class="form-control" style="background-color: #ffffff"></div>
+      <div class="PosibleHorasDeDocencia-item row">
+        <label for="PosibleHorasDeDocencia-item" class="col1"><strong>Posible Horas de Docencia:</strong></label>
+        <div id="PosibleHorasDeDocencia" class="form-control2 col22" style="background-color: #ffffff"></div>
       </div>
     </div>
   </form>
@@ -57,51 +54,51 @@
     <!-- Docencia Directa -->
     <form>
       <div class="containerflex1">
-        <h2>Docencia Directa</h2>
+        <h1 class="titulo">Docencia Directa</h1>
 
-        <div class="codigo-item">
-          <label for="codigo">Codigo:</label>
-          <input type="text" id="codigo" class="form-control" placeholder="Codigo Asignatura" required
+        <div class="codigo-item row">
+          <label for="codigo" class="col1"><strong>Codigo:</strong></label>
+          <input type="text" id="codigo" class="form-control1 col22" placeholder="Codigo Asignatura" required
             autocomplete="off" (change)="buscarSecciones()" uptwo>
         </div>
 
         <!-- Actualiza el llamado a la función agregarFilaTabla() para pasar el ID del tbody -->
-        <div class="seccion-item">
-          <label for="seccion">Seccion:</label>
-          <select id="seccion" class="form-control" (change)="agregarFila()"></select>
+        <div class="seccion-item row">
+          <label for="seccion" class="col1"><strong>Seccion:</strong></label>
+          <select id="seccion" class="form-control1 col22" (change)="agregarFila()"></select>
         </div>
 
         <table id="asignaturasTable">
           <thead>
             <tr>
-              <td class="cell-box">Codigo</td>
-              <td class="cell-box">Sección</td>
-              <td class="cell-box">Nombre</td>
-              <td class="cell-box">Horas 45'</td>
-              <td class="cell-box">Minutos</td>
-              <td class="cell-box">Planificacion</td>
-              <td class="cell-box">Total</td>
-              <td class="cell-box">Confirmar</td>
-              <td class="cell-box">Eliminar</td>
+              <td class="cell-box"><strong>Codigo</strong></td>
+              <td class="cell-box"><strong>Sección</strong></td>
+              <td class="cell-box"><strong>Nombre</strong></td>
+              <td class="cell-box"><strong>Horas 45'</strong></td>
+              <td class="cell-box"><strong>Minutos</strong></td>
+              <td class="cell-box"><strong>Planificacion</strong></td>
+              <td class="cell-box"><strong>Total</strong></td>
+              <td class="cell-box"><strong>Confirmar</strong></td>
+              <td class="cell-box"><strong>Eliminar</strong></td>
             </tr>
           </thead>
           <tbody id="asignaturas-body">
             <!-- Aquí se agregarán las filas dinámicamente -->
           </tbody>
-          <button type="button" id="guardar-button" (click)="guardarDatos()">Guardar</button>
+          <button type="button" id="guardar-button" class="boton" (click)="guardarDatos()">Guardar</button>
         </table>
       </div>
     </form>
 
     <form>
       <div class="containerflex3">
-        <h3>Otros Trabajos de Gestión Académica</h3>
+        <h1 class="titulo">Otros Trabajos de Gestión Académica</h1>
         <table id="asignaturasTable2">
           <thead>
             <tr>
-              <td class="cell-box">Concepto</td>
-              <td class="cell-box">Horas 60'</td>
-              <td class="cell-box">Minutos</td>
+              <td class="cell-box"><strong>Concepto</strong></td>
+              <td class="cell-box"><strong>Horas 60'</strong></td>
+              <td class="cell-box"><strong>Minutos</strong></td>
             </tr>
           </thead>
           <tbody id="asignaturas-body">
@@ -113,8 +110,8 @@
 
     <form>
       <div class="containerflex4">
-        <h3>Notas</h3>
-        <textarea rows="4" cols="50" placeholder="Escribe tus notas aquí"></textarea>
+        <h1 class="titulo">Notas</h1>
+        <textarea rows="4" cols="50" class="form-control2" placeholder="Escribe tus notas aquí"></textarea>
       </div>
     </form>
   </div>

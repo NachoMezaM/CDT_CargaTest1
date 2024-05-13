@@ -258,31 +258,36 @@ export class CargaHorariaComponent {
   }
 
   guardarDatos() {
-    const idProfesor = (document.getElementById('rut') as HTMLInputElement)
-      .value;
+    const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
     const año = (document.getElementById('año') as HTMLInputElement).value;
-
+  
     const filas = document.querySelectorAll('#asignaturas-body tr');
+    let algunaFilaGuardada = false; // Variable para controlar si al menos una fila se guardó con éxito
     filas.forEach((fila) => {
-      const checkbox = fila.querySelector(
-        '.confirm-checkbox'
-      ) as HTMLInputElement;
+      const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
       if (checkbox.checked) {
         const columnas = fila.querySelectorAll('td');
         const codigo = columnas[0].innerText;
         const seccion = columnas[1].innerText;
         const planificacion = parseInt(columnas[5].innerText);
         const minutos = parseInt(columnas[4].innerText);
-
-        this.guardarCargaDocente(
-          idProfesor,
-          `${codigo}${seccion}`,
-          planificacion,
-          minutos,
-          año
-        );
+  
+        this.guardarCargaDocente(idProfesor, `${codigo}${seccion}`, planificacion, minutos, año)
+          .then((guardado) => {
+            if (guardado) {
+              algunaFilaGuardada = true;
+            }
+          });
       }
     });
+  
+    // Mostrar mensaje dependiendo de si se guardó al menos una fila o no
+    if (algunaFilaGuardada) {
+      alert('Se guardaron las filas correctamente.');
+      this.limpiarFilasGuardadas();
+    } else {
+      alert('No se guardaron filas duplicadas.');
+    }
 
     // Limpiar las filas guardadas después de guardar
     this.limpiarFilasGuardadas();
@@ -300,32 +305,32 @@ export class CargaHorariaComponent {
     });
   }
 
-  guardarCargaDocente(
-    idProfesor: string,
-    idAsignaturaSeccion: string,
-    planificacion: number,
-    minutos: number,
-    año: string
-  ) {
-    this.http
-      .post<any>('http://localhost:3000/guardar-carga-docente', {
-        idProfesor,
-        idAsignaturaSeccion,
-        HorasPlanificacion: planificacion,
-        Horas_Minutos: minutos,
-        Anio: año,
-      })
-      .subscribe(
-        (data) => {
-          console.log('Carga docente guardada exitosamente:', data);
-        },
-        (error) => {
-          console.error('Error al guardar la carga docente:', error);
-          alert(
-            'Ocurrió un error al guardar la carga docente. Por favor, inténtalo de nuevo más tarde.'
-          );
-        }
-      );
+  guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificacion: number, minutos: number, año: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.http
+        .post<any>('http://localhost:3000/guardar-carga-docente', {
+          idProfesor,
+          idAsignaturaSeccion,
+          HorasPlanificacion: planificacion,
+          Horas_Minutos: minutos,
+          Anio: año,
+        })
+        .subscribe(
+          (data) => {
+            console.log('Carga docente guardada exitosamente:', data);
+            resolve(true); // Indicar que la fila se guardó con éxito
+          },
+          (error) => {
+            console.error('Error al guardar la carga docente:', error);
+            if (error.status === 400 && error.error.message === 'No se guardaron filas duplicadas') {
+              resolve(false); // Indicar que la fila no se guardó debido a duplicados
+            } else {
+              alert('Ocurrió un error al guardar la carga docente. Por favor, inténtalo de nuevo más tarde.');
+              reject(error);
+            }
+          }
+        );
+    });
   }
 
   eliminarFila1(row: HTMLElement) {
