@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {  Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { VisualizarCA } from './visualizar-carga';
+import { Profesor } from '../profesor/profesor';
 
 @Injectable({
   providedIn: 'root'
@@ -25,33 +26,21 @@ export class VisualizarCargaService {
   --------------------------------------------
   --------------------------------------------*/
   constructor(private httpClient: HttpClient) { }
-  /**
-   * Write code on Method
-   *
-   * @return response()
-   */
+ 
   getAll(): Observable<any> {
     return this.httpClient.get(this.apiURL + '/VisualizarCA/')
     .pipe(
       catchError(this.errorHandler)
     )
   } 
-  /**
-   * Write code on Method
-   *
-   * @return response()
-   */
+  
   create(cargaDocente:VisualizarCA): Observable<any> {
     return this.httpClient.post(this.apiURL + '/VisualizarCA/crear-profe', JSON.stringify(cargaDocente), this.httpOptions)
     .pipe(
       catchError(this.errorHandler)
     )
   }  
-  /**
-   * Write code on Method
-   *
-   * @return response()
-   */
+  
   find(idCargaDocente:number): Observable<any> {
     console.log(this.httpClient.get(this.apiURL + '/VisualizarCA/' + idCargaDocente))
     return this.httpClient.get(this.apiURL + '/VisualizarCA/' + idCargaDocente)
@@ -59,40 +48,29 @@ export class VisualizarCargaService {
       catchError(this.errorHandler)
     )
   }
-  /**
-   * Write code on Method
-   *
-   * @return response()
-   */
-  update(idCargaDocente:number, cargaDocente:VisualizarCA): Observable<any> {
-    return this.httpClient.put(this.apiURL + '/cargaDocente/' + idCargaDocente, JSON.stringify(cargaDocente), this.httpOptions)
-    .pipe( 
-      catchError(this.errorHandler)
-    )
-  } 
-  /**
-   * Write code on Method
-   *
-   * @return response()
-   */
+
   delete(idCargaDocente:number){
-    return this.httpClient.delete(this.apiURL + '/cargaDocente/' + idCargaDocente, this.httpOptions)
+    return this.httpClient.delete(this.apiURL + '/VisualizarCA/' + idCargaDocente, this.httpOptions)
     .pipe(
       catchError(this.errorHandler)
     )
   }      
-  /** 
-   * Write code on Method
-   *
-   * @return response()
-   */
+ 
+  buscarDatos(idProfesor:string){
+    return this.httpClient.get(this.apiURL+'/buscar-datos'+idProfesor)
+    .pipe(
+      catchError(this.errorHandler)
+    )
+
+  }
+ 
   errorHandler(error:any) {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {
       errorMessage = error.error.message;
-
+      
     } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message} `;
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message} nosirve `;
     }
     return throwError(errorMessage);
  }

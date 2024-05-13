@@ -196,7 +196,7 @@ app.put("/profesor/:idProfesor", (req, res) => {
 
 // Ruta para buscar los datos en la base de datos
 app.post("/buscar-datos", (req, res) => {
-  const { rut, nombre, año } = req.body;
+  const { rut, nombre} = req.body;
 
   // Realizar la consulta en la base de datos, uniendo con la tabla de jerarquías para obtener el nombre de la jerarquía
   const query = `
@@ -206,7 +206,7 @@ app.post("/buscar-datos", (req, res) => {
     WHERE CONCAT(Profesor.Nombre, ' ', Profesor.Apellido) LIKE ? OR Profesor.idProfesor = ?
     
   `;
-  console.log(query);
+  
   const values = [`%${nombre}%`, rut];
 
   db.query(query, values, (err, result) => {
@@ -376,7 +376,7 @@ app.get("/VisualizarCA", (req, res) => {
   });
 });
 /* Visualizar VisualizarCA */
-app.get("/VisualizarCA/:id", (req, res) => {
+app.get("/VisualizarCA/:idCargaDocente", (req, res) => {
   const cargarAc = req.params.ideCargaDocente;
   db.query(
     "SELECT * FROM cargaacademica.CargaDocente WHERE ideCargaDocente =?",
@@ -393,6 +393,16 @@ app.get("/VisualizarCA/:id", (req, res) => {
       res.json(result[0]);
     }
   );
+});
+app.delete('/VisualizarCA/:idCargaDocente', (req, res) => {
+  const postId = req.params.idCargaDocente;
+  db.query('DELETE FROM cargaacademica.CargaDocente WHERE idCargaDocente = ?', postId, err => {
+    if (err) {
+      res.status(500).send('Error deleting post');
+      return;
+    }
+    res.status(200).json({ msg: 'Post deleted successfully' });
+  });
 });
 
 /* Start server */

@@ -11,6 +11,7 @@ import { MenuComponent } from './menu/menu.component';
 import { BarranavegacionComponent } from './barranavegacion/barranavegacion.component';
 import { CargaHorariaComponent } from './carga-horaria/carga-horaria/carga-horaria.component';
 import { VisualizarCargaComponent } from './carga-horaria/visualizar-carga/visualizar-carga.component';
+import { CargaHoraria2Component } from './carga-horaria/carga-horaria2/carga-horaria2.component';
 
 export const routes: Routes = [
     
@@ -26,7 +27,9 @@ export const routes: Routes = [
       { path: 'menu', component: MenuComponent  },
       { path: 'barranavegacion', component: BarranavegacionComponent},
       { path: 'carga-horaria/carga-horaria', component: CargaHorariaComponent},
-      { path: 'carga-horaria/visualizar-carga', component: VisualizarCargaComponent}
+      { path: 'carga-horaria/visualizar-carga', component: VisualizarCargaComponent},
+      { path: 'carga-horaria/carga-horaria2', component: CargaHoraria2Component}
+
 
   ];
 
