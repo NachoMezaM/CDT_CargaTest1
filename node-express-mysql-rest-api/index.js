@@ -318,16 +318,36 @@ app.post("/guardar-carga-docente", (req, res) => {
     Anio,
   } = req.body;
 
+  // Verificar si ya existe una entrada con los mismos valores de idProfesor, idAsignaturaSeccion y Anio
   db.query(
-    "INSERT INTO cargaacademica.CargaDocente (idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio) VALUES (?, ?, ?, ?, ?)",
-    [idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio],
+    "SELECT COUNT(*) AS count FROM cargaacademica.CargaDocente WHERE idProfesor = ? AND idAsignaturaSeccion = ? AND Anio = ?",
+    [idProfesor, idAsignaturaSeccion, Anio],
     (err, result) => {
       if (err) {
-        console.error("Error al guardar la carga docente:", err);
+        console.error("Error al realizar la verificación:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
-      res.status(200).json({ message: "Carga docente guardada exitosamente" });
+
+      // Verificar si se encontró alguna entrada
+      if (result[0].count > 0) {
+        // Si ya existe una entrada, devolver un mensaje indicando que no se guardará
+        res.status(400).json({ message: "No se guardaron filas duplicadas" });
+      } else {
+        // Si no se encontró ninguna entrada, insertar los datos en la base de datos
+        db.query(
+          "INSERT INTO cargaacademica.CargaDocente (idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio) VALUES (?, ?, ?, ?, ?)",
+          [idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio],
+          (err, result) => {
+            if (err) {
+              console.error("solo se guardaron las filas no duplicadas", err);
+              res.status(500).send("Error interno del servidor");
+              return;
+            }
+            res.status(200).json({ message: "Carga docente guardada exitosamente" });
+          }
+        );
+      }
     }
   );
 });
@@ -403,6 +423,24 @@ app.delete('/VisualizarCA/:idCargaDocente', (req, res) => {
     }
     res.status(200).json({ msg: 'Post deleted successfully' });
   });
+});
+
+/* Ruta para eliminar una fila de la tabla CargaDocente */
+app.post("/eliminar-fila", (req, res) => {
+  const { codigo, seccion } = req.body;
+
+  db.query(
+    'DELETE CargaDocente FROM CargaDocente JOIN AsignaturaSeccion ON CargaDocente.idAsignaturaSeccion = AsignaturaSeccion.idAsignaturaSeccion JOIN Asignatura ON AsignaturaSeccion.idAsignatura = Asignatura.idAsignatura JOIN Seccion ON AsignaturaSeccion.idSeccion = Seccion.idSeccion JOIN Profesor ON CargaDocente.idProfesor = Profesor.idProfesor WHERE AsignaturaSeccion.idAsignatura = ? AND AsignaturaSeccion.idSeccion = ?',
+    [codigo, seccion],
+    (err, result) => {
+      if (err) {
+        console.error("Error al eliminar la fila:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      res.status(200).json({ message: "Fila eliminada exitosamente" });
+    }
+  );
 });
 
 /* Start server */
