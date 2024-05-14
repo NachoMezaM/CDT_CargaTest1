@@ -32,7 +32,7 @@ export class CargaHoraria2Component {
   }
 
   constructor(public visualizarService: VisualizarCargaService, private router: Router,) {
-    this.filteredPosts = this.visualizarCA;
+   
   }
   @HostListener('document:keydown.enter', ['$event'])
   handleEnterKey(event: KeyboardEvent) {
@@ -47,26 +47,16 @@ export class CargaHoraria2Component {
     }
   }
 
-  /**
-   * Write code on Method
-   *
-   * @return response()
-   */
+
   ngOnInit(): void {
 
     this.visualizarService.getAll().subscribe((data: VisualizarCA[]) => {
       this.visualizarCA = data;
-      this.filteredPosts = this.visualizarCA;
+      
      
     })
   }
-
-
-  /**
-   * Write code on Method
-   *
-   * @return response()
-   */
+  
   deleteCargaH(idCargaDocente: number) {
     this.visualizarService.delete(idCargaDocente).subscribe(res => {
       this.visualizarCA = this.visualizarCA.filter(item => item.idCargaDocente !== idCargaDocente);

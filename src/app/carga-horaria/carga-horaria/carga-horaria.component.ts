@@ -66,7 +66,7 @@ export class CargaHorariaComponent {
       .post<any>('http://localhost:3000/buscar-datos', { rut, nombre, año })
       .subscribe(
         (response) => {
-          console.log('Datos encontrados:', response);
+          //console.log('Datos encontrados:', response);
           // Verificar si la respuesta es un array y contiene al menos un elemento
           if (Array.isArray(response) && response.length > 0) {
             // Buscar el resultado que coincide con el rut buscado o el nombre y apellido
@@ -156,10 +156,8 @@ export class CargaHorariaComponent {
 
   // Método para agregar una fila a la tabla de docencia directa
   agregarFila() {
-    const codigo = (document.getElementById('codigo') as HTMLInputElement)
-      .value;
-    const seccion = (document.getElementById('seccion') as HTMLSelectElement)
-      .value;
+    const codigo = (document.getElementById('codigo') as HTMLInputElement).value;
+    const seccion = (document.getElementById('seccion') as HTMLSelectElement).value;
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
     const año = (document.getElementById('año') as HTMLInputElement).value;
 
@@ -346,6 +344,7 @@ export class CargaHorariaComponent {
       .innerText;
     const seccion = (row.querySelector('td:nth-child(2)') as HTMLElement)
       .innerText;
+    const idProfesor=
 
     // Realizar una solicitud POST al servidor para eliminar la fila
     this.http

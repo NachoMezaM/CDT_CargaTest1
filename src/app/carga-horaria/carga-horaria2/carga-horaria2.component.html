@@ -17,7 +17,7 @@
 
       <div class="rut-item">
         <label for="rut">Rut:</label>
-        <input type="text" id="rut" class="form-control" placeholder="12345678-9" required autocomplete="off" />
+        <input type="text" id="rut" (keyup)="onSearch($event)" class="form-control" placeholder="12345678-9" required autocomplete="off" />
       </div>
 
       <div class="nombre-item">

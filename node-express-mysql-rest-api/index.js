@@ -169,7 +169,7 @@ app.get("/profesor/:idProfesor", (req, res) => {
 //Update a post
 app.put("/profesor/:idProfesor", (req, res) => {
   const profesoridProfesor = req.params.idProfesor;
-  console.log("Funca");
+  //console.log("Funca");
   const { Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
   db.query(
     "UPDATE cargaacademica.Profesor SET Nombre=? ,Tipo = ?, Profesion = ?, Horas = ?, ValorHora = ?, idJerarquia = ?, Direccion = ?, Telefono = ?, Grado = ?, TituloGrado = ?, Estado = ?, Apellido = ? WHERE idProfesor = ?",
@@ -215,7 +215,7 @@ app.post("/buscar-datos", (req, res) => {
       res.status(500).send("Error interno del servidor");
       return;
     }
-    console.log("Datos encontrados:", result);
+   // console.log("Datos encontrados:", result);
     res.status(200).json(result);
   });
 });
@@ -380,7 +380,7 @@ JOIN (
       res.status(500).send("Error interno del servidor");
       return;
     }
-    console.log("Datos encontrados:", result);
+   // console.log("Datos encontrados:", result);
     res.status(200).json(result);
   });
 });
@@ -428,7 +428,7 @@ app.delete('/VisualizarCA/:idCargaDocente', (req, res) => {
 /* Ruta para eliminar una fila de la tabla CargaDocente */
 app.post("/eliminar-fila", (req, res) => {
   const { codigo, seccion } = req.body;
-
+  //console.log(codigo,seccion);
   db.query(
     'DELETE CargaDocente FROM CargaDocente JOIN AsignaturaSeccion ON CargaDocente.idAsignaturaSeccion = AsignaturaSeccion.idAsignaturaSeccion JOIN Asignatura ON AsignaturaSeccion.idAsignatura = Asignatura.idAsignatura JOIN Seccion ON AsignaturaSeccion.idSeccion = Seccion.idSeccion JOIN Profesor ON CargaDocente.idProfesor = Profesor.idProfesor WHERE AsignaturaSeccion.idAsignatura = ? AND AsignaturaSeccion.idSeccion = ?',
     [codigo, seccion],
