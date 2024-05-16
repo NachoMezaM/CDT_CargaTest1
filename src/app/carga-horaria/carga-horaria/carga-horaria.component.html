@@ -11,21 +11,24 @@
   <form>
     <div class="containerflex">
       <h1 class="titulo">Ingresar Carga</h1>
-
-      <div class="rut-item row">
-        <label for="rut" class="col1"><strong>Rut:</strong></label>
-        <input type="text" id="rut" class="form-control1 col22" placeholder="12345678-9" required autocomplete="off" />
-      </div>
-
-      <div class="nombre-item row">
-        <label for="nombre" class="col1"><strong>Nombre:</strong></label>
-        <input type="text" id="nombre" class="form-control1 col22" placeholder="Nombre y apellidos" autocomplete="off" />
-      </div>
-
-      <div class="año-item row">
-        <label for="año" class="col1"><strong>Año:</strong></label>
-        <input type="text" id="año" class="form-control1 col22" autocomplete="off" [value]="currentYear" readonly
-          style="background-color: #ffffff" />
+      
+      <div class="form-group">
+        <div class="row">
+          <div class="col1">
+            <label for="idProfesor"><strong>Rut:</strong></label>
+            <input formControlName="idProfesor" id="rut" type="text" class="form-control1">
+          </div>
+          
+          <div class="col21 ">
+            <label for="nombre"><strong>Nombre:</strong></label>
+            <input formControlName="Nombre" id="nombre" type="text" class="form-control2">
+          </div>
+          
+          <div class=col21>
+            <label for="año"><strong>Año:</strong></label>
+            <input formControlName="Año" id="año" class="form-control1" autocomplete="off" [value]="currentYear" readonly>
+          </div>
+        </div>
       </div>
 
       <div class="grado-item row">
