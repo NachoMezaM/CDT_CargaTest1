@@ -427,11 +427,11 @@ app.delete('/VisualizarCA/:idCargaDocente', (req, res) => {
 
 /* Ruta para eliminar una fila de la tabla CargaDocente */
 app.post("/eliminar-fila", (req, res) => {
-  const { codigo, seccion } = req.body;
+  const { codigo, seccion, rut } = req.body;
   //console.log(codigo,seccion);
   db.query(
-    'DELETE CargaDocente FROM CargaDocente JOIN AsignaturaSeccion ON CargaDocente.idAsignaturaSeccion = AsignaturaSeccion.idAsignaturaSeccion JOIN Asignatura ON AsignaturaSeccion.idAsignatura = Asignatura.idAsignatura JOIN Seccion ON AsignaturaSeccion.idSeccion = Seccion.idSeccion JOIN Profesor ON CargaDocente.idProfesor = Profesor.idProfesor WHERE AsignaturaSeccion.idAsignatura = ? AND AsignaturaSeccion.idSeccion = ?',
-    [codigo, seccion],
+    'DELETE FROM CargaDocente WHERE idAsignaturaSeccion IN ( SELECT idAsignaturaSeccion FROM AsignaturaSeccion WHERE idAsignatura = ? AND idSeccion = ? ) AND idProfesor = ?',
+    [codigo, seccion, rut],
     (err, result) => {
       if (err) {
         console.error("Error al eliminar la fila:", err);

@@ -284,7 +284,7 @@ export class CargaHorariaComponent {
       alert('Se guardaron las filas correctamente.');
       this.limpiarFilasGuardadas();
     } else {
-      alert('No se guardaron filas duplicadas.');
+      // alert('No se guardaron filas duplicadas.');
     }
 
     // Limpiar las filas guardadas después de guardar
@@ -344,11 +344,11 @@ export class CargaHorariaComponent {
       .innerText;
     const seccion = (row.querySelector('td:nth-child(2)') as HTMLElement)
       .innerText;
-    const idProfesor=
+    const rut = (document.getElementById('rut') as HTMLInputElement).value;
 
     // Realizar una solicitud POST al servidor para eliminar la fila
     this.http
-      .post<any>('http://localhost:3000/eliminar-fila', { codigo, seccion })
+      .post<any>('http://localhost:3000/eliminar-fila', { codigo, seccion, rut })
       .subscribe(
         (data) => {
           // Manejar la respuesta del servidor
