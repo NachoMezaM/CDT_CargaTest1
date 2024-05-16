@@ -25,6 +25,7 @@
   padding: 10px;
   border: 2px solid #ccc;
   border-radius: 15px;
+  font-size: medium;
 }
 
 .containerflex3 {
@@ -37,6 +38,7 @@
   padding: 10px;
   border: 2px solid #ccc;
   border-radius: 15px;
+  font-size: medium;
 }
 
 .containerflex4 {
@@ -49,6 +51,7 @@
   padding: 10px;
   border: 2px solid #ccc;
   border-radius: 15px;
+  font-size: medium;
 }
 
 @media (max-width: 768px) {
