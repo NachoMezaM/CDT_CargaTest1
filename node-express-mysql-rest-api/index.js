@@ -116,7 +116,7 @@ app.get("/profesor/", (req, res) => {
 
 /* SECCION LLAMAR  */ 
 
-app.put("/posts/:id", (req, res) => {
+app.post("/posts/:id", (req, res) => {
   const postId = req.params.id;
   const { idAsignatura } =
     req.body;
