@@ -43,6 +43,7 @@ export class SeccionComponent {
       idAsignatura: new FormControl('', [Validators.required]),
       Facultad: new FormControl('', [Validators.required]),
       Carrera: new FormControl('', [Validators.required]),
+      Semestre: new FormControl('', [Validators.required])
     });
   }
 
