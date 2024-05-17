@@ -55,20 +55,18 @@
 }
 
 @media (max-width: 768px) {
-
   .containerflex {
     width: 80%; /* Cambiado de 66% a 80% */
     margin: 15px; /* Reducido el margen */
   }
-
 }
 
-
-.h1{
-  position: center;
+.h1 {
+  text-align: center;
 }
-.has{
-position: relative;
+
+.has {
+  position: relative;
 }
 
 /* Estilo para las celdas de la tabla */
@@ -88,7 +86,7 @@ position: relative;
  margin-left: 550px;
 } */
 
-.form-control1{
+.form-control1 {
   display: block;
   width: 130px;
   height: 34px;
@@ -101,7 +99,8 @@ position: relative;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-.form-control2{
+
+.form-control2 {
   display: block;
   width: 100%;
   height: 34px;
@@ -114,42 +113,50 @@ position: relative;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 .row {
   margin-bottom: 25px;
   margin-left: 25px; 
-  width:100%;
-
-}
-.col1{
- width:150px;
- margin-bottom: 25px;
-
+  width: 100%;
 }
 
-.col21, .col22{
-  width:43%;
+.col1 {
+  width: 150px;
+  margin-bottom: 25px;
 }
+
+.col21, .col22 {
+  width: 43%;
+}
+
 /* FONDO */
-body{
+body {
   background-color: #0062C4;
   width: 100%;
-  height:100%;
-  display: flex; /* Añadido */
-  flex-direction: column; /* Añadido */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   justify-content: flex-start;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Para Firefox */
 }
+
+body::-webkit-scrollbar {
+  display: none; /* Para Chrome, Safari y Opera */
+}
+
 /* CONTENIDO */
-.border{
+.border {
   background-color: white;
   padding: 40px 10px;
   width: 80%;
   margin: 0 auto;
   border: 1px solid #ccc;
   border-radius: 20px;
-
 }
+
 /* BOTONES CONFIG */
-.boton{
+.boton {
   color: white;
   background-color: #003366;
   text-align: center;
@@ -158,19 +165,27 @@ body{
   border-radius: 10px;
   border: 0px;
 }
-.boton:hover{
+
+.boton:hover {
   background-color: #002244;
   color: white;
 }
-.linear{
+
+.linear {
   text-align: center;
   padding: 15px;
 }
+
 /* TITULO */
-.titulo{
+.titulo {
   text-align: center;
   color: rgb(0, 0, 0);
   margin-top: 25px;
   margin-bottom: 30px;
   font-size: 35px;
+}
+
+/* OCULTAR SIDEBAR */
+.sidebar {
+  visibility: hidden;
 }
