@@ -24,7 +24,7 @@ export class SeccionComponent {
     { id: 'FS', nombre: 'Facultad de Salud', carreras: ['Facultad','Enfermería', 'Nutricion y Dietetica','Obstetricia y Puericultura','Quimica y Farmacia','Tecnico de Nivel Superior en Enfermeria','Terapia Ocupacional'] },
     { id: 'FE', nombre: 'Facultad de Educacion', carreras: ['Facultad','Educación Parvularia', 'Licenciatura en Educacion','Pedagogía en Educación Diferencial','Pedagogía en Educación Física','Pedagogía en Educación General Básica','Pedagogía en Inglés','Pedagogía en Música'] },
     { id: 'DE', nombre: 'Facultad de Ciencias Juridicas y Sociales', carreras: ['Facultad','Derecho', 'Psicología','Trabajo Social','Licenciatura en Trabajo Social',] },
-    { id: 'DE', nombre: 'Facultad de Teologia', carreras: ['Teologia'] }
+    { id: 'TE', nombre: 'Facultad de Teologia', carreras: ['','Teologia'] }
   ];
 
   constructor(
