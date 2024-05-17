@@ -20,10 +20,11 @@ export class SeccionComponent {
   form!: FormGroup;
   te!: { value: string; label: string }[];
   facultades = [
-    { id: 'FI', nombre: 'Facultad de Ingenieria y Negocios', carreras: ['Facultad','Agronomia', 'Contador Auditor Online','Ingenieria Civil Industrial','Ingenieria Civil Informatica','Ingenieria Comercial'] },
+    { id: 'FI', nombre: 'Facultad de Ingenieria y Negocios', carreras: ['FAIN','Agronomia', 'Contador Auditor Online','Ingenieria Civil Industrial','Ingenieria Civil Informatica','Ingenieria Comercial'] },
     { id: 'FS', nombre: 'Facultad de Salud', carreras: ['Facultad','Enfermería', 'Nutricion y Dietetica','Obstetricia y Puericultura','Quimica y Farmacia','Tecnico de Nivel Superior en Enfermeria','Terapia Ocupacional'] },
     { id: 'FE', nombre: 'Facultad de Educacion', carreras: ['Facultad','Educación Parvularia', 'Licenciatura en Educacion','Pedagogía en Educación Diferencial','Pedagogía en Educación Física','Pedagogía en Educación General Básica','Pedagogía en Inglés','Pedagogía en Música'] },
     { id: 'DE', nombre: 'Facultad de Ciencias Juridicas y Sociales', carreras: ['Facultad','Derecho', 'Psicología','Trabajo Social','Licenciatura en Trabajo Social',] },
+    { id: 'DE', nombre: 'Facultad de Teologia', carreras: ['Teologia'] }
   ];
 
   constructor(
@@ -57,4 +58,13 @@ export class SeccionComponent {
     return [];
   }
 
+
+
+  submit(){
+    console.log(this.form.value);
+    this.postService.create(this.form.value).subscribe((res:any) => {
+         console.log('Post created successfully!');
+         this.router.navigateByUrl('post/index');
+    })
+  }
 }

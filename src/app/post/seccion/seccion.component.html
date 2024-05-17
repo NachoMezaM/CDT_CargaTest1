@@ -1,5 +1,5 @@
 <body>
-    <form [formGroup]="form">
+    <form [formGroup]="form" (ngSubmit)="submit()">
         <select formControlName="Facultad">
           <option *ngFor="let facultad of facultades" [value]="facultad.id">{{ facultad.nombre }}</option>
         </select>
@@ -8,6 +8,7 @@
         </select>
 
 
+        
         <td style="color: white;">{{ post.idAsignatura + '/Clase/'  }}</td>
         <button class="boton" type="submit">Crear</button>
       </form>
