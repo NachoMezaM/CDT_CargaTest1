@@ -84,9 +84,9 @@ position: relative;
 }
 
 /* Estilos para el botón Buscar Código */
-.boton-item button {
+/* .boton-item button {
  margin-left: 550px;
-}
+} */
 
 .form-control1{
   display: block;
@@ -172,4 +172,5 @@ body{
   color: rgb(0, 0, 0);
   margin-top: 25px;
   margin-bottom: 30px;
+  font-size: 35px;
 }

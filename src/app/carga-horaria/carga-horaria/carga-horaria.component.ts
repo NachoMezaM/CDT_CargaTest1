@@ -22,6 +22,12 @@ export class CargaHorariaComponent {
   ngOnInit() {
     // Obtener el año actual al inicializar el componente
     this.currentYear = new Date().getFullYear();
+
+ // Agregar el evento input para transformar el texto a mayúsculas
+    const codigoInput = document.getElementById('codigo') as HTMLInputElement;
+    if (codigoInput) {
+      codigoInput.addEventListener('input', this.transformarAMayusculas);
+      }
   }
 
   @HostListener('document:keydown.enter', ['$event'])
@@ -223,6 +229,7 @@ export class CargaHorariaComponent {
               this.actualizarBotonGuardar();
             });
           }
+          
         },
         (error) => {
           console.error(
@@ -234,6 +241,11 @@ export class CargaHorariaComponent {
           );
         }
       );
+  }
+
+  transformarAMayusculas(event: Event) {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.toUpperCase();
   }
 
   actualizarBotonGuardar() {
@@ -323,7 +335,7 @@ export class CargaHorariaComponent {
             if (error.status === 400 && error.error.message === 'No se guardaron filas duplicadas') {
               resolve(false); // Indicar que la fila no se guardó debido a duplicados
             } else {
-              alert('Ocurrió un error al guardar la carga docente. Por favor, inténtalo de nuevo más tarde.');
+              alert('fila o filas duplicadas.');
               reject(error);
             }
           }
@@ -413,7 +425,7 @@ export class CargaHorariaComponent {
               <td>${minutos}</td>
               <td>${planificacion}</td>
               <td></td>
-              <td><input type="checkbox" class="confirm-checkbox"></td>
+              <td><input type="checkbox" class="confirm-checkbox" disabled></td>
               <td><label class="remove-checkbox">✘</label></td>
             `;
               tbody.appendChild(newRow);
@@ -466,8 +478,6 @@ export class CargaHorariaComponent {
     }
   }
 
-  //Docencia Directa
-
   // Método para buscar las secciones disponibles para un código de asignatura dado
   buscarSecciones() {
     const codigo = (document.getElementById('codigo') as HTMLInputElement)
@@ -477,9 +487,7 @@ export class CargaHorariaComponent {
       .post<any>('http://localhost:3000/obtener-secciones', { codigo })
       .subscribe(
         (data) => {
-          const seccionSelect = document.getElementById(
-            'seccion'
-          ) as HTMLSelectElement;
+          const seccionSelect = document.getElementById('seccion') as HTMLSelectElement;
           seccionSelect.innerHTML = ''; // Limpiar opciones anteriores
           if (Array.isArray(data)) {
             data.forEach((Seccion) => {

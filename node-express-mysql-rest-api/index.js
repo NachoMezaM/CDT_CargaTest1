@@ -332,7 +332,7 @@ app.post("/guardar-carga-docente", (req, res) => {
       // Verificar si se encontró alguna entrada
       if (result[0].count > 0) {
         // Si ya existe una entrada, devolver un mensaje indicando que no se guardará
-        res.status(400).json({ message: "No se guardaron filas duplicadas" });
+        res.status(400).json({ message: "fila duplicada o filas duplicadas" });
       } else {
         // Si no se encontró ninguna entrada, insertar los datos en la base de datos
         db.query(
