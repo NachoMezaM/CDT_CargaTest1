@@ -18,7 +18,6 @@ export class SeccionComponent {
   id!: number;
   post!: Post;
   form!: FormGroup;
-  te!: { value: string; label: string }[];
   facultades = [
     { id: 'FI', nombre: 'Facultad de Ingenieria y Negocios', carreras: ['FAIN','Agronomia', 'Contador Auditor Online','Ingenieria Civil Industrial','Ingenieria Civil Informatica','Ingenieria Comercial'] },
     { id: 'FS', nombre: 'Facultad de Salud', carreras: ['Facultad','Enfermería', 'Nutricion y Dietetica','Obstetricia y Puericultura','Quimica y Farmacia','Tecnico de Nivel Superior en Enfermeria','Terapia Ocupacional'] },
