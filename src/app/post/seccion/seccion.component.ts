@@ -31,7 +31,6 @@ export class SeccionComponent {
     private route: ActivatedRoute,
     private router: Router
   ){
-    this.te = [{ value: 'TE', label: 'Teologia' }];
 
   }
 
