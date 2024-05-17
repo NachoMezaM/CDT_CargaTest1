@@ -9,6 +9,7 @@
   <app-barranavegacion></app-barranavegacion>
   
   <form>
+  <div class="fila">
     <div class="containerflex ">
       <h1 class="titulo">Ingresar Carga</h1>
       
@@ -26,7 +27,7 @@
           
           <div class=col1>
             <label for="año"><strong>Año:</strong></label>
-            <input formControlName="Año" id="año" class="form-control1" autocomplete="off" [value]="currentYear" readonly>
+            <input formControlName="Año" id="año" class="form-control11" autocomplete="off" [value]="currentYear" readonly>
           </div>
         </div>
       </div>
@@ -55,11 +56,22 @@
         </div>
       </div>
     </div>
+
+    <form>
+      <div class="containerflex4">
+        <h1 class="titulo">Notas</h1>
+        <textarea rows="4" cols="50" class="form-control2" placeholder="Escribe tus notas aquí"></textarea>
+      </div>
+    </form>
+  </div>
   </form>
 
-  <div class="flex-container">
+
+
+  <div class="fila">
     <!-- Docencia Directa -->
     <form>
+      
       <div class="containerflex1">
         <h1 class="titulo">Docencia Directa</h1>
 
@@ -117,13 +129,6 @@
             <!-- Aquí se agregarán las filas dinámicamente -->
           </tbody>
         </table>
-      </div>
-    </form>
-
-    <form>
-      <div class="containerflex4">
-        <h1 class="titulo">Notas</h1>
-        <textarea rows="4" cols="50" class="form-control2" placeholder="Escribe tus notas aquí"></textarea>
       </div>
     </form>
   </div>

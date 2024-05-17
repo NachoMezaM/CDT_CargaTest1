@@ -1,6 +1,9 @@
 /* Estilos para los campos de información */
+
+/* CAMPO DATOS INGRESAR CARGA*/
 .containerflex {
-  margin: 15px auto;
+  margin-left: 20px;
+  margin-top: 20px;
   width: 40%;
   max-width: 800px; /* Añadido un ancho máximo */
   min-width: 800px; /* Añadido un ancho mínimo */
@@ -9,50 +12,55 @@
   border: 2px solid #ccc;
   border-radius: 15px;
 }
-
-.flex-container {
+/* CAMPO FILA INGRESAR Y NOTAS*/
+.fila{
+  margin-right: -8px;
+  margin-left:-8px; 
+  margin-bottom: 20px;
+  margin-top: 10px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  width:100%;
 }
-
-.containerflex1 {
-  margin: 15px;
-  width: 100%;
-  max-width: 825px; /* Añadido un ancho máximo */
-  min-width: 760px; /* Añadido un ancho mínimo */
-  background-color: #f2f2f2;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 15px;
-  font-size: medium;
-}
-
-.containerflex3 {
-  margin: 15px;
-  margin-right: 230px;
-  width: 80%;
-  max-width: 800px; /* Añadido un ancho máximo */
-  min-width: 760px; /* Añadido un ancho mínimo */
-  background-color: #f2f2f2;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 15px;
-  font-size: medium;
-}
-
+/* CAMPO NOTAS */
 .containerflex4 {
-  margin: 15px;
-  margin-top: 30px;
-  width: 80%;
-  max-width: 800px; /* Añadido un ancho máximo */
-  min-width: 760px; /* Añadido un ancho mínimo */
+  margin-left: 30px;
+  margin-top: 20px;
+  max-width: 500px; /* Añadido un ancho máximo */
+  min-width: 500px; /* Añadido un ancho mínimo */
+  min-height: 280px;
   background-color: #f2f2f2;
   padding: 10px;
   border: 2px solid #ccc;
   border-radius: 15px;
   font-size: me;
 }
+/* DATOS PARA DOCENCIA DIRECTA*/
+.containerflex1 {
+  margin-left: 100px;
+  max-width: 825px; /* Añadido un ancho máximo */
+  min-width: 805px; /* Añadido un ancho mínimo */
+  background-color: #f2f2f2;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 15px;
+  font-size: medium;
+}
+/* DATOS PARA  OTROS GESTION */
+.containerflex3 {
+  margin-left: 30px;
+  width: 80%;
+  min-width: 500px; /* Añadido un ancho mínimo */
+  min-height: 330px;
+  background-color: #f2f2f2;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 15px;
+  font-size: medium;
+}
+
+
 
 @media (max-width: 768px) {
   .containerflex {
@@ -100,6 +108,20 @@
   border-radius: 4px;
 }
 
+.form-control11 {
+  display: block;
+  width: 90px;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #ffffffff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .form-control2 {
   display: block;
   width: 100%;
@@ -115,7 +137,7 @@
 }
 
 .row {
-  margin-bottom: 25px;
+  margin-bottom: 10px;
   margin-left: 25px; 
   width: 100%;
 }
@@ -161,6 +183,7 @@ body::-webkit-scrollbar {
   background-color: #003366;
   text-align: center;
   margin-right: 25px;
+  margin-top: 30px;
   padding: 10px 20px;
   border-radius: 10px;
   border: 0px;
@@ -180,8 +203,8 @@ body::-webkit-scrollbar {
 .titulo {
   text-align: center;
   color: rgb(0, 0, 0);
-  margin-top: 25px;
-  margin-bottom: 30px;
+  margin-top: 10px;
+  margin-bottom: 20px;
   font-size: 35px;
 }
 
