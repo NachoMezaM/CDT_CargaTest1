@@ -6,6 +6,36 @@
 </head>
 <body>
     <app-barranavegacion></app-barranavegacion>
+    <h1 class="titulo">Carga Academica</h1>
+    <div class="border">
+      <form>
+        <div class="form-group">
+          <div class="col1">
+            <div class="form-group">
+                <label for="Facultad"><strong>Facultad</strong></label>
+                <select id="Facultad" class="form-control" formControlName="Facultad" (change)="onFacultadChange($event)">
+                    <option value="1">FACS</option>
+                    <option value="2">FAIN</option>
+                    <option value="3">FEDUC</option>
+                    <option value="4">FTEO </option>
+                    <option value="5">FACIJS </option>
+                </select>
+            </div>
+        </div>
+        </div>
+        <div class="form-group" *ngIf="showCarrera">
+          <div class="col1">
+            <div class="form-group">
+              <label for="Carrera"><strong>Carrera</strong></label>
+              <select id="Carrera" class="form-control" formControlName="Carrera">
+                <option *ngFor="let carrera of carreras" [value]="carrera.value">{{ carrera.label }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </form>
+     
+    </div>
 
     
 
