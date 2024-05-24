@@ -116,21 +116,6 @@ app.get("/profesor/", (req, res) => {
 
 /* SECCION LLAMAR  */ 
 
-app.get("/posts/:id", (req, res) => {
-  const postId = req.params.id;
-  const { idAsignatura } =
-    req.body;
-  db.query(
-    "SELECT idAsignatura=? FROM cargaacademica.Asignatura  WHERE idAsignatura =?",
-    [idAsignatura, postId],
-    (err) => {
-      if (err) {
-        res.status(500).send("Error updating post");
-        return;
-      }
-    }
-  );
-});
 /* SECCION MANDAR */
 //-------------------------------------------------------------------------------------------------------------------//
 

@@ -14,17 +14,50 @@ import { Post } from '../post';
   styleUrl: './seccion.component.css'
 })
 export class SeccionComponent {
-
+  url = '';
+  showresultado = false;
   id!: number;
   post!: Post;
   form!: FormGroup;
   facultades = [
-    { id: 'FI', nombre: 'Facultad de Ingenieria y Negocios', carreras: ['FAIN','Agronomia', 'Contador Auditor Online','Ingenieria Civil Industrial','Ingenieria Civil Informatica','Ingenieria Comercial'] },
-    { id: 'FS', nombre: 'Facultad de Salud', carreras: ['Facultad','Enfermería', 'Nutricion y Dietetica','Obstetricia y Puericultura','Quimica y Farmacia','Tecnico de Nivel Superior en Enfermeria','Terapia Ocupacional'] },
-    { id: 'FE', nombre: 'Facultad de Educacion', carreras: ['Facultad','Educación Parvularia', 'Licenciatura en Educacion','Pedagogía en Educación Diferencial','Pedagogía en Educación Física','Pedagogía en Educación General Básica','Pedagogía en Inglés','Pedagogía en Música'] },
-    { id: 'DE', nombre: 'Facultad de Ciencias Juridicas y Sociales', carreras: ['Facultad','Derecho', 'Psicología','Trabajo Social','Licenciatura en Trabajo Social',] },
-    { id: 'TE', nombre: 'Facultad de Teologia', carreras: ['','Teologia'] }
-  ];
+    { id: 'FI', nombre: 'Facultad de Ingenieria y Negocios', carreras: [
+        { nombre: 'FAIN', valor: 'FI' },
+        { nombre: 'Agronomia', valor: 'AG' },
+        { nombre: 'Contador Auditor Online', valor: 'CO' },
+        { nombre: 'Ingenieria Civil Industrial', valor: 'CI' },
+        { nombre: 'Ingenieria Civil Informatica', valor: 'II' },
+        { nombre: 'Ingenieria Comercial', valor: 'IC' }
+    ] },
+    { id: 'FS', nombre: 'Facultad de Salud', carreras: [
+        { nombre: 'Facultad', valor: 'FS' },
+        { nombre: 'Enfermería', valor: 'EN' },
+        { nombre: 'Nutricion y Dietetica', valor: 'NU' },
+        { nombre: 'Obstetricia y Puericultura', valor: 'OB' },
+        { nombre: 'Quimica y Farmacia', valor: 'QF' },
+        { nombre: 'Tecnico de Nivel Superior en Enfermeria', valor: 'ET' },
+        { nombre: 'Terapia Ocupacional', valor: 'TO' }
+    ] },
+    { id: 'FE', nombre: 'Facultad de Educacion', carreras: [
+        { nombre: 'Facultad', valor: 'FE' },
+        { nombre: 'Educación Parvularia', valor: 'EP' },
+        { nombre: 'Licenciatura en Educacion', valor: 'LE' },
+        { nombre: 'Pedagogía en Educación Diferencial', valor: 'ED' },
+        { nombre: 'Pedagogía en Educación Física', valor: 'EF' },
+        { nombre: 'Pedagogía en Educación General Básica', valor: 'EB' },
+        { nombre: 'Pedagogía en Inglés', valor: 'PI' },
+        { nombre: 'Pedagogía en Música', valor: 'MU' },
+    ] },
+    { id: 'DE', nombre: 'Facultad de Ciencias Juridicas y Sociales', carreras: [
+        { nombre: 'Facultad', valor: 'FD' },
+        { nombre: 'Derecho', valor: 'DE' },
+        { nombre: 'Psicología', valor: 'PS' },
+        { nombre: 'Trabajo Social', valor: 'TS' },
+        { nombre: 'Licenciatura en Trabajo Social', valor: 'LS' }
+    ] },
+    { id: 'TE', nombre: 'Facultad de Teologia', carreras: [
+        { nombre: 'Teologia', valor: 'TE' }
+    ] }
+];
 
   constructor(
     public postService: PostService,
@@ -32,6 +65,19 @@ export class SeccionComponent {
     private router: Router
   ){
 
+  }
+
+  onresultadochange(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    const selectvalue = target.value;
+    console.log("Resultado ", selectvalue);
+    
+    this.showresultado=!!selectvalue
+  }
+  
+  setresultado(event: Event) {
+   const target=event.target as HTMLSelectElement;
+   const selectvalue=target.value;
   }
 
   ngOnInit(): void {
@@ -43,7 +89,8 @@ export class SeccionComponent {
       idAsignatura: new FormControl('', [Validators.required]),
       Facultad: new FormControl('', [Validators.required]),
       Carrera: new FormControl('', [Validators.required]),
-      Semestre: new FormControl('', [Validators.required])
+      Semestre: new FormControl('', [Validators.required]),
+      grupos: new FormControl('',[Validators.required])
     });
   }
 
@@ -59,11 +106,18 @@ export class SeccionComponent {
 
 
 
-  submit(){
-    console.log(this.form.value);
-    this.postService.create(this.form.value).subscribe((res:any) => {
-         console.log('Post created successfully!');
-         this.router.navigateByUrl('post/index');
-    })
+  submit() {
+    const carreraControl = this.form.get('Carrera')!;
+    const carrera = this.Carreras.find(c => c.nombre === carreraControl.value);
+    const carreraValor = carrera? carrera.valor : null;
+    const idAsignatura = this.form.value.idAsignatura;
+    const Semestre = this.form.value.Semestre;
+    const grupos = this.form.value.grupos;
+    if (carreraValor) {
+      this.form.patchValue({ Carrera: carreraValor });
+    }
+    this.url = `${idAsignatura}/${carreraValor}${Semestre}${grupos}`;
+    console.log(this.url);   
   }
-}
+    
+  }

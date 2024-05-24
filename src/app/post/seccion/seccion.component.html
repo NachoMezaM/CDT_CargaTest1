@@ -1,38 +1,60 @@
 <body>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <label for="idAsignatura"><strong>Codigo:</strong></label>
-      <input 
-          formControlName="idAsignatura"
-          id="idAsignatura" 
-          type="text" 
-          [(ngModel)]="post.idAsignatura"
-          class="form-control">
-        <select formControlName="Facultad">
-          <option *ngFor="let facultad of facultades" [value]="facultad.id">{{ facultad.nombre }}</option>
-        </select>
-        <select formControlName="Carrera">
-          <option *ngFor="let carrera of Carreras" [value]="carrera">{{ carrera }}</option>
-        </select>
-        <label for="Semestre"><strong>Semestre:</strong></label>
-        <select 
-        formControlName="Semestre"
-        id="Semestre">
-        <option value="">Seleccione Opcion</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="X">10</option>
-        <option value="XI">11</option>
-         </select>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label for="idAsignatura"><strong>Codigo:</strong></label>
+    <input 
+        formControlName="idAsignatura"
+        id="idAsignatura" 
+        type="text" 
+        [(ngModel)]="post.idAsignatura"
+        readonly
+        class="form-control">
+      <select formControlName="Facultad">
+        <option *ngFor="let facultad of facultades" [value]="facultad.id">{{ facultad.nombre }}</option>
+      </select>
+      <select [(ngModel)]="form.value.Carrera" name="Carrera" formControlName="Carrera">
+        <option *ngFor="let carrera of Carreras" [value]="carrera.nombre">
+          {{ carrera.nombre }}
+        </option>
+      </select>
+      <label for="Semestre"><strong>Semestre:</strong></label>
+      <select 
+      formControlName="Semestre"
+      id="Semestre">
+      <option value="">Seleccione Opcion</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="X">10</option>
+      <option value="XI">11</option>
+       </select>
+       <label for="grupos"><strong>Cantidad de grupos:</strong></label>
+       <input 
+           formControlName="grupos"
+           id="grupos" 
+           type="text" 
+           class="form-control"
+           (change)="onresultadochange($event)">
 
-        
-        <button class="boton" type="submit">Crear</button>
-      </form>
+           <!-- resultado -->
+           
+      <button class="boton" type="submit" >Crear</button>
+    </form>
+    <div class="form-group" *ngIf="showresultado">
+      <label for="AsignaturaSeccion"><strong>Resultado:</strong></label>
+            <input 
+                formControlName="AsignaturaSeccion"
+                id="AsignaturaSeccion" 
+                type="text" 
+                [value]="url"
+                readonly
+                class="form-control"
+                (change)="setresultado($event)">
+           </div>
 </body>
