@@ -1,5 +1,13 @@
 <body>
+
     <form [formGroup]="form" (ngSubmit)="submit()">
+      <label for="idAsignatura"><strong>Codigo:</strong></label>
+      <input 
+          formControlName="idAsignatura"
+          id="idAsignatura" 
+          type="text" 
+          [(ngModel)]="post.idAsignatura"
+          class="form-control">
         <select formControlName="Facultad">
           <option *ngFor="let facultad of facultades" [value]="facultad.id">{{ facultad.nombre }}</option>
         </select>
@@ -25,7 +33,6 @@
          </select>
 
         
-        <td style="color: white;">{{ post.idAsignatura + '/Clase/' }}</td>
         <button class="boton" type="submit">Crear</button>
       </form>
 </body>
