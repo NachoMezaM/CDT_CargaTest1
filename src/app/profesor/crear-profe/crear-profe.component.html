@@ -96,8 +96,12 @@
                 <div class="col21">
                     <div class="form-group">
                         <label for="Grado"><strong>Grado Académico</strong></label>
-                        <input formControlName="Grado" id="Grado" type="text" class="form-control">
-
+                        <select formControlName="Grado" id="Grado" class="form-control2">
+                            <option value="Bachiller"> Bachiller</option>
+                            <option value="Licenciado"> Licenciado</option>
+                            <option value="Magíster "> Magíster</option>
+                            <option value="Doctorado"> Doctorado</option>
+                        </select>
                         <div *ngIf="f['Grado'].touched && f['Grado'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Grado'].errors && f['Grado'].errors['required']">Es necesario agregar Grado.</div>
                         </div>
@@ -118,11 +122,14 @@
                 <div class="col1">
                     <div class="form-group">
                         <label for="Horas"><strong>Horas semanales</strong></label>
-                        <input formControlName="Horas" id="Horas" type="text" class="form-control">
+                        <input formControlName="Horas" id="Horas" type="number" name="Horas" class="form-control" oninput="validarNumero()" min="0">
 
                         <div *ngIf="f['Horas'].touched && f['Horas'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Horas'].errors && f['Horas'].errors['required']">Es necesario agregar Horas.</div>
+                            <div *ngIf="f['Horas'].errors && f['Horas'].errors['maxNumber']">No se pueden asignar mas de 42 horas.</div>
+                            <div *ngIf="f['Horas'].errors && f['Horas'].errors['minNumber']">No se puede asignar 0 horas.</div>
                         </div>
+                       
                     </div>
                 </div>
                 <div class="col1">
@@ -133,6 +140,7 @@
                         <div *ngIf="f['ValorHora'].touched && f['ValorHora'].invalid" class="alert alert-danger">
                             <div *ngIf="f['ValorHora'].errors && f['ValorHora'].errors['required']">Es necesario agregar ValorHora .</div>
                         </div>
+                        
                     </div>
                 </div>
                 <div class="col1">

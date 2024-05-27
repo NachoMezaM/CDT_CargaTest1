@@ -40,14 +40,14 @@ export class EditarProfeComponent {
   ngOnInit(): void {
     
     this.idProfesor = this.route.snapshot.params['profesoridProfesor'];
-   
+    console.log(this.idProfesor)
     this.profesorService.find( this.idProfesor).subscribe((data:Profesor) =>{
       this.profesor=data;
     }); 
     
         
     this.form = new FormGroup({
-      idProfesor: new FormControl('', [Validators.required]),
+      idProfesor: new FormControl(),
       Nombre: new FormControl('', [Validators.required]),
       Tipo: new FormControl('', Validators.required),
       Profesion: new FormControl('', [Validators.required]),
@@ -87,7 +87,7 @@ export class EditarProfeComponent {
   // }
   submit() {
     console.log(this.form.value);
-    this.profesorService.create(this.form.value).subscribe(
+    this.profesorService.find(this.form.value).subscribe(
       (res: any) => {
         console.log('Profesor creado exitosamente!');
         this.mensajeRespuesta = 'Profesor creado exitosamente';

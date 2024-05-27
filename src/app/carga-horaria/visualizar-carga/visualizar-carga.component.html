@@ -1,1 +1,46 @@
-<p>visualizar-carga works!</p>
+<html>
+  <body>
+<app-barranavegacion></app-barranavegacion>
+
+<div class="container">
+    <h1 style="color: white; margin-top: 10px;">Carga Academica UNACH</h1>
+    <div class="btn-group" role="group" aria-label="Basic example">
+  </div>
+
+ 
+  <input type="text" class="search" placeholder="Busqueda por Rut y Seccion" (keyup)="onSearch($event)" >
+  <br>  
+    <table class="table table-striped table-bordered">
+        <thead>
+              <tr>   
+
+                <th>Codigo de Asignatura</th>
+                <th>Rut</th>
+                <th>Nombre </th>
+                <th>Grado </th>        
+                <th>Año</th>
+                <th>Horas de Planificacion</th>
+                <th>Horas Minutos</th>
+                <th>Sección </th>
+                
+                
+              </tr>
+        </thead>
+        <tbody>
+              <tr *ngFor="let visualizarCA of filteredPosts">
+                <td>{{ visualizarCA.idCargaDocente }}</td>
+                <td>{{ visualizarCA.idProfesor }}</td>
+                <td>{{ visualizarCA.Nombre +" " +visualizarCA.Apellido }}</td>
+                <td>{{ visualizarCA.Grado }}</td>
+                <td>{{ visualizarCA.Anio }}</td>
+                <td>{{ visualizarCA.HorasPlanificacion }}</td>
+                <td>{{ visualizarCA.Horas_Minutos }}</td>
+                <td>{{ visualizarCA.idAsignaturaSeccion }}</td>
+                
+                
+              </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

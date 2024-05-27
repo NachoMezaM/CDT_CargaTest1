@@ -39,7 +39,7 @@ export class CrearProfeComponent {
         Nombre: new FormControl('', [Validators.required]),
         Tipo: new FormControl('', Validators.required),
         Profesion: new FormControl('', [Validators.required]),
-        Horas: new FormControl('', [Validators.required]),
+        Horas: new FormControl('', [Validators.required, this.maxNumberValidator]),
         ValorHora: new FormControl('', [Validators.required]),
         idJerarquia: new FormControl('', [Validators.required]),
         Direccion: new FormControl('', [Validators.required]),
@@ -76,17 +76,17 @@ export class CrearProfeComponent {
             this.router.navigateByUrl('profesor/index-profe');
           }, 2000); // Redirige después de 2 segundos
         },
-        error => {
-      console.error('Error al crear profesor:', error);
-      if (error && error.error === 'Ya existe un profesor con ese ID') {
-        this.mensajeRespuesta = 'Ya existe un profesor con ese ID. Por favor, elige otro ID.';
-      } else if (error && error.error && typeof error.error === 'string') {
-        this.mensajeRespuesta = 'Error al crear profesor: ' + error.error;
-      } else {
-        this.mensajeRespuesta = 'Error al crear profesor. Por favor, verifique que estan correctos los datos.';
-      }
-    }
+        
   );
+    }
+    maxNumberValidator(control: FormControl): { [key: string]: boolean } | null {
+      const value = control.value;
+      if (value > 42 ) {
+        return { 'maxNumber': true };
+      }else if(value==0){
+        return{'minNumber':true };
+      }
+      return null;
     }
     
   }

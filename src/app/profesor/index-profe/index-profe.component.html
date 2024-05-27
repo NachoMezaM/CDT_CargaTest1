@@ -4,7 +4,7 @@
     <h1 style="color: white; margin-top: 10px;">Docentes </h1>
    <div>
     <button  routerLink="/profesor/crear-profe/" class="boton">Crear nuevo Docente</button>    
-    <input type="text" class="busqueda" placeholder="Buscar Asignatura" (keyup)="onSearch($event)">
+    <input type="text" class="busqueda" placeholder="Buscar Docente" (keyup)="onSearch($event)">
    </div>
   
     <table class="table table-striped table-bordered">
@@ -23,7 +23,7 @@
         <tbody>
               <tr *ngFor="let profesor of filteredProfesor">
                 <td>{{ profesor.idProfesor }}</td>
-                <td>{{ profesor.Nombre }}</td>
+                <td>{{ profesor.Nombre + " " + profesor.Apellido}}</td>
                 <td>{{ obtenerTipo(profesor.Tipo)}}</td>
                 <td>{{ profesor.Profesion }}</td>
                 <td>{{ profesor.Horas }}</td>

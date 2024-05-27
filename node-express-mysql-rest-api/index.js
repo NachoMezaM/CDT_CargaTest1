@@ -151,7 +151,7 @@ console.log("Funca")
 app.post("/profesor/crear-profe", (req, res) => {
   const {
     idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
-  // Si no existe, insertar el nuevo profesor en la base de datos
+  // Si no existe, insertar el nuevo profesor en la base de datos0
   db.query(
     "INSERT INTO cargaacademica.Profesor (idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
     [idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido],
@@ -201,8 +201,9 @@ app.get("/profesor/:idProfesor", (req, res) => {
 
 //Update a post
 app.put("/profesor/:idProfesor", (req, res) => {
+  console.log(req)
   const profesoridProfesor = req.params.idProfesor;
-  console.log("Funca");
+  console.log("Funca"+profesoridProfesor);
   const { Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
   db.query(
     "UPDATE cargaacademica.Profesor SET Nombre=? ,Tipo = ?, Profesion = ?, Horas = ?, ValorHora = ?, idJerarquia = ?, Direccion = ?, Telefono = ?, Grado = ?, TituloGrado = ?, Estado = ?, Apellido = ? WHERE idProfesor = ?",
@@ -226,9 +227,10 @@ app.put("/profesor/:idProfesor", (req, res) => {
     }
   );
 });
+
 // Ruta para buscar los datos en la base de datos
 app.post("/buscar-datos", (req, res) => {
-  const { rut, nombre, año } = req.body;
+  const { rut, nombre} = req.body;
 
   // Realizar la consulta en la base de datos, uniendo con la tabla de jerarquías para obtener el nombre de la jerarquía
   const query = `
@@ -236,8 +238,9 @@ app.post("/buscar-datos", (req, res) => {
     FROM Profesor
     JOIN Jerarquia ON Profesor.idJerarquia = Jerarquia.idJerarquia
     WHERE CONCAT(Profesor.Nombre, ' ', Profesor.Apellido) LIKE ? OR Profesor.idProfesor = ?
+    
   `;
-  console.log(query);
+  
   const values = [`%${nombre}%`, rut];
 
   db.query(query, values, (err, result) => {
@@ -246,7 +249,7 @@ app.post("/buscar-datos", (req, res) => {
       res.status(500).send("Error interno del servidor");
       return;
     }
-    console.log("Datos encontrados:", result);
+   // console.log("Datos encontrados:", result);
     res.status(200).json(result);
   });
 });
@@ -349,24 +352,76 @@ app.post("/guardar-carga-docente", (req, res) => {
     Anio,
   } = req.body;
 
+  // Verificar si ya existe una entrada con los mismos valores de idProfesor, idAsignaturaSeccion y Anio
   db.query(
-    "INSERT INTO CargaDocente (idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio) VALUES (?, ?, ?, ?, ?)",
-    [idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio],
+    "SELECT COUNT(*) AS count FROM cargaacademica.CargaDocente WHERE idProfesor = ? AND idAsignaturaSeccion = ? AND Anio = ?",
+    [idProfesor, idAsignaturaSeccion, Anio],
     (err, result) => {
       if (err) {
-        console.error("Error al guardar la carga docente:", err);
+        console.error("Error al realizar la verificación:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
-      res.status(200).json({ message: "Carga docente guardada exitosamente" });
+
+      // Verificar si se encontró alguna entrada
+      if (result[0].count > 0) {
+        // Si ya existe una entrada, devolver un mensaje indicando que no se guardará
+        res.status(400).json({ message: "fila duplicada o filas duplicadas" });
+      } else {
+        // Si no se encontró ninguna entrada, insertar los datos en la base de datos
+        db.query(
+          "INSERT INTO cargaacademica.CargaDocente (idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio) VALUES (?, ?, ?, ?, ?)",
+          [idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio],
+          (err, result) => {
+            if (err) {
+              console.error("solo se guardaron las filas no duplicadas", err);
+              res.status(500).send("Error interno del servidor");
+              return;
+            }
+            res.status(200).json({ message: "Carga docente guardada exitosamente" });
+          }
+        );
+      }
     }
   );
 });
 
+// Ruta para buscar los datos en la base de datos relacionados con el idProfesor
+app.post("/buscar-datos-profesor", (req, res) => {
+  const { rut } = req.body;
+
+  // Realizar la consulta en la base de datos para obtener las filas relacionadas con el idProfesor
+  const query = `
+  SELECT CD.HorasPlanificacion, CD.Horas_Minutos, AS1.idAsignatura, AS1.idSeccion, AS1.Horas, AS1.Nombre
+FROM (
+    SELECT CD.*
+    FROM CargaDocente CD
+    JOIN AsignaturaSeccion AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion
+    JOIN Asignatura A ON AS1.idAsignatura = A.idAsignatura
+    WHERE CD.idProfesor = ?
+) AS CD
+JOIN (
+    SELECT AS2.*, A2.Nombre AS Nombre, A2.Horas AS Horas
+    FROM AsignaturaSeccion AS AS2
+    JOIN Asignatura A2 ON AS2.idAsignatura = A2.idAsignatura
+) AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion;
+  `;
+  const values = [rut];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error al buscar datos del profesor:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+   // console.log("Datos encontrados:", result);
+    res.status(200).json(result);
+  });
+});
 
 /* Listar todas las Cargas Academicas */
 app.get("/VisualizarCA", (req, res) => {
-  db.query("SELECT * FROM cargaacademica.Asignatura", (err, results) => {
+  db.query("SELECT CD.*, Pr.Nombre,Pr.Apellido, Pr.Grado FROM cargaacademica.CargaDocente as CD , cargaacademica.Profesor as Pr where CD.idProfesor= Pr.idProfesor", (err, results) => {
     if (err) {
       res.status(500).send("Error fetching posts");
       return;
@@ -375,7 +430,7 @@ app.get("/VisualizarCA", (req, res) => {
   });
 });
 /* Visualizar VisualizarCA */
-app.get("/VisualizarCA/:id", (req, res) => {
+app.get("/VisualizarCA/:idCargaDocente", (req, res) => {
   const cargarAc = req.params.ideCargaDocente;
   db.query(
     "SELECT * FROM cargaacademica.CargaDocente WHERE ideCargaDocente =?",
@@ -393,6 +448,79 @@ app.get("/VisualizarCA/:id", (req, res) => {
     }
   );
 });
+app.delete('/VisualizarCA/:idCargaDocente', (req, res) => {
+  const postId = req.params.idCargaDocente;
+  db.query('DELETE FROM cargaacademica.CargaDocente WHERE idCargaDocente = ?', postId, err => {
+    if (err) {
+      res.status(500).send('Error deleting post');
+      return;
+    }
+    res.status(200).json({ msg: 'Post deleted successfully' });
+  });
+});
+
+/* Ruta para eliminar una fila de la tabla CargaDocente */
+app.post("/eliminar-fila", (req, res) => {
+  const { codigo, seccion, rut } = req.body;
+  //console.log(codigo,seccion);
+  db.query(
+    'DELETE FROM CargaDocente WHERE idAsignaturaSeccion IN ( SELECT idAsignaturaSeccion FROM AsignaturaSeccion WHERE idAsignatura = ? AND idSeccion = ? ) AND idProfesor = ?',
+    [codigo, seccion, rut],
+    (err, result) => {
+      if (err) {
+        console.error("Error al eliminar la fila:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      res.status(200).json({ message: "Fila eliminada exitosamente" });
+    }
+  );
+});
+
+// Guardar carga administrativa
+app.post('/guardar-carga-administrativa', (req, res) => {
+  const { idProfesor, Horas, Hora_Minutos, idTrabajoAdministrativo  } = req.body;
+
+  const query = `
+  INSERT INTO CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos)
+  VALUES (?, ?, ?, ?)
+  `;
+const values = [idProfesor, Horas, Hora_Minutos, idTrabajoAdministrativo];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al guardar la carga administrativa:', err);
+      res.status(500).send('Error al guardar la carga administrativa');
+    } else {
+      console.log('Carga administrativa guardada exitosamente:', result);
+      res.send('Carga administrativa guardada exitosamente');
+    }
+  });
+});
+
+// Ruta para buscar los datos administrativos del profesor
+ app.get("/buscar-datos-administrativos/:rut", (req, res) => {
+   const rut = req.params.rut;
+
+    //Consulta para obtener los datos administrativos del profesor
+   const query = `
+     SELECT CargaAdministrativa.*, TrabajoAdministrativo.Nombre AS nombre
+     FROM CargaAdministrativa
+     JOIN TrabajoAdministrativo ON CargaAdministrativa.idTrabajoAdministrativo = TrabajoAdministrativo.idTrabajo
+     WHERE CargaAdministrativa.idProfesor = ?
+   `;
+   const values = [rut];
+
+   db.query(query, values, (err, result) => {
+     if (err) {
+       console.error("Error al buscar datos administrativos:", err);
+       res.status(500).send("Error interno del servidor");
+       return;
+     }
+
+     res.status(200).json(result);
+   });
+ });
 
 /* Start server */
 app.listen(port, () => {
