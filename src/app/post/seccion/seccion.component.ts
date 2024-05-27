@@ -15,10 +15,12 @@ import { Post } from '../post';
 })
 export class SeccionComponent {
   url = '';
+  datos: any = {};
   showresultado = false;
   id!: number;
   post!: Post;
   form!: FormGroup;
+  form2!: FormGroup;
   facultades = [
     { id: 'FI', nombre: 'Facultad de Ingenieria y Negocios', carreras: [
         { nombre: 'FAIN', valor: 'FI' },
@@ -56,7 +58,10 @@ export class SeccionComponent {
     ] },
     { id: 'TE', nombre: 'Facultad de Teologia', carreras: [
         { nombre: 'Teologia', valor: 'TE' }
-    ] }
+    ] },
+    { id: 'XX', nombre: 'Complementario', carreras: [
+      { nombre: 'Complementario', valor: 'CO' }
+  ] }
 ];
 
   constructor(
@@ -117,7 +122,20 @@ export class SeccionComponent {
       this.form.patchValue({ Carrera: carreraValor });
     }
     this.url = `${idAsignatura}/${carreraValor}${Semestre}${grupos}`;
-    console.log(this.url);   
+    console.log("Funca hasta aca")
+    
+    this.datos = {
+      url: this.url,
+      idAsignatura: this.form.value.idAsignatura,
+      Semestre: this.form.value.Semestre,
+      carreraValor: carrera?.valor
+    };
+       console.log(this.datos)
+    this.postService.crear(this.datos).subscribe((res:any) => {
+      console.log("ola")
+      console.log('Seccion created successfully!');
+      this.router.navigateByUrl('post/index');
+ })  
   }
     
   }
