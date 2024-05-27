@@ -19,6 +19,18 @@
                 <div *ngIf="f['Nombre'].errors && f['Nombre'].errors['required']">Se requiere un Nombre.</div>
             </div>
         </div>
+
+        <div class="col21">
+            <label for="idPlanAcademico"><strong>Plan Academico (Numero):</strong></label>
+            <input 
+                formControlName="idPlanAcademico"
+                id="idPlanAcademico" 
+                type="text" 
+                class="form-control">
+            <div *ngIf="f['idPlanAcademico'].touched && f['idPlanAcademico'].invalid" class="alert alert-danger">
+                <div *ngIf="f['idPlanAcademico'].errors && f['idPlanAcademico'].errors['required']">Se requiere un idPlanAcademico.</div>
+            </div>
+        </div>
         
         <div class="col21">
             <label for="TipoAsignatura"><strong>Tipo de Asignatura:</strong></label>

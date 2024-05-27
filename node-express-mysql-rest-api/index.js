@@ -40,12 +40,12 @@ app.get("/posts", (req, res) => {
 
 /* Crear asignatura */
 app.post("/posts/create", (req, res) => {
-  const { idAsignatura, Nombre, Horas, NumeroAlumnos, Estado, TipoAsignatura } =
+  const { idAsignatura, Nombre, Horas, NumeroAlumnos, Estado, TipoAsignatura, idPlanAcademico } =
     req.body;
 
   db.query(
-    "INSERT INTO cargaacademica.Asignatura (idAsignatura, Nombre, Horas, NumeroAlumnos, Estado, TipoAsignatura) VALUES (?,?,?,?,?,?)",
-    [idAsignatura, Nombre, Horas, NumeroAlumnos, "Activo", TipoAsignatura],
+    "INSERT INTO cargaacademica.Asignatura (idAsignatura, Nombre, Horas, NumeroAlumnos, Estado, TipoAsignatura, idPlanAcademico) VALUES (?,?,?,?,?,?,?)",
+    [idAsignatura, Nombre, Horas, NumeroAlumnos, "Activo", TipoAsignatura, idPlanAcademico],
     (err, result) => {
       if (err) {
         res.status(500).send("Error creating cargaacademica.Asignatura");
@@ -114,11 +114,25 @@ app.get("/profesor/", (req, res) => {
   });
 });
 
-/* SECCION LLAMAR  */ 
 
 /* SECCION MANDAR */
 //-------------------------------------------------------------------------------------------------------------------//
+app.post("/posts/create", (req, res) => {
+  const { AsignaturaSeccion, Semestre, grupos, idAsignatura } =
+    req.body;
 
+  db.query(
+    "INSERT INTO cargaacademica.Asignatura (idAsignaturaSeccion, Semestre, idSeccion, idAsignatura) VALUES (?,?,?,?)",
+    [AsignaturaSeccion, Semestre, grupos, idAsignatura],
+    (err, result) => {
+      if (err) {
+        res.status(500).send("Error creating cargaacademica.AsignaturaSeccion");
+        return;
+      }
+      res.status(201).json(req.body);
+    }
+  );
+});
 // -------------------------------------------------------------------------Profesor-------------------------------------------------------------------------
 /* Crear un nuevo profesor */
 app.post("/profesor/crear-profe", (req, res) => {

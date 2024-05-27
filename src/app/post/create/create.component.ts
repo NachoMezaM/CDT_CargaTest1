@@ -34,7 +34,8 @@ export class CreateComponent {
       Nombre: new FormControl('', [Validators.required]),
       TipoAsignatura: new FormControl('', Validators.required),
       NumeroAlumnos: new FormControl('', Validators.required),
-      Horas: new FormControl('', [Validators.required])
+      Horas: new FormControl('', [Validators.required]),
+      idPlanAcademico: new FormControl('',[Validators.required])
     });
   }
       
