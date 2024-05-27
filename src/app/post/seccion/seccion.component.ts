@@ -6,13 +6,14 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
 import { PostService } from '../post.service';
 import { Post } from '../post';
 import { ViewSeccionesComponent } from "../view-secciones/view-secciones.component";
+import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.component";
 
 @Component({
     selector: 'app-seccion',
     standalone: true,
     templateUrl: './seccion.component.html',
     styleUrl: './seccion.component.css',
-    imports: [ReactiveFormsModule, CommonModule, RouterOutlet, RouterLink, ViewSeccionesComponent]
+    imports: [ReactiveFormsModule, CommonModule, RouterOutlet, RouterLink, ViewSeccionesComponent, BarranavegacionComponent]
 })
 export class SeccionComponent {
   url = '';

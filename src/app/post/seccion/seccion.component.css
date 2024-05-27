@@ -1,14 +1,37 @@
 /* BACKGROUND DEL FORMULARIO*/
 .row1 {
     background-color: white;
-    padding: 40px 10px;
-    width: 50%;
+    padding: 10px 5px;
+    width: 20%;
     margin: 0 auto;
+    margin-top: 30px;
     border: 1px solid #ccc;
     border-radius: 20px;
+    display: flex;
+    flex-direction: column;
   }
-  .col1{
-    color: #003366; 
-    width: 200px;
-     margin-left: 0%;
+  .col1{    
+  width: 100%;
+  margin: 0 auto;
+  padding: 5px 5px;
+  margin-bottom: 5px;
  }
+ .boton{
+    text-align: center;
+    margin-right: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    padding: 10px 10px;
+    background-color: #003366;
+    border: 0px;
+    color: white;
+}
+
+.boton:hover{
+    background-color: #002244;
+    color: white;
+}
+.botones{
+    display: center;
+    text-align: center;
+}

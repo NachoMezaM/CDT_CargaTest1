@@ -1,4 +1,6 @@
 <body>
+  <app-barranavegacion></app-barranavegacion>
+  <div class="rowgeneral">
   <div class="row1">
   <form [formGroup]="form" (ngSubmit)="submit()">
     <label for="idAsignatura"><strong>Codigo:</strong></label>
@@ -9,10 +11,11 @@
         [(ngModel)]="post.idAsignatura"
         readonly
         class="col1">
-      <label>Facultad / Carrera</label>
+      <label><strong>Facultad</strong></label>
       <select formControlName="Facultad" class="col1">
         <option *ngFor="let facultad of facultades" [value]="facultad.id">{{ facultad.nombre }}</option>
       </select>
+      <label><strong>Carrera</strong></label>
       <select [(ngModel)]="form.value.Carrera" name="Carrera" formControlName="Carrera" class="col1">
         <option *ngFor="let carrera of Carreras" [value]="carrera.nombre">
           {{ carrera.nombre }}
@@ -36,19 +39,20 @@
       <option value="X">10</option>
       <option value="XI">11</option>
        </select>
-       <label for="grupos" class="col1"><strong>Cantidad de grupos:</strong></label>
+
+       <label for="grupos" class="col1"><strong>Grupo:</strong></label>
        <input 
            formControlName="grupos"
            id="grupos" 
-           type="text" 
-           class="form-control"
+           type="number"     
+           class="col1"
            >
 
            <!-- resultado -->
       
-      <button class="boton" type="submit" >Crear</button>
+      
     </form>
-    <button (click)="onresultadochange()"  (click)="mostrar()"  >Mostrar </button>
+    
     <div class="form-group" *ngIf="showresultado">
       <label for="AsignaturaSeccion"><strong>Resultado:</strong></label>
             <input 
@@ -57,13 +61,15 @@
                 type="text" 
                 [value]="url"
                 readonly
-                class="form-control"
+                class="col1"
                 (change)="setresultado($event)">
            </div>
+           <div class="botones">
+            <button class="boton" type="submit" >Crear</button>
+            <button (click)="onresultadochange()"  (click)="mostrar()" class="boton" >Mostrar </button>
+            </div>
       </div>
 
-
-           <div class="row2">
           <app-view-secciones></app-view-secciones>
-           </div>
+          </div>
 </body>
