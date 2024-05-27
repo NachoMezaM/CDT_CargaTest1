@@ -132,7 +132,6 @@ app.put("/posts/:id", (req, res) => {
 app.post("/posts/seccion", (req, res) => {
   const hola= { url, Semestre, carreraValor, idAsignatura } =
     req.body;
-    console.log(req)
 console.log("Funca")
   db.query(
     "INSERT INTO cargaacademica.AsignaturaSeccion (idAsignaturaSeccion, Semestre, idSeccion, idAsignatura) VALUES (?,?,?,?)",
