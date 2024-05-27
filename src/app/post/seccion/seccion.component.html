@@ -40,12 +40,13 @@
            id="grupos" 
            type="text" 
            class="form-control"
-           (change)="onresultadochange($event)">
+           >
 
            <!-- resultado -->
-           
+      
       <button class="boton" type="submit" >Crear</button>
     </form>
+    <button (click)="onresultadochange()"  (click)="mostrar()"  >Mostrar </button>
     <div class="form-group" *ngIf="showresultado">
       <label for="AsignaturaSeccion"><strong>Resultado:</strong></label>
             <input 

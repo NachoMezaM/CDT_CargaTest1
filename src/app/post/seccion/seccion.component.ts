@@ -72,13 +72,10 @@ export class SeccionComponent {
 
   }
 
-  onresultadochange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const selectvalue = target.value;
-    console.log("Resultado ", selectvalue);
-    
-    this.showresultado=!!selectvalue
+  onresultadochange(){
+    this.showresultado = true;
   }
+  
   
   setresultado(event: Event) {
    const target=event.target as HTMLSelectElement;
@@ -111,7 +108,7 @@ export class SeccionComponent {
 
 
 
-  submit() {
+  mostrar() {
     const carreraControl = this.form.get('Carrera')!;
     const carrera = this.Carreras.find(c => c.nombre === carreraControl.value);
     const carreraValor = carrera? carrera.valor : null;
@@ -131,11 +128,13 @@ export class SeccionComponent {
       carreraValor: carrera?.valor
     };
        console.log(this.datos)
-    this.postService.crear(this.datos).subscribe((res:any) => {
-      console.log("ola")
-      console.log('Seccion created successfully!');
-      this.router.navigateByUrl('post/index');
- })  
+   
   }
-    
+    submit(){
+      this.postService.crear(this.datos).subscribe((res:any) => {
+        console.log("ola")
+        console.log('Seccion created successfully!');
+        this.router.navigateByUrl('post/index');
+   })  
+    }
   }
