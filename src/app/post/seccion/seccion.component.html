@@ -1,5 +1,5 @@
 <body>
-
+  <div class="row1">
   <form [formGroup]="form" (ngSubmit)="submit()">
     <label for="idAsignatura"><strong>Codigo:</strong></label>
     <input 
@@ -8,16 +8,18 @@
         type="text" 
         [(ngModel)]="post.idAsignatura"
         readonly
-        class="form-control">
-      <select formControlName="Facultad">
+        class="col1">
+      <label>Facultad / Carrera</label>
+      <select formControlName="Facultad" class="col1">
         <option *ngFor="let facultad of facultades" [value]="facultad.id">{{ facultad.nombre }}</option>
       </select>
-      <select [(ngModel)]="form.value.Carrera" name="Carrera" formControlName="Carrera">
+      <select [(ngModel)]="form.value.Carrera" name="Carrera" formControlName="Carrera" class="col1">
         <option *ngFor="let carrera of Carreras" [value]="carrera.nombre">
           {{ carrera.nombre }}
         </option>
       </select>
-      <label for="Semestre"><strong>Semestre:</strong></label>
+
+      <label for="Semestre" class="col1"><strong>Semestre:</strong></label>
       <select 
       formControlName="Semestre"
       id="Semestre">
@@ -34,7 +36,7 @@
       <option value="X">10</option>
       <option value="XI">11</option>
        </select>
-       <label for="grupos"><strong>Cantidad de grupos:</strong></label>
+       <label for="grupos" class="col1"><strong>Cantidad de grupos:</strong></label>
        <input 
            formControlName="grupos"
            id="grupos" 
@@ -57,5 +59,11 @@
                 readonly
                 class="form-control"
                 (change)="setresultado($event)">
+           </div>
+      </div>
+
+
+           <div class="row2">
+          <app-view-secciones></app-view-secciones>
            </div>
 </body>

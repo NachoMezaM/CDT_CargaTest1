@@ -1,0 +1,14 @@
+/* BACKGROUND DEL FORMULARIO*/
+.row1 {
+    background-color: white;
+    padding: 40px 10px;
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+  }
+  .col1{
+    color: #003366; 
+    width: 200px;
+     margin-left: 0%;
+ }

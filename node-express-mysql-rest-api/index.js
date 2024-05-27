@@ -26,7 +26,6 @@ db.connect((err) => {
 app.use(bodyParser.json());
 app.use(cors());
 
-/* --------------------------------------------------------------------- Asignaturas  ---------------------------------------------------------------------*/
 /* Listar todas las Asignaturas */
 app.get("/posts", (req, res) => {
   db.query("SELECT * FROM cargaacademica.Asignatura", (err, results) => {
@@ -37,6 +36,28 @@ app.get("/posts", (req, res) => {
     res.json(results);
   });
 });
+//Listar todos los Profesores 
+app.get("/profesor/", (req, res) => {
+  db.query("SELECT * FROM cargaacademica.Profesor", (err, results) => {
+    if (err) {
+      res.status(500).send("Error fetching posts");
+      return;
+    }
+    res.json(results);
+  });
+});
+app.get("/seccion/", (req, res) => {
+  
+  db.query("SELECT * FROM cargaacademica.AsignaturaSeccion", (err, results) => {
+    if (err) {
+      res.status(500).send("Error fetching posts");
+      return;
+    }
+    res.json(results);
+    console.log(results)
+  });
+});
+/* --------------------------------------------------------------------- Asignaturas  ---------------------------------------------------------------------*/
 
 /* Crear asignatura */
 app.post("/posts/create", (req, res) => {
@@ -103,16 +124,7 @@ app.put("/posts/:id", (req, res) => {
     }
   );
 });
- //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-app.get("/profesor/", (req, res) => {
-  db.query("SELECT * FROM cargaacademica.Profesor", (err, results) => {
-    if (err) {
-      res.status(500).send("Error fetching posts");
-      return;
-    }
-    res.json(results);
-  });
-});
+
 
 
 /* SECCION MANDAR */

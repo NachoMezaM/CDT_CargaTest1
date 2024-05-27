@@ -5,13 +5,14 @@ import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/route
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostService } from '../post.service';
 import { Post } from '../post';
+import { ViewSeccionesComponent } from "../view-secciones/view-secciones.component";
 
 @Component({
-  selector: 'app-seccion',
-  imports: [ReactiveFormsModule,CommonModule,RouterOutlet, RouterLink],
-  standalone: true,
-  templateUrl: './seccion.component.html',
-  styleUrl: './seccion.component.css'
+    selector: 'app-seccion',
+    standalone: true,
+    templateUrl: './seccion.component.html',
+    styleUrl: './seccion.component.css',
+    imports: [ReactiveFormsModule, CommonModule, RouterOutlet, RouterLink, ViewSeccionesComponent]
 })
 export class SeccionComponent {
   url = '';
