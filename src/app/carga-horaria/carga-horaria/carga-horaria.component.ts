@@ -17,7 +17,6 @@ export class CargaHorariaComponent {
   totalMinutos: number = 0;
   currentYear: number | undefined;
   datosAdministrativos: any;
-rut: string;
 
   constructor(private http: HttpClient) {}
 
@@ -42,6 +41,17 @@ rut: string;
         activeElement.tagName === 'TEXTAREA')
     ) {
       this.buscarDatos();
+    }
+  }
+
+  @HostListener('keydown.enter', ['$event'])
+  onEnterKey(event: KeyboardEvent) {
+    // Prevenir la actualización de la página
+    event.preventDefault();
+
+    const target = event.target as HTMLInputElement;
+    if (target.id === 'codigo') {
+      this.buscarSecciones();
     }
   }
 
@@ -131,7 +141,6 @@ rut: string;
         }
       );
     this.buscarDatosProfesor();
-    // Después de buscar los datos exitosamente, llamar a la función limpiarPagina()
     this.limpiarPagina();
   }
 
@@ -160,7 +169,7 @@ rut: string;
 
   filasIndirecta: any = []; // Array para almacenar las filas de la tabla de docencia indirecta
 
-  //Docencia Directa
+  //-----------------------Docencia Directa----------------------------------------
 
   // Método para agregar una fila a la tabla de docencia directa
   agregarFila() {
@@ -276,6 +285,7 @@ rut: string;
     const filas = document.querySelectorAll('#asignaturas-body tr');
     const filasAdministrativa = document.querySelectorAll('#carga-administrativa-body tr');
     let algunaFilaGuardada = false; // Variable para controlar si al menos una fila se guardó con éxito
+    
     filas.forEach((fila) => {
       const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
       if (checkbox.checked) {
@@ -296,11 +306,11 @@ rut: string;
 
     // Guardar datos de carga administrativa
     filasAdministrativa.forEach((fila) => {
-      const concepto = (fila.querySelector('td:nth-child(1) input') as HTMLInputElement).value;
+      const nombre = (fila.querySelector('td:nth-child(1) input') as HTMLInputElement).value;
       const horas = (fila.querySelector('td:nth-child(2) input') as HTMLInputElement).value;
       const minutos = (fila.querySelector('td:nth-child(3) input') as HTMLInputElement).value;
 
-      this.guardarCargaAdministrativa(idProfesor, concepto, parseInt(horas), parseInt(minutos))
+      this.guardarCargaAdministrativa(idProfesor, nombre, parseInt(horas), parseInt(minutos))
         .then((guardado) => {
           if (guardado) {
             algunaFilaGuardada = true;
@@ -526,6 +536,8 @@ rut: string;
         }
       );
   }
+
+  //----------------------------------Carga Administrativa---------------------------
 
   agregarFilaAdministrativa(data: any) {
     const tbody = document.getElementById('carga-administrativa-body');
