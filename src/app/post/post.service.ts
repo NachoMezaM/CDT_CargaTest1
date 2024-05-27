@@ -57,6 +57,13 @@ export class PostService {
     )
   }  
     
+//CREAR
+  crear(post:Post): Observable<any> {
+    return this.httpClient.post(this.apiURL + '/posts/seccion', JSON.stringify(post), this.httpOptions)
+    .pipe(
+      catchError(this.errorHandler)
+    )
+  }  
   /**
    * Write code on Method
    *

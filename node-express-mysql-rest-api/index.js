@@ -117,7 +117,7 @@ app.get("/profesor/", (req, res) => {
 
 /* SECCION MANDAR */
 //-------------------------------------------------------------------------------------------------------------------//
-app.post("/posts/create", (req, res) => {
+app.post("/posts/seccion", (req, res) => {
   const { AsignaturaSeccion, Semestre, grupos, idAsignatura } =
     req.body;
 
