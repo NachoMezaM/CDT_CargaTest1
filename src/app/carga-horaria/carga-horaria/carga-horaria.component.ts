@@ -24,11 +24,18 @@ export class CargaHorariaComponent {
     // Obtener el año actual al inicializar el componente
     this.currentYear = new Date().getFullYear();
 
- // Agregar el evento input para transformar el texto a mayúsculas
+    // Agregar el evento input para transformar el texto a mayúsculas
     const codigoInput = document.getElementById('codigo') as HTMLInputElement;
     if (codigoInput) {
       codigoInput.addEventListener('input', this.transformarAMayusculas);
-      }
+    }
+
+    // Agregue un evento de escucha al campo de entrada de rut
+const rutInput = document.getElementById('rut') as HTMLInputElement;
+rutInput.addEventListener('input', () => {
+  const rut = rutInput.value;
+    this.buscarDatosAdministrativos(rut);
+});
   }
 
   @HostListener('document:keydown.enter', ['$event'])
@@ -173,8 +180,10 @@ export class CargaHorariaComponent {
 
   // Método para agregar una fila a la tabla de docencia directa
   agregarFila() {
-    const codigo = (document.getElementById('codigo') as HTMLInputElement).value;
-    const seccion = (document.getElementById('seccion') as HTMLSelectElement).value;
+    const codigo = (document.getElementById('codigo') as HTMLInputElement)
+      .value;
+    const seccion = (document.getElementById('seccion') as HTMLSelectElement)
+      .value;
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
     const año = (document.getElementById('año') as HTMLInputElement).value;
 
@@ -240,7 +249,6 @@ export class CargaHorariaComponent {
               this.actualizarBotonGuardar();
             });
           }
-          
         },
         (error) => {
           console.error(
@@ -279,43 +287,63 @@ export class CargaHorariaComponent {
   }
 
   guardarDatos() {
-    const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
+    const idProfesor = (document.getElementById('rut') as HTMLInputElement)
+      .value;
     const año = (document.getElementById('año') as HTMLInputElement).value;
-  
+
     const filas = document.querySelectorAll('#asignaturas-body tr');
-    const filasAdministrativa = document.querySelectorAll('#carga-administrativa-body tr');
+    const filasAdministrativa = document.querySelectorAll(
+      '#carga-administrativa-body tr'
+    );
     let algunaFilaGuardada = false; // Variable para controlar si al menos una fila se guardó con éxito
-    
+
     filas.forEach((fila) => {
-      const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
+      const checkbox = fila.querySelector(
+        '.confirm-checkbox'
+      ) as HTMLInputElement;
       if (checkbox.checked) {
         const columnas = fila.querySelectorAll('td');
         const codigo = columnas[0].innerText;
         const seccion = columnas[1].innerText;
         const planificacion = parseInt(columnas[5].innerText);
         const minutos = parseInt(columnas[4].innerText);
-  
-        this.guardarCargaDocente(idProfesor, `${codigo}${seccion}`, planificacion, minutos, año)
-          .then((guardado) => {
-            if (guardado) {
-              algunaFilaGuardada = true;
-            }
-          });
+
+        this.guardarCargaDocente(
+          idProfesor,
+          `${codigo}${seccion}`,
+          planificacion,
+          minutos,
+          año
+        ).then((guardado) => {
+          if (guardado) {
+            algunaFilaGuardada = true;
+          }
+        });
       }
     });
 
     // Guardar datos de carga administrativa
     filasAdministrativa.forEach((fila) => {
-      const nombre = (fila.querySelector('td:nth-child(1) input') as HTMLInputElement).value;
-      const horas = (fila.querySelector('td:nth-child(2) input') as HTMLInputElement).value;
-      const minutos = (fila.querySelector('td:nth-child(3) input') as HTMLInputElement).value;
+      const nombre = (
+        fila.querySelector('td:nth-child(1) input') as HTMLInputElement
+      ).value;
+      const horas = (
+        fila.querySelector('td:nth-child(2) input') as HTMLInputElement
+      ).value;
+      const minutos = (
+        fila.querySelector('td:nth-child(3) input') as HTMLInputElement
+      ).value;
 
-      this.guardarCargaAdministrativa(idProfesor, nombre, parseInt(horas), parseInt(minutos))
-        .then((guardado) => {
-          if (guardado) {
-            algunaFilaGuardada = true;
-          }
-        });
+      this.guardarCargaAdministrativa(
+        idProfesor,
+        nombre,
+        parseInt(horas),
+        parseInt(minutos)
+      ).then((guardado) => {
+        if (guardado) {
+          algunaFilaGuardada = true;
+        }
+      });
     });
 
     // Mostrar mensaje dependiendo de si se guardó al menos una fila o no
@@ -329,7 +357,7 @@ export class CargaHorariaComponent {
     // Limpiar las filas guardadas después de guardar
     this.limpiarFilasGuardadas();
   }
-  
+
   limpiarFilasGuardadas() {
     const filasGuardadas = document.querySelectorAll('#asignaturas-body tr');
     filasGuardadas.forEach((fila) => {
@@ -342,7 +370,13 @@ export class CargaHorariaComponent {
     });
   }
 
-  guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificacion: number, minutos: number, año: string): Promise<boolean> {
+  guardarCargaDocente(
+    idProfesor: string,
+    idAsignaturaSeccion: string,
+    planificacion: number,
+    minutos: number,
+    año: string
+  ): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       this.http
         .post<any>('http://localhost:3000/guardar-carga-docente', {
@@ -359,7 +393,10 @@ export class CargaHorariaComponent {
           },
           (error) => {
             console.error('Error al guardar la carga docente:', error);
-            if (error.status === 400 && error.error.message === 'No se guardaron filas duplicadas') {
+            if (
+              error.status === 400 &&
+              error.error.message === 'No se guardaron filas duplicadas'
+            ) {
               resolve(false); // Indicar que la fila no se guardó debido a duplicados
             } else {
               alert('fila o filas duplicadas.');
@@ -387,7 +424,11 @@ export class CargaHorariaComponent {
 
     // Realizar una solicitud POST al servidor para eliminar la fila
     this.http
-      .post<any>('http://localhost:3000/eliminar-fila', { codigo, seccion, rut })
+      .post<any>('http://localhost:3000/eliminar-fila', {
+        codigo,
+        seccion,
+        rut,
+      })
       .subscribe(
         (data) => {
           // Manejar la respuesta del servidor
@@ -515,7 +556,9 @@ export class CargaHorariaComponent {
       .post<any>('http://localhost:3000/obtener-secciones', { codigo })
       .subscribe(
         (data) => {
-          const seccionSelect = document.getElementById('seccion') as HTMLSelectElement;
+          const seccionSelect = document.getElementById(
+            'seccion'
+          ) as HTMLSelectElement;
           seccionSelect.innerHTML = ''; // Limpiar opciones anteriores
           if (Array.isArray(data)) {
             data.forEach((Seccion) => {
@@ -539,40 +582,50 @@ export class CargaHorariaComponent {
 
   //----------------------------------Carga Administrativa---------------------------
 
-  agregarFilaAdministrativa(data: any) {
+  agregarFilaAdministrativa() {
     const tbody = document.getElementById('carga-administrativa-body');
     if (!tbody) {
-      console.error('No se encontró el elemento tbody para carga administrativa.');
+      console.error(
+        'No se encontró el elemento tbody para carga administrativa.'
+      );
       return;
     }
-  
+
     const newRow = document.createElement('tr');
-  
+
     newRow.innerHTML = `
-      <td>${data.nombre}</td>
-      <td>${data.Hora}</td>
-      <td>${data.Hora_Minutos}</td>
+      <td><input type="text" class="form-control" placeholder="Nombre"></td>
+      <td><input type="number" class="form-control" placeholder="Horas 60'"></td>
+      <td><input type="number" class="form-control" placeholder="Minutos"></td>
       <td><label class="remove-checkbox">✘</label></td>
     `;
-  
+
     tbody.appendChild(newRow);
-  
+
     // Centrar el texto en todas las celdas de la nueva fila
     const cells = newRow.querySelectorAll('td');
     cells.forEach((cell) => {
       cell.style.textAlign = 'center';
     });
-  
+
+    // Agregar el evento de clic al botón de eliminación
+    const deleteButton = newRow.querySelector('.remove-btn');
+    if (deleteButton) {
+      deleteButton.addEventListener('click', () => {
+        this.eliminarFila1(newRow);
+        this.actualizarBotonGuardar();
+      });
+    }
+
     // Agregar el evento de clic a la "x" para eliminar la fila
     const removeLabel = newRow.querySelector('.remove-checkbox');
     if (removeLabel) {
       removeLabel.addEventListener('click', () => {
-        this.eliminarFilaAdministrativa(newRow);
+        this.eliminarFila(newRow);
         this.actualizarBotonGuardar();
       });
     }
   }
-  
 
   eliminarFilaAdministrativa(row: HTMLElement) {
     if (row.parentNode) {
@@ -585,9 +638,14 @@ export class CargaHorariaComponent {
     if (tbody) {
       tbody.innerHTML = ''; // Limpiar el contenido del tbody
     }
-}
+  }
 
-  guardarCargaAdministrativa(idProfesor: string, nombre: string, horas: number, minutos: number): Promise<boolean> {
+  guardarCargaAdministrativa(
+    idProfesor: string,
+    nombre: string,
+    horas: number,
+    minutos: number
+  ): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       this.http
         .post<any>('http://localhost:3000/guardar-carga-administrativa', {
@@ -609,21 +667,48 @@ export class CargaHorariaComponent {
     });
   }
 
+  // Actualice el método buscarDatosAdministrativos para agregar una nueva fila al contenedor de carga administrativa
   buscarDatosAdministrativos(rut: string) {
     console.log('ID del profesor a buscar:', rut);
     this.http
-      .get<any>(
-        `http://localhost:3000/buscar-datos-administrativos/${rut}`
-      )
+      .get<any>(`http://localhost:3000/buscar-datos-administrativos/${rut}`)
       .subscribe(
         (response) => {
           // Limpiar las filas existentes en el contenedor de carga administrativa
           this.limpiarFilasCargaAdministrativa();
+
           // Mostrar los datos administrativos en la interfaz de usuario
           console.log('Datos administrativos encontrados:', response);
+
           // Iterar sobre los datos y agregar filas al contenedor de carga administrativa
           response.forEach((item: any) => {
-            this.agregarFilaAdministrativa(item);
+            this.agregarFilaAdministrativa();
+
+            // Obtenga la fila recién agregada
+            const newRow = document.getElementById('carga-administrativa-body')
+              ?.lastElementChild as HTMLElement;
+
+            // Agregue los valores de planificación y minutos a las variables totales
+            const planificacionInput = newRow.querySelector(
+              'td:nth-child(2) input'
+            ) as HTMLInputElement;
+            const minutosInput = newRow.querySelector(
+              'td:nth-child(3) input'
+            ) as HTMLInputElement;
+            const planificacion = parseInt(planificacionInput.value);
+            const minutos = parseInt(minutosInput.value);
+            this.totalHoras += planificacion;
+            this.totalMinutos += minutos;
+
+            // Actualice el texto de los totales en la interfaz de usuario
+            const totalHorasText = document.getElementById(
+              'totalHoras'
+            ) as HTMLElement;
+            const totalMinutosText = document.getElementById(
+              'totalMinutos'
+            ) as HTMLElement;
+            totalHorasText.innerText = this.totalHoras.toString();
+            totalMinutosText.innerText = this.totalMinutos.toString();
           });
         },
         (error) => {
@@ -631,5 +716,4 @@ export class CargaHorariaComponent {
         }
       );
   }
-  
 }
