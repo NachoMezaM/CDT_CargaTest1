@@ -5,39 +5,104 @@
   <title>Carga Academica</title>
 </head>
 <body>
-    <app-barranavegacion></app-barranavegacion>
-    <h1 class="titulo">Carga Academica</h1>
-    <div class="border">
-      <form>
-        <div class="form-group">
-          <div class="col1">
-            <div class="form-group">
-                <label for="Facultad"><strong>Facultad</strong></label>
-                <select id="Facultad" class="form-control" formControlName="Facultad" (change)="onFacultadChange($event)">
-                    <option value="1">FACS</option>
-                    <option value="2">FAIN</option>
-                    <option value="3">FEDUC</option>
-                    <option value="4">FTEO </option>
-                    <option value="5">FACIJS </option>
-                </select>
-            </div>
-        </div>
-        </div>
-        <div class="form-group" *ngIf="showCarrera">
-          <div class="col1">
-            <div class="form-group">
-              <label for="Carrera"><strong>Carrera</strong></label>
-              <select id="Carrera" class="form-control" formControlName="Carrera">
-                <option *ngFor="let carrera of carreras" [value]="carrera.value">{{ carrera.label }}</option>
-              </select>
-            </div>
+  <app-barranavegacion></app-barranavegacion>
+  <h1 class="titulo">Carga Academica</h1>
+  <div class="border">
+    <form [formGroup]="form">
+      <div class="form-group">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Facultad"><strong>Facultad</strong></label>
+            <select id="Facultad" class="form-control" formControlName="Facultad" (change)="onFacultadChange($event)">
+              <option value="1">FACS</option>
+              <option value="2">FAIN</option>
+              <option value="3">FEDUC</option>
+              <option value="4">FTEO </option>
+              <option value="5">FACIJS </option>
+            </select>
           </div>
         </div>
-      </form>
-     
-    </div>
-
-    
-
+      </div>
+      <div class="form-group" *ngIf="showCarrera">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Carrera"><strong>Carrera</strong></label>
+            <select id="Carrera" class="form-control" formControlName="Carrera" (change)="onCarreraChange($event)">
+              <option *ngFor="let carrera of carreras" [value]="carrera.value">{{ carrera.label }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="showPlan">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Plan"><strong>Plan</strong></label>
+            <select id="Plan" class="form-control" formControlName="Plan" (change)="onPlanChange($event)">
+              <option value="1"> Plan 2020</option>
+              <option value="2"> Plan 2024 </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="showSemestre">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Semestre"><strong>Semestre</strong></label>
+            <select id="Semestre" class="form-control" formControlName="Semestre" (change)="onSeccionChange($event)">
+              <option value="1">1 </option>
+              <option value="2">2 </option>
+              <option value="3">3 </option>
+              <option value="4">4 </option>
+              <option value="5">5 </option>
+              <option value="6">6 </option>
+              <option value="7">7 </option>
+              <option value="8">8 </option>
+              <option value="9">9 </option>
+              <option value="X">X </option>
+              <option value="XI">XI </option>
+              
+              
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="form-group" *ngIf="showSeccion">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Seccion"><strong>Seccion</strong></label>
+            <select id="Seccion" class="form-control" formControlName="Seccion" (change)="setSeccion($event)">
+              <option value="1"> FI</option>
+              <option value="2"> FE </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="showAsignatura">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Asignatura"><strong>Asignatura</strong></label>
+            <select id="Asignatura" class="form-control" formControlName="Asignatura" (change)="setAsignatura($event)">
+              <option value="1"> FI</option>
+              <option value="2"> FE </option>
+            </select>
+          </div>
+        </div>
+      </div>
+       <div class="form-group" *ngIf="showHoras">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Horas"><strong>Horas</strong></label>
+            <select id="Horas" class="form-control" formControlName="Horas" (change)="setHoras($event)">
+              <option value="1"> FI</option>
+              <option value="2"> FE </option>
+            </select>
+          </div>
+        </div>
+      </div> --> 
+    </form>
+  </div>
 </body>
 </html>
+
+<!-- 
+SELECT PA.*, ASec.Semestre , Ca.Nombre as 'Carrera',Fa.Nombre as 'Facultad', Asig.*  FROM cargaacademica.PlanAcademico as PA , cargaacademica.Carrera as Ca , cargaacademica.Facultad as Fa, cargaacademica.AsignaturaSeccion as ASec, cargaacademica.Asignatura as Asig where Ca.idFacultad=Fa.idFacultad && PA.idCarrera=Ca.idCarrera && PA.idPlanAcademico=Asig.idPlanAcademico && ASec.idAsignatura=Asig.idAsignatura ; -->

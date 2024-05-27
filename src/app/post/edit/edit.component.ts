@@ -41,6 +41,7 @@ export class EditComponent {
     this.postService.find(this.id).subscribe((data: Post)=>{
       this.post = data;
     }); 
+  
         
     this.form = new FormGroup({
       idAsignatura: new FormControl('', [Validators.required]),

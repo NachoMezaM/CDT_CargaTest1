@@ -118,7 +118,7 @@ app.get("/profesor/", (req, res) => {
 app.post("/profesor/crear-profe", (req, res) => {
   const {
     idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
-  // Si no existe, insertar el nuevo profesor en la base de datos
+  // Si no existe, insertar el nuevo profesor en la base de datos0
   db.query(
     "INSERT INTO cargaacademica.Profesor (idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
     [idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido],
@@ -168,8 +168,9 @@ app.get("/profesor/:idProfesor", (req, res) => {
 
 //Update a post
 app.put("/profesor/:idProfesor", (req, res) => {
+  console.log(req)
   const profesoridProfesor = req.params.idProfesor;
-  //console.log("Funca");
+  console.log("Funca"+profesoridProfesor);
   const { Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
   db.query(
     "UPDATE cargaacademica.Profesor SET Nombre=? ,Tipo = ?, Profesion = ?, Horas = ?, ValorHora = ?, idJerarquia = ?, Direccion = ?, Telefono = ?, Grado = ?, TituloGrado = ?, Estado = ?, Apellido = ? WHERE idProfesor = ?",
