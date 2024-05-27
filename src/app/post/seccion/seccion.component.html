@@ -59,7 +59,7 @@
             </div>
       
     </form>
-    <button (click)="onresultadochange()"  (click)="mostrar()" class="boton" >Mostrar </button>
+    
     <div class="form-group" *ngIf="showresultado">
       <label for="AsignaturaSeccion"><strong>Resultado:</strong></label>
             <input 
@@ -71,7 +71,9 @@
                 class="col1"
                 (change)="setresultado($event)">
            </div>
-           
+           <div class="botones">
+            <button (click)="onresultadochange()"  (click)="mostrar()" class="boton" >Mostrar </button>
+          </div>
           </div>
       </div>
           <div class="row2">
