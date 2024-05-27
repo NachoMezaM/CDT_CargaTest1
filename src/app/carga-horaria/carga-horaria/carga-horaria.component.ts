@@ -30,12 +30,11 @@ export class CargaHorariaComponent {
       codigoInput.addEventListener('input', this.transformarAMayusculas);
     }
 
-    // Agregue un evento de escucha al campo de entrada de rut
-const rutInput = document.getElementById('rut') as HTMLInputElement;
-rutInput.addEventListener('input', () => {
-  const rut = rutInput.value;
-    this.buscarDatosAdministrativos(rut);
-});
+    const rutInput = document.getElementById('rut') as HTMLInputElement;
+    rutInput.addEventListener('input', () => {
+      const rut = rutInput.value;
+        this.buscarDatosAdministrativos(rut);
+    });
   }
 
   @HostListener('document:keydown.enter', ['$event'])
@@ -671,8 +670,8 @@ rutInput.addEventListener('input', () => {
   buscarDatosAdministrativos(rut: string) {
     console.log('ID del profesor a buscar:', rut);
     this.http
-      .get<any>(`http://localhost:3000/buscar-datos-administrativos/${rut}`)
-      .subscribe(
+     .get<any>(`http://localhost:3000/buscar-datos-administrativos/${rut}`)
+     .subscribe(
         (response) => {
           // Limpiar las filas existentes en el contenedor de carga administrativa
           this.limpiarFilasCargaAdministrativa();
@@ -685,30 +684,27 @@ rutInput.addEventListener('input', () => {
             this.agregarFilaAdministrativa();
 
             // Obtenga la fila recién agregada
-            const newRow = document.getElementById('carga-administrativa-body')
-              ?.lastElementChild as HTMLElement;
+            const newRow = document.getElementById('carga-administrativa-body')?.lastElementChild as HTMLElement;
 
             // Agregue los valores de planificación y minutos a las variables totales
-            const planificacionInput = newRow.querySelector(
-              'td:nth-child(2) input'
-            ) as HTMLInputElement;
-            const minutosInput = newRow.querySelector(
-              'td:nth-child(3) input'
-            ) as HTMLInputElement;
+            const planificacionInput = newRow.querySelector('td:nth-child(2) input') as HTMLInputElement;
+            const minutosInput = newRow.querySelector('td:nth-child(3) input') as HTMLInputElement;
             const planificacion = parseInt(planificacionInput.value);
             const minutos = parseInt(minutosInput.value);
             this.totalHoras += planificacion;
             this.totalMinutos += minutos;
 
             // Actualice el texto de los totales en la interfaz de usuario
-            const totalHorasText = document.getElementById(
-              'totalHoras'
-            ) as HTMLElement;
-            const totalMinutosText = document.getElementById(
-              'totalMinutos'
-            ) as HTMLElement;
+            const totalHorasText = document.getElementById('totalHoras') as HTMLElement;
+            const totalMinutosText = document.getElementById('totalMinutos') as HTMLElement;
             totalHorasText.innerText = this.totalHoras.toString();
             totalMinutosText.innerText = this.totalMinutos.toString();
+
+            // Rellene los campos de la fila con los datos de la base de datos
+            const nombreInput = newRow.querySelector('td:nth-child(1) input') as HTMLInputElement;
+            nombreInput.value = item.nombre;
+            planificacionInput.value = item.planificacion.toString();
+            minutosInput.value = item.minutos.toString();
           });
         },
         (error) => {
