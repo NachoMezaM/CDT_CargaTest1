@@ -9,6 +9,7 @@
 
   <button class="boton" (click)="filterByEstado('Activo')">Mostrar Activos</button>
   <button class="boton" (click)="filterByEstado('Inactivo')">Mostrar Inactivos</button>
+  <button class="boton" *ngIf="filteredPosts.length!== posts.length"  (click)="clearfilters()">Quitar Filtro</button>
   <input type="text" class="search" placeholder="Buscar Asignatura" (keyup)="onSearch($event)">
     <table class="table table-striped table-bordered">
         <thead>

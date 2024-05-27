@@ -33,6 +33,10 @@ onSearch(event: any) {
   || post.idAsignatura.toLocaleUpperCase().includes(this.busqueda) || post.Nombre.toLocaleUpperCase().includes(this.busqueda) || post.Nombre.includes(this.busqueda) || post.idAsignatura.includes(this.busqueda));
 }
 
+clearfilters(){
+  this.filteredPosts = this.posts;
+}
+
   constructor(public postService: PostService, private router: Router) { 
     
   }
