@@ -4,8 +4,7 @@
 
 <div class="container">
     <h1 style="color: white; margin-top: 10px;">Asignaturas</h1>
-    <div class="btn-group" role="group" aria-label="Basic example">
-  </div>
+   
 
   <button class="boton" (click)="filterByEstado('Activo')">Mostrar Activos</button>
   <button class="boton" (click)="filterByEstado('Inactivo')">Mostrar Inactivos</button>
@@ -20,7 +19,7 @@
                 <th>Cantidad de Alumnos</th>
                 <th>Horas</th>
                 <th>Estado</th>
-                <th width="145px"></th>
+                <th width="250px"></th>
               </tr>
         </thead>
         <tbody>
@@ -32,9 +31,9 @@
                 <td>{{ post.Horas }}</td>
                 <td>{{ post.Estado }}</td>
                 <td>
-                  <a href="#" [routerLink]="['/post/', post.idAsignatura, 'view']" class="btn btn-info">Ver</a>
-                  <a href="#" [routerLink]="['/post/', post.idAsignatura, 'edit']" class="btn btn-primary">Editar</a>
-                  <a href="#" [routerLink]="['/post/', post.idAsignatura, 'seccion']" class="btn btn-primary">Seccion</a>
+                  <button href="#" [routerLink]="['/post/', post.idAsignatura, 'view']" class="btn1">Ver</button>
+                  <button href="#" [routerLink]="['/post/', post.idAsignatura, 'edit']" class="btn2">Editar</button>
+                  <button href="#" [routerLink]="['/post/', post.idAsignatura, 'seccion']" class="btn1">Seccion</button>
                 </td>
               </tr>
         </tbody>

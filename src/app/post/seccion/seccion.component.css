@@ -1,14 +1,27 @@
 /* BACKGROUND DEL FORMULARIO*/
+.titulo{
+    margin-bottom: 10px;
+    color: white;
+    margin-left: 5%;
+
+}
 .row1 {
-    background-color: white;
-    padding: 10px 5px;
-    width: 20%;
-    margin: 0 auto;
-    margin-top: 30px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
+  background-color: white;
+  padding: 10px 30px;
+  width: 80%; /* Reduce the width of the row */
+  margin-left: 5%;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  display: flex;
+
+  
+  flex-direction: column;
+  }
+  .row2 {
+  width: 70%; 
+  display: flex;
+  flex-direction: column;
+  margin-right: 5%;
   }
   .col1{    
   width: 100%;
@@ -34,4 +47,15 @@
 .botones{
     display: center;
     text-align: center;
+}
+.rowgeneral{
+    display: flex;
+  flex-wrap: nowrap; 
+  justify-content: space-around;
+  margin: 0 auto;
+  margin-top: 2%;
+
+}
+.r1{
+    width: 40%;
 }
