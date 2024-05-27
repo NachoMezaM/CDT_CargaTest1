@@ -16,6 +16,8 @@ export class CargaHorariaComponent {
   totalHoras: number = 0;
   totalMinutos: number = 0;
   currentYear: number | undefined;
+  datosAdministrativos: any;
+rut: string;
 
   constructor(private http: HttpClient) {}
 
@@ -272,6 +274,7 @@ export class CargaHorariaComponent {
     const año = (document.getElementById('año') as HTMLInputElement).value;
   
     const filas = document.querySelectorAll('#asignaturas-body tr');
+    const filasAdministrativa = document.querySelectorAll('#carga-administrativa-body tr');
     let algunaFilaGuardada = false; // Variable para controlar si al menos una fila se guardó con éxito
     filas.forEach((fila) => {
       const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
@@ -290,7 +293,21 @@ export class CargaHorariaComponent {
           });
       }
     });
-  
+
+    // Guardar datos de carga administrativa
+    filasAdministrativa.forEach((fila) => {
+      const concepto = (fila.querySelector('td:nth-child(1) input') as HTMLInputElement).value;
+      const horas = (fila.querySelector('td:nth-child(2) input') as HTMLInputElement).value;
+      const minutos = (fila.querySelector('td:nth-child(3) input') as HTMLInputElement).value;
+
+      this.guardarCargaAdministrativa(idProfesor, concepto, parseInt(horas), parseInt(minutos))
+        .then((guardado) => {
+          if (guardado) {
+            algunaFilaGuardada = true;
+          }
+        });
+    });
+
     // Mostrar mensaje dependiendo de si se guardó al menos una fila o no
     if (algunaFilaGuardada) {
       alert('Se guardaron las filas correctamente.');
@@ -302,7 +319,7 @@ export class CargaHorariaComponent {
     // Limpiar las filas guardadas después de guardar
     this.limpiarFilasGuardadas();
   }
-
+  
   limpiarFilasGuardadas() {
     const filasGuardadas = document.querySelectorAll('#asignaturas-body tr');
     filasGuardadas.forEach((fila) => {
@@ -444,6 +461,7 @@ export class CargaHorariaComponent {
                   this.actualizarBotonGuardar();
                 });
               }
+
               // Agregar el evento de clic al botón de eliminación
               const deleteButton = newRow.querySelector('.remove-btn');
               if (deleteButton) {
@@ -508,4 +526,98 @@ export class CargaHorariaComponent {
         }
       );
   }
+
+  agregarFilaAdministrativa(data: any) {
+    const tbody = document.getElementById('carga-administrativa-body');
+    if (!tbody) {
+      console.error('No se encontró el elemento tbody para carga administrativa.');
+      return;
+    }
+  
+    const newRow = document.createElement('tr');
+  
+    newRow.innerHTML = `
+      <td>${data.nombre}</td>
+      <td>${data.Hora}</td>
+      <td>${data.Hora_Minutos}</td>
+      <td><label class="remove-checkbox">✘</label></td>
+    `;
+  
+    tbody.appendChild(newRow);
+  
+    // Centrar el texto en todas las celdas de la nueva fila
+    const cells = newRow.querySelectorAll('td');
+    cells.forEach((cell) => {
+      cell.style.textAlign = 'center';
+    });
+  
+    // Agregar el evento de clic a la "x" para eliminar la fila
+    const removeLabel = newRow.querySelector('.remove-checkbox');
+    if (removeLabel) {
+      removeLabel.addEventListener('click', () => {
+        this.eliminarFilaAdministrativa(newRow);
+        this.actualizarBotonGuardar();
+      });
+    }
+  }
+  
+
+  eliminarFilaAdministrativa(row: HTMLElement) {
+    if (row.parentNode) {
+      row.parentNode.removeChild(row);
+    }
+  }
+
+  limpiarFilasCargaAdministrativa() {
+    const tbody = document.getElementById('carga-administrativa-body');
+    if (tbody) {
+      tbody.innerHTML = ''; // Limpiar el contenido del tbody
+    }
+}
+
+  guardarCargaAdministrativa(idProfesor: string, nombre: string, horas: number, minutos: number): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.http
+        .post<any>('http://localhost:3000/guardar-carga-administrativa', {
+          idProfesor,
+          nombre,
+          Horas: horas,
+          Hora_Minutos: minutos,
+        })
+        .subscribe(
+          (data) => {
+            console.log('Carga administrativa guardada exitosamente:', data);
+            resolve(true);
+          },
+          (error) => {
+            console.error('Error al guardar la carga administrativa:', error);
+            reject(error);
+          }
+        );
+    });
+  }
+
+  buscarDatosAdministrativos(rut: string) {
+    console.log('ID del profesor a buscar:', rut);
+    this.http
+      .get<any>(
+        `http://localhost:3000/buscar-datos-administrativos/${rut}`
+      )
+      .subscribe(
+        (response) => {
+          // Limpiar las filas existentes en el contenedor de carga administrativa
+          this.limpiarFilasCargaAdministrativa();
+          // Mostrar los datos administrativos en la interfaz de usuario
+          console.log('Datos administrativos encontrados:', response);
+          // Iterar sobre los datos y agregar filas al contenedor de carga administrativa
+          response.forEach((item: any) => {
+            this.agregarFilaAdministrativa(item);
+          });
+        },
+        (error) => {
+          console.error('Error al buscar datos administrativos:', error);
+        }
+      );
+  }
+  
 }

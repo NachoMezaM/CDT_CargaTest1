@@ -443,6 +443,51 @@ app.post("/eliminar-fila", (req, res) => {
   );
 });
 
+// Guardar carga administrativa
+app.post('/guardar-carga-administrativa', (req, res) => {
+  const { idProfesor, Horas, Hora_Minutos, idTrabajoAdministrativo  } = req.body;
+
+  const query = `
+  INSERT INTO CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos)
+  VALUES (?, ?, ?, ?)
+  `;
+const values = [idProfesor, Horas, Hora_Minutos, idTrabajoAdministrativo];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al guardar la carga administrativa:', err);
+      res.status(500).send('Error al guardar la carga administrativa');
+    } else {
+      console.log('Carga administrativa guardada exitosamente:', result);
+      res.send('Carga administrativa guardada exitosamente');
+    }
+  });
+});
+
+// Ruta para buscar los datos administrativos del profesor
+ app.get("/buscar-datos-administrativos/:rut", (req, res) => {
+   const rut = req.params.rut;
+
+    //Consulta para obtener los datos administrativos del profesor
+   const query = `
+     SELECT CargaAdministrativa.*, TrabajoAdministrativo.Nombre AS nombre
+     FROM CargaAdministrativa
+     JOIN TrabajoAdministrativo ON CargaAdministrativa.idTrabajoAdministrativo = TrabajoAdministrativo.idTrabajo
+     WHERE CargaAdministrativa.idProfesor = ?
+   `;
+   const values = [rut];
+
+   db.query(query, values, (err, result) => {
+     if (err) {
+       console.error("Error al buscar datos administrativos:", err);
+       res.status(500).send("Error interno del servidor");
+       return;
+     }
+
+     res.status(200).json(result);
+   });
+ });
+
 /* Start server */
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
