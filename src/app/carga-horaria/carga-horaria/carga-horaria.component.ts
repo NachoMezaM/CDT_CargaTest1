@@ -19,6 +19,10 @@ export class CargaHorariaComponent {
   totalMinutos: number = 0;
   currentYear: number | undefined;
   datosAdministrativos: any;
+  idProfesor!: string;
+  nombre!: string;
+  planificacion!: number; 
+  minutos!: number;
 
   constructor(private http: HttpClient) {}
 
