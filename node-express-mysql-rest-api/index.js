@@ -479,14 +479,14 @@ app.post("/eliminar-fila", (req, res) => {
 
 // Guardar carga administrativa
 app.post('/guardar-carga-administrativa', (req, res) => {
-  const { rut, Horas, Hora_Minutos } = req.body;
+  const { idProfesor, nombre, planificacion, minutos } = req.body;
 console.log('funca')
 
   const query = `
   INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos)
   VALUES (?, ?, ?, ?)
   `;
-const values = [rut, Horas, Hora_Minutos ];
+const values = [idProfesor, nombre, planificacion, minutos ];
 
   db.query(query, values, (err, result) => {
     if (err) {
@@ -505,7 +505,7 @@ const values = [rut, Horas, Hora_Minutos ];
 
     //Consulta para obtener los datos administrativos del profesor
    const query = `
-   SELECT CargaAdministrativa.Hora, CargaAdministrativa.Hora_Minutos, TrabajoAdministrativo.Nombre AS nombre
+   SELECT CargaAdministrativa.Hora AS planificacion, CargaAdministrativa.Hora_Minutos AS minutos, TrabajoAdministrativo.Nombre AS nombre
    FROM CargaAdministrativa
    JOIN TrabajoAdministrativo ON CargaAdministrativa.idTrabajoAdministrativo = TrabajoAdministrativo.idTrabajo
    WHERE CargaAdministrativa.idProfesor = ?

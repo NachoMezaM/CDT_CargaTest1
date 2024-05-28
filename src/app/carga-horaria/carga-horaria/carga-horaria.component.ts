@@ -107,19 +107,15 @@ export class CargaHorariaComponent {
               let jerarquia = '';
               switch (data.idJerarquia) {
                 case 1:
-                  console.log('Caso: MAGISTER');
                   jerarquia = 'Instructor';
                   break;
                 case 2:
-                  console.log('Caso: LICENCIADO');
                   jerarquia = 'Asistente';
                   break;
                 case 3:
-                  console.log('Caso: DOCTORADO');
                   jerarquia = 'Asociado';
                   break;
                 case 4:
-                  console.log('Caso: Default');
                   jerarquia = 'Titular';
                   break;
               }
@@ -174,8 +170,6 @@ export class CargaHorariaComponent {
         }
       );
   }
-
-  filasIndirecta: any = []; // Array para almacenar las filas de la tabla de docencia indirecta
 
   //-----------------------Docencia Directa----------------------------------------
 
@@ -293,9 +287,7 @@ export class CargaHorariaComponent {
     const año = (document.getElementById('año') as HTMLInputElement).value;
 
     const filas = document.querySelectorAll('#asignaturas-body tr');
-    const filasAdministrativa = document.querySelectorAll(
-      '#carga-administrativa-body tr'
-    );
+    const filasAdministrativa = document.querySelectorAll('#carga-administrativa-body tr');
     let algunaFilaGuardada = false; // Variable para controlar si al menos una fila se guardó con éxito
 
     filas.forEach((fila) => {
@@ -325,15 +317,9 @@ export class CargaHorariaComponent {
 
     // Guardar datos de carga administrativa
     filasAdministrativa.forEach((fila) => {
-      const nombre = (
-        fila.querySelector('td:nth-child(1) input') as HTMLInputElement
-      ).value;
-      const horas = (
-        fila.querySelector('td:nth-child(2) input') as HTMLInputElement
-      ).value;
-      const minutos = (
-        fila.querySelector('td:nth-child(3) input') as HTMLInputElement
-      ).value;
+      const nombre = (fila.querySelector('td:nth-child(1) input') as HTMLInputElement).value;
+      const horas = (fila.querySelector('td:nth-child(2) input') as HTMLInputElement).value;
+      const minutos = (fila.querySelector('td:nth-child(3) input') as HTMLInputElement).value;
 
       this.guardarCargaAdministrativa(
         idProfesor,
@@ -596,6 +582,7 @@ agregarFilaAdministrativa() {
     <td><input type="text" class="form-control" placeholder="Nombre"></td>
     <td><input type="number" class="form-control" placeholder="Horas 60'"></td>
     <td><input type="number" class="form-control" placeholder="Minutos"></td>
+    <td><input type="checkbox" class="confirm-checkbox"></td>
     <td><label class="remove-checkbox">✘</label></td>
   `;
 
@@ -624,6 +611,16 @@ agregarFilaAdministrativa() {
       this.actualizarBotonGuardar();
     });
   }
+
+// Agregar el evento de cambio al checkbox de confirmación
+   const confirmCheckbox = newRow.querySelector(
+     '.confirm-checkbox'
+   ) as HTMLInputElement;
+   if (confirmCheckbox) {
+     confirmCheckbox.addEventListener('change', () => {
+       this.actualizarBotonGuardar();
+     });
+   }
 }
 
 eliminarFilaAdministrativa(row: HTMLElement) {
@@ -639,13 +636,13 @@ limpiarFilasCargaAdministrativa() {
   }
 }
 
-guardarCargaAdministrativa(idProfesor: string, nombre: string, horas: number, minutos: number): Promise<boolean> {
+guardarCargaAdministrativa(idProfesor: string, nombre: string, planificacion: number, minutos: number): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
     this.http
       .post<any>('http://localhost:3000/guardar-carga-administrativa', {
         idProfesor,
         nombre,
-        Horas: horas,
+        Horas: planificacion,
         Hora_Minutos: minutos,
       })
       .subscribe(
