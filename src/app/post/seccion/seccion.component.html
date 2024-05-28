@@ -1,0 +1,83 @@
+<body>
+  <app-barranavegacion></app-barranavegacion>
+  
+  <div class="rowgeneral">
+    
+  <div class="r1">
+    <h1 class="titulo">Crear Seccion</h1>
+    <div class="row1">
+  <form  [formGroup]="form" (ngSubmit)="submit()">
+    <label for="idAsignatura"><strong>Codigo:</strong></label>
+    <input 
+        formControlName="idAsignatura"
+        id="idAsignatura" 
+        type="text" 
+        [(ngModel)]="post.idAsignatura"
+        readonly
+        class="col1">
+      <label><strong>Facultad</strong></label>
+      <select formControlName="Facultad" class="col1">
+        <option *ngFor="let facultad of facultades" [value]="facultad.id">{{ facultad.nombre }}</option>
+      </select>
+      <label><strong>Carrera</strong></label>
+      <select [(ngModel)]="form.value.Carrera" name="Carrera" formControlName="Carrera" class="col1">
+        <option *ngFor="let carrera of Carreras" [value]="carrera.nombre">
+          {{ carrera.nombre }}
+        </option>
+      </select>
+
+      <label for="Semestre" class="col1"><strong>Semestre:</strong></label>
+      <select 
+      formControlName="Semestre"
+      id="Semestre">
+      <option value="">Seleccione Opcion</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="X">10</option>
+      <option value="XI">11</option>
+       </select>
+
+       <label for="grupos" class="col1"><strong>Grupo:</strong></label>
+       <input 
+           formControlName="grupos"
+           id="grupos" 
+           type="number"     
+           class="col1"
+           >
+
+           <!-- resultado -->
+           <div class="botones">
+            <button class="boton" type="submit" >Crear</button>
+            
+            </div>
+      
+    </form>
+    
+    <div class="form-group" *ngIf="showresultado">
+      <label for="AsignaturaSeccion"><strong>Resultado:</strong></label>
+            <input 
+                formControlName="AsignaturaSeccion"
+                id="AsignaturaSeccion" 
+                type="text" 
+                [value]="url"
+                readonly
+                class="col1"
+                (change)="setresultado($event)">
+           </div>
+           <div class="botones">
+            <button (click)="onresultadochange()"  (click)="mostrar()" class="boton" >Mostrar </button>
+          </div>
+          </div>
+      </div>
+          <div class="row2">
+          <app-view-secciones></app-view-secciones>
+        </div>
+          </div>
+</body>

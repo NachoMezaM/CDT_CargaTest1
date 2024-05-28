@@ -44,6 +44,14 @@ export class PostService {
       catchError(this.errorHandler)
     )
   }
+  getAllSeccion(): Observable<any>{
+
+   
+    return this.httpClient.get(this.apiURL + '/seccion/')
+    .pipe(
+      catchError(this.errorHandler)
+    )
+  }
       
   /**
    * Write code on Method
@@ -57,6 +65,13 @@ export class PostService {
     )
   }  
     
+//CREAR
+  crear(post:Post): Observable<any> {
+    return this.httpClient.post(this.apiURL + '/posts/seccion', JSON.stringify(post), this.httpOptions)
+    .pipe(
+      catchError(this.errorHandler)
+    )
+  }  
   /**
    * Write code on Method
    *

@@ -3,13 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { HostListener } from '@angular/core';
 import { BarranavegacionComponent } from '../../barranavegacion/barranavegacion.component';
 import { response } from 'express';
+import { RouterOutlet, RouterLink, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-carga-horaria',
   templateUrl: './carga-horaria.component.html',
   styleUrls: ['./carga-horaria.component.css'],
   standalone: true,
-  imports: [BarranavegacionComponent],
+  imports: [CommonModule, RouterModule, RouterOutlet, RouterLink, BarranavegacionComponent],
 })
 export class CargaHorariaComponent {
   asignaturas: any[] = [];

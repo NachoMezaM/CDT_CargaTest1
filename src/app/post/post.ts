@@ -6,4 +6,6 @@ export interface Post {
     Horas: number;
     NumeroAlumnos: number;
     Estado: string;
+    CarreraId: string;
+    idPlanAcademico: number;
 }

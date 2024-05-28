@@ -26,7 +26,6 @@ db.connect((err) => {
 app.use(bodyParser.json());
 app.use(cors());
 
-/* Routes */
 /* Listar todas las Asignaturas */
 app.get("/posts", (req, res) => {
   db.query("SELECT * FROM cargaacademica.Asignatura", (err, results) => {
@@ -37,15 +36,37 @@ app.get("/posts", (req, res) => {
     res.json(results);
   });
 });
+//Listar todos los Profesores 
+app.get("/profesor/", (req, res) => {
+  db.query("SELECT * FROM cargaacademica.Profesor", (err, results) => {
+    if (err) {
+      res.status(500).send("Error fetching posts");
+      return;
+    }
+    res.json(results);
+  });
+});
+app.get("/seccion/", (req, res) => {
+  
+  db.query("SELECT * FROM cargaacademica.AsignaturaSeccion", (err, results) => {
+    if (err) {
+      res.status(500).send("Error fetching posts");
+      return;
+    }
+    res.json(results);
+    console.log(results)
+  });
+});
+/* --------------------------------------------------------------------- Asignaturas  ---------------------------------------------------------------------*/
 
 /* Crear asignatura */
 app.post("/posts/create", (req, res) => {
-  const { idAsignatura, Nombre, Horas, NumeroAlumnos, Estado, TipoAsignatura } =
+  const { idAsignatura, Nombre, Horas, NumeroAlumnos, Estado, TipoAsignatura, idPlanAcademico } =
     req.body;
 
   db.query(
-    "INSERT INTO cargaacademica.Asignatura (idAsignatura, Nombre, Horas, NumeroAlumnos, Estado, TipoAsignatura) VALUES (?,?,?,?,?,?)",
-    [idAsignatura, Nombre, Horas, NumeroAlumnos, "Activo", TipoAsignatura],
+    "INSERT INTO cargaacademica.Asignatura (idAsignatura, Nombre, Horas, NumeroAlumnos, Estado, TipoAsignatura, idPlanAcademico) VALUES (?,?,?,?,?,?,?)",
+    [idAsignatura, Nombre, Horas, NumeroAlumnos, "Activo", TipoAsignatura, idPlanAcademico],
     (err, result) => {
       if (err) {
         res.status(500).send("Error creating cargaacademica.Asignatura");
@@ -104,21 +125,33 @@ app.put("/posts/:id", (req, res) => {
   );
 });
 
-app.get("/profesor/", (req, res) => {
-  db.query("SELECT * FROM cargaacademica.Profesor", (err, results) => {
-    if (err) {
-      res.status(500).send("Error fetching posts");
-      return;
+
+
+/* SECCION MANDAR */
+//-------------------------------------------------------------------------------------------------------------------//
+app.post("/posts/seccion", (req, res) => {
+  const hola= { url, Semestre, carreraValor, idAsignatura } =
+    req.body;
+console.log("Funca")
+  db.query(
+    "INSERT INTO cargaacademica.AsignaturaSeccion (idAsignaturaSeccion, Semestre, idSeccion, idAsignatura) VALUES (?,?,?,?)",
+    [url, Semestre, carreraValor, idAsignatura],
+    (err, result) => {
+      if (err) {
+        res.status(500).send("Error creating cargaacademica.AsignaturaSeccion");
+        return;
+      }
+      res.status(201).json(req.body);
     }
-    res.json(results);
-  });
+    
+  );
 });
 // -------------------------------------------------------------------------Profesor-------------------------------------------------------------------------
 /* Crear un nuevo profesor */
 app.post("/profesor/crear-profe", (req, res) => {
   const {
     idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
-  // Si no existe, insertar el nuevo profesor en la base de datos
+  // Si no existe, insertar el nuevo profesor en la base de datos0
   db.query(
     "INSERT INTO cargaacademica.Profesor (idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
     [idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido],
@@ -168,8 +201,9 @@ app.get("/profesor/:idProfesor", (req, res) => {
 
 //Update a post
 app.put("/profesor/:idProfesor", (req, res) => {
+  console.log(req)
   const profesoridProfesor = req.params.idProfesor;
-  //console.log("Funca");
+  console.log("Funca"+profesoridProfesor);
   const { Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
   db.query(
     "UPDATE cargaacademica.Profesor SET Nombre=? ,Tipo = ?, Profesion = ?, Horas = ?, ValorHora = ?, idJerarquia = ?, Direccion = ?, Telefono = ?, Grado = ?, TituloGrado = ?, Estado = ?, Apellido = ? WHERE idProfesor = ?",

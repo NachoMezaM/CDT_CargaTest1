@@ -53,7 +53,7 @@ export class ProfesorService {
    * @return response()
    */
   find(idProfesor:number): Observable<any> {
-    //console.log(this.httpClient.get(this.apiURL + '/profesor/' + idProfesor))
+    
     return this.httpClient.get(this.apiURL + '/profesor/' + idProfesor)
     .pipe(
       catchError(this.errorHandler)

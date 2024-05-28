@@ -4,11 +4,11 @@
 
 <div class="container">
     <h1 style="color: white; margin-top: 10px;">Asignaturas</h1>
-    <div class="btn-group" role="group" aria-label="Basic example">
-  </div>
+   
 
   <button class="boton" (click)="filterByEstado('Activo')">Mostrar Activos</button>
   <button class="boton" (click)="filterByEstado('Inactivo')">Mostrar Inactivos</button>
+  <button class="boton" *ngIf="filteredPosts.length!== posts.length"  (click)="clearfilters()">Quitar Filtro</button>
   <input type="text" class="search" placeholder="Buscar Asignatura" (keyup)="onSearch($event)">
     <table class="table table-striped table-bordered">
         <thead>
@@ -19,7 +19,7 @@
                 <th>Cantidad de Alumnos</th>
                 <th>Horas</th>
                 <th>Estado</th>
-                <th width="145px"></th>
+                <th width="250px"></th>
               </tr>
         </thead>
         <tbody>
@@ -31,8 +31,9 @@
                 <td>{{ post.Horas }}</td>
                 <td>{{ post.Estado }}</td>
                 <td>
-                  <a href="#" [routerLink]="['/post/', post.idAsignatura, 'view']" class="btn btn-info">Ver</a>
-                  <a href="#" [routerLink]="['/post/', post.idAsignatura, 'edit']" class="btn btn-primary">Editar</a>
+                  <button href="#" [routerLink]="['/post/', post.idAsignatura, 'view']" class="btn1">Ver</button>
+                  <button href="#" [routerLink]="['/post/', post.idAsignatura, 'edit']" class="btn2">Editar</button>
+                  <button href="#" [routerLink]="['/post/', post.idAsignatura, 'seccion']" class="btn1">Seccion</button>
                 </td>
               </tr>
         </tbody>
