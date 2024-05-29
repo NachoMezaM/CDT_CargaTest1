@@ -525,12 +525,20 @@ const values = [rut, Horas, Hora_Minutos ];
    });
  });
 
- app.get("//trabajos-administrativos", (req, res) => {
-  db.query('SELECT TrabajoAdministrativo.Nombre FROM CargaAdministrativa JOIN TrabajoAdministrativo ON CargaAdministrativa.idTrabajoAdministrativo = TrabajoAdministrativo.idTrabajo', (err, results) => {
-    if (err) throw err;
-    res.json(results);
+// Ruta para obtener todos los nombres de trabajos administrativos
+app.get('/trabajos-administrativos', (req, res) => {
+  const query = 'SELECT Nombre AS carga FROM TrabajoAdministrativo';
+  
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error al obtener trabajos administrativos:', err);
+      res.status(500).send('Error al obtener trabajos administrativos');
+      return;
+    }
+    
+    res.status(200).json(results);
   });
- });
+});
 
 /* Start server */
 app.listen(port, () => {

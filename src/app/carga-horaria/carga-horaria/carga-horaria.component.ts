@@ -5,6 +5,7 @@ import { BarranavegacionComponent } from '../../barranavegacion/barranavegacion.
 import { response } from 'express';
 import { RouterOutlet, RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { map, catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-carga-horaria',
@@ -21,12 +22,15 @@ export class CargaHorariaComponent {
   datosAdministrativos: any;
   idProfesor!: string;
   carga!: string;
-  horas!: number; 
+  horas!: number;
   minutos!: number;
+  rut!: string;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
+
+    this.cargarTrabajosAdministrativos();
     // Obtener el año actual al inicializar el componente
     this.currentYear = new Date().getFullYear();
 
@@ -41,7 +45,13 @@ export class CargaHorariaComponent {
       const rut = rutInput.value;
         this.buscarDatosAdministrativos(rut);
     });
+
+//     const addButton = document.getElementById('agregar-button') as HTMLButtonElement;
+// addButton.addEventListener('click', () => {
+//   this.agregarFilaAdministrativa(rut: string);
+// });
   }
+
 
   @HostListener('document:keydown.enter', ['$event'])
   handleEnterKey(event: KeyboardEvent) {
@@ -67,16 +77,16 @@ export class CargaHorariaComponent {
     }
   }
 
-  // @HostListener('keydown.enter', ['$event'])
-  // onEnterKey1(event: KeyboardEvent) {
-  //   // Prevenir la actualización de la página
-  //   event.preventDefault();
+   @HostListener('keydown.enter', ['$event'])
+   onEnterKey1(event: KeyboardEvent) {
+     // Prevenir la actualización de la página
+     event.preventDefault();
 
-  //   const target = event.target as HTMLInputElement;
-  //   if (target.id === 'Horas') {
-  //     this.agregarFilaAdministrativa();
-  //   }
-  // }
+     const target = event.target as HTMLInputElement;
+     if (target.id === 'Horas') {
+       this.agregarFilaAdministrativa1();
+     }
+   }
 
   limpiarPagina() {
     // Limpiar los campos del formulario
@@ -94,6 +104,10 @@ export class CargaHorariaComponent {
     if (tbody) {
       tbody.innerHTML = '';
     }
+    // const tbodyAdmin = document.getElementById('carga-administrativa-body');
+    // if (tbodyAdmin) {
+    //   tbodyAdmin.innerHTML='';
+    // }
   }
 
   buscarDatos() {
@@ -161,6 +175,7 @@ export class CargaHorariaComponent {
       );
     this.buscarDatosProfesor();
     this.limpiarPagina();
+    this.agregarFilaAdministrativa(rut);
   }
 
   obtenerHoraMaximaDocencia(idJerarquia: string) {
@@ -586,74 +601,155 @@ export class CargaHorariaComponent {
 
   //----------------------------------Carga Administrativa---------------------------
 
-  agregarFilaAdministrativa() {
-    const horasInput = document.getElementById('Horas') as HTMLInputElement;
-    const horas = horasInput.value;
-    const minutos = parseInt(horas) * 60; // Calcular los minutos
-  
-    const tbody = document.getElementById('carga-administrativa-body');
-    if (!tbody) {
-      console.error('No se encontró el elemento tbody para carga administrativa.');
-      return;
-    }
-  
-    const newRow = document.createElement('tr');
-  
-    newRow.innerHTML = `
-      <td><input type="text" class="form-control" placeholder="Carga"></td>
-      <td>${horas}</td>
-      <td>${minutos}</td>
-      <td><input type="checkbox" class="confirm-checkbox"></td>
-      <td><label class="remove-checkbox">✘</label></td>
-    `;
-  
-    tbody.appendChild(newRow);
-  
-    // Centrar el texto en todas las celdas de la nueva fila
-    const cells = newRow.querySelectorAll('td');
-    cells.forEach((cell) => {
-      cell.style.textAlign = 'center';
+  agregarFilaAdministrativa(rut: string) {
+    this.buscarDatosAdministrativos(rut).subscribe((response) => {
+      console.log('Datos recibidos:', response);
+      const tbody = document.getElementById('carga-administrativa-body');
+      if (!tbody) {
+        console.error('No se encontró el elemento tbody para carga administrativa.');
+        return;
+      }
+
+      tbody.innerHTML = '';
+
+      response.forEach((item: { carga: any; horas: any; minutos: any; }) => {
+        const newRow = document.createElement('tr');
+
+        newRow.innerHTML = `
+          <td>${item.carga}</td>
+          <td>${item.horas}</td>
+          <td>${item.minutos}</td>
+          <td><input type="checkbox" class="confirm-checkbox"></td>
+          <td><label class="remove-checkbox">✘</label></td>
+        `;
+
+        tbody.appendChild(newRow);
+
+        // Centrar el texto en todas las celdas de la nueva fila
+        const cells = newRow.querySelectorAll('td');
+        cells.forEach((cell) => {
+          cell.style.textAlign = 'center';
+        });
+
+        // Agregar el evento de clic a la "x" para eliminar la fila
+        const removeLabel = newRow.querySelector('.remove-checkbox');
+        if (removeLabel) {
+          removeLabel.addEventListener('click', () => {
+            this.eliminarFila1(newRow);
+            this.actualizarBotonGuardar();
+          });
+        }
+
+        // Agregar el evento de clic al botón de eliminación
+        const deleteButton = newRow.querySelector('.remove-btn');
+        if (deleteButton) {
+          deleteButton.addEventListener('click', () => {
+            this.eliminarFila1(newRow);
+            this.actualizarBotonGuardar();
+          });
+        }
+
+        // Agregar el evento de cambio al checkbox de confirmación
+        const confirmCheckbox = newRow.querySelector(
+          '.confirm-checkbox'
+        ) as HTMLInputElement;
+        if (confirmCheckbox) {
+          confirmCheckbox.addEventListener('change', () => {
+            this.actualizarBotonGuardar();
+          });
+        }
+      });
     });
-  
-    // Agregar el evento de clic al botón de eliminación
-    const deleteButton = newRow.querySelector('.remove-btn');
-    if (deleteButton) {
-      deleteButton.addEventListener('click', () => {
-        this.eliminarFilaAdministrativa(newRow);
-        this.actualizarBotonGuardar();
-      });
-    }
-  
-    // Agregar el evento de clic a la "x" para eliminar la fila
-    const removeLabel = newRow.querySelector('.remove-checkbox');
-    if (removeLabel) {
-      removeLabel.addEventListener('click', () => {
-        this.eliminarFilaAdministrativa(newRow);
-        this.actualizarBotonGuardar();
-      });
-    }
-  
-    // Agregar el evento de cambio al checkbox de confirmación
-    const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
-    if (confirmCheckbox) {
-      confirmCheckbox.addEventListener('change', () => {
-        this.actualizarBotonGuardar();
-      });
-    }
   }
 
-eliminarFilaAdministrativa(row: HTMLElement) {
-  if (row.parentNode) {
-    row.parentNode.removeChild(row);
-  }
-}
+  agregarFilaAdministrativa1() {
+    
+    const rut = (document.getElementById('rut') as HTMLInputElement).value;
 
-limpiarFilasCargaAdministrativa() {
-  const tbody = document.getElementById('carga-administrativa-body');
-  if (tbody) {
-    tbody.innerHTML = ''; // Limpiar el contenido del tbody
+    this.http
+      .get<any>(
+        `http://localhost:3000/buscar-datos-administrativos/${rut}`
+      )
+      .subscribe(
+        (data) => {
+          const tbody = document.getElementById('carga-administrativa-body');
+          if (!tbody) {
+            console.error('No se encontró el elemento tbody.');
+            return;
+          }
+          const newRow = document.createElement('tr');
+          const horas = parseInt(data.horas);
+          const minutos = horas * 60; // Calcular los minutos
+          // const planificacion = Math.floor(minutos); // Calcular las horas
+          // const totalMinutos = Math.floor(minutos);
+
+          newRow.innerHTML = `
+          <td>${data.arga}</td>
+          <td>${horas}</td>
+          <td>${minutos}</td>
+          <td><input type="checkbox" class="confirm-checkbox"></td>
+          <td><label class="remove-checkbox">✘</label></td>
+        `;
+          tbody.appendChild(newRow);
+
+          // Centrar el texto en todas las celdas de la nueva fila
+          const cells = newRow.querySelectorAll('td');
+          cells.forEach((cell) => {
+            cell.style.textAlign = 'center';
+          });
+
+          // Agregar el evento de clic a la "x" para eliminar la fila
+          const removeLabel = newRow.querySelector('.remove-checkbox');
+          if (removeLabel) {
+            removeLabel.addEventListener('click', () => {
+              this.eliminarFila1(newRow);
+              this.actualizarBotonGuardar();
+            });
+          }
+
+          // Agregar el evento de clic al botón de eliminación
+          const deleteButton = newRow.querySelector('.remove-btn');
+          if (deleteButton) {
+            deleteButton.addEventListener('click', () => {
+              this.eliminarFila1(newRow);
+              this.actualizarBotonGuardar();
+            });
+          }
+
+          // Agregar el evento de cambio al checkbox de confirmación
+          const confirmCheckbox = newRow.querySelector(
+            '.confirm-checkbox'
+          ) as HTMLInputElement;
+          if (confirmCheckbox) {
+            confirmCheckbox.addEventListener('change', () => {
+              this.actualizarBotonGuardar();
+            });
+          }
+        },
+        (error) => {
+          console.error(
+            'Error al obtener los detalles de la asignatura:',
+            error
+          );
+          alert(
+            'Ocurrió un error al obtener los detalles de la asignatura. Por favor, inténtalo de nuevo más tarde.'
+          );
+        }
+      );
   }
-}
+
+  buscarDatosAdministrativos(rut: string) {
+    return this.http.get<any>(`http://localhost:3000/buscar-datos-administrativos/${rut}`).pipe(
+      map((response: any) => {
+        console.log('Datos recibidos:', response);
+        return response;
+      }),
+      catchError((error: any) => {
+        console.error('Error al buscar datos:', error);
+        return throwError(error);
+      })
+    );
+  }
 
 guardarCargaAdministrativa(idProfesor: string, nombre: string, planificacion: number, minutos: number): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
@@ -677,38 +773,34 @@ guardarCargaAdministrativa(idProfesor: string, nombre: string, planificacion: nu
   });
 }
 
-buscarDatosAdministrativos(rut: string) {
-  console.log('ID del profesor a buscar:', rut);
-  this.http.get<any>(`http://localhost:3000/buscar-datos-administrativos/${rut}`)
-   .subscribe(
-      (response) => {
-        this.limpiarFilasCargaAdministrativa();
-        console.log('Datos administrativos encontrados:', response);
-
-        response.forEach((item: any) => {
-          this.agregarFilaAdministrativa();
-
-          const newRow = document.getElementById('carga-administrativa-body')?.lastElementChild as HTMLElement;
-
-          if (newRow) {
-            const cargaInput = newRow.querySelector('td:nth-child(1) input') as HTMLInputElement;
-            const horasInput = newRow.querySelector('td:nth-child(2) input') as HTMLInputElement;
-            const minutosInput = newRow.querySelector('td:nth-child(3) input') as HTMLInputElement;
-
-            if (cargaInput && horasInput && minutosInput) {
-              cargaInput.value = item.carga || '';
-              horasInput.value = (item.horas!= null? item.horas : '').toString();
-              minutosInput.value = (item.minutos!= null? item.minutos : '').toString();
-            } else {
-              console.error('No se encontraron los elementos de entrada en la nueva fila.');
-            }
-          } else {
-            console.error('No se encontró la nueva fila.');
-          }
-        });
+cargarTrabajosAdministrativos() {
+  this.http.get<any[]>('http://localhost:3000/trabajos-administrativos').subscribe(
+    (data) => {
+      const selectElement = document.getElementById('Carga') as HTMLSelectElement;
+      data.forEach((trabajo) => {
+        const option = document.createElement('option');
+        option.value = trabajo.carga;
+        option.text = trabajo.carga;
+        selectElement.appendChild(option);
+      });
     },
     (error) => {
-      console.error('Error al buscar datos administrativos:', error);
-    });
+      console.error('Error al cargar trabajos administrativos:', error);
+    }
+  );
 }
+
+eliminarFilaAdministrativa(row: HTMLElement) {
+  if (row.parentNode) {
+    row.parentNode.removeChild(row);
+  }
+}
+
+limpiarFilasCargaAdministrativa() {
+  const tbody = document.getElementById('carga-administrativa-body');
+  if (tbody) {
+    tbody.innerHTML = ''; // Limpiar el contenido del tbody
+  }
+}
+
 }
