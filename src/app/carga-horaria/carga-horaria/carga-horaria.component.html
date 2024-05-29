@@ -7,15 +7,15 @@
 
 <body >
   <app-barranavegacion></app-barranavegacion>
-  
+
   <form>
     <div class="fila_titulo">
     <h1 class="titulo">Ingresar Carga</h1>
-    <h1 class="titulo" style="margin-left: 600px;">Notas</h1>
+    <!-- <h1 class="titulo" style="margin-left: 600px;">Notas</h1> -->
   </div>
   <div class="fila">
     <div class="containerflex ">
-     
+
 
       <div class="form-group">
         <div class="row">
@@ -23,12 +23,12 @@
             <label for="idProfesor"><strong>Rut:</strong></label>
             <input formControlName="idProfesor" id="rut" type="text" class="form-control1" autocomplete="off">
           </div>
-          
+
           <div class="col22 ">
             <label for="nombre"><strong>Nombre:</strong></label>
             <input formControlName="Nombre" id="nombre" type="text" class="form-control2" autocomplete="off">
           </div>
-          
+
           <div class=col1>
             <label for="año"><strong>Año:</strong></label>
             <input formControlName="Año" id="año" class="form-control11" autocomplete="off" [value]="currentYear" readonly disabled>
@@ -42,17 +42,17 @@
             <label for="grado"><strong>Grado:</strong></label>
             <div formControlName="Grado" id="grado" class="form-control1"></div>
           </div>
-          
+
           <div class="col1">
             <label for="jerarquizacion"><strong>Jerarquizacion:</strong></label>
             <div formControlName="Jerarquizacion" id="jerarquizacion" class="form-control2" ></div>
           </div>
-          
+
           <div class="col1">
             <label for="horascontrato"><strong>Horas Contrato:</strong></label>
             <div formControlName="horascontrato" id="horascontrato" class="form-control2"></div>
           </div>
-          
+
           <div class="col1">
             <label for="PosibleHorasDeDocencia"><strong>Horas Docencia:</strong></label>
             <div formControlName="PosibleHorasDeDocencia" id="PosibleHorasDeDocencia" class="form-control2"></div>
@@ -61,12 +61,12 @@
       </div>
     </div>
 
-    <form>
+    <!-- <form>
       <div class="containerflex4">
-       
+
         <textarea rows="4" cols="50" class="form-control2" placeholder="Escribe tus notas aquí"></textarea>
       </div>
-    </form>
+    </form> -->
   </div>
   </form>
 
@@ -79,14 +79,14 @@
     <!-- Docencia Directa -->
     <form>
       <div class="containerflex1">
-  
+
         <div class="form-group">
           <div class="row">
             <div class="col1">
               <label for="codigo"><strong>Codigo:</strong></label>
               <input formControlName="codigo" type="text" id="codigo" class="form-control1" placeholder="Codigo Asignatura" required autocomplete="off" uptwo>
             </div>
-            
+
             <div class="col1">
               <label for="seccion"><strong>Seccion:</strong></label>
               <select formControlName="seccion" id="seccion" class="form-control1" (change)="agregarFila()"></select>
@@ -119,12 +119,25 @@
 
     <form>
       <div class="containerflex3">
-       <h2>Carga Administrativa</h2>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col1">
+              <label for="Carga"><strong>Carga:</strong></label>
+              <select formControlName="Carga"  id="Carga" class="form-control1" placeholder="Nombre Carga"></select>
+            </div>
+
+            <div class="col1">
+              <label for="Horas"><strong>Horas</strong></label>
+              <input formControlName="Horas" type="text" id="Horas" class="form-control1" placeholder="Horas">
+            </div>
+          </div>
+        </div>
 
         <table class="table table-striped table-bordered">
           <thead>
             <tr>
-              <th>Nombre</th>
+              <th>Carga</th>
               <th>Horas 60'</th>
               <th>Minutos</th>
               <th>Confirmar</th>
@@ -135,7 +148,7 @@
             <!-- Aquí se agregarán las filas dinámicamente -->
           </tbody>
           <button type="button" class="boton" (click)="agregarFilaAdministrativa()">Agregar</button>
-          <button type="button" class="boton" id="guardar-carga-administrativa-btn" (click)="guardarCargaAdministrativa(idProfesor, nombre, planificacion, minutos)">Guardar</button>
+          <button type="button" class="boton" id="guardar-carga-administrativa-btn" (click)="guardarCargaAdministrativa(idProfesor, carga, horas, minutos)">Guardar</button>
         </table>
       </div>
     </form>

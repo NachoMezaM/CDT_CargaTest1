@@ -283,7 +283,7 @@ app.get("/obtener-hora-maxima-docencia/:idJerarquia", (req, res) => {
   });
 });
 
-//Docencia Directa
+//--------------------------Docencia Directa---------------------------------
 
 // Ruta para obtener las secciones disponibles para un código de asignatura
 app.post("/obtener-secciones", (req, res) => {
@@ -477,6 +477,8 @@ app.post("/eliminar-fila", (req, res) => {
   );
 });
 
+//--------------------------Carga Administrativa--------------------------------
+
 // Guardar carga administrativa
 app.post('/guardar-carga-administrativa', (req, res) => {
   const { rut, Horas, Hora_Minutos } = req.body;
@@ -505,7 +507,7 @@ const values = [rut, Horas, Hora_Minutos ];
 
     //Consulta para obtener los datos administrativos del profesor
    const query = `
-   SELECT CargaAdministrativa.Hora AS planificacion, CargaAdministrativa.Hora_Minutos AS minutos, TrabajoAdministrativo.Nombre AS nombre
+   SELECT CargaAdministrativa.Hora AS horas, CargaAdministrativa.Hora_Minutos AS minutos, TrabajoAdministrativo.Nombre AS carga
    FROM CargaAdministrativa
    JOIN TrabajoAdministrativo ON CargaAdministrativa.idTrabajoAdministrativo = TrabajoAdministrativo.idTrabajo
    WHERE CargaAdministrativa.idProfesor = ?
@@ -521,6 +523,13 @@ const values = [rut, Horas, Hora_Minutos ];
 
      res.status(200).json(result);
    });
+ });
+
+ app.get("//trabajos-administrativos", (req, res) => {
+  db.query('SELECT TrabajoAdministrativo.Nombre FROM CargaAdministrativa JOIN TrabajoAdministrativo ON CargaAdministrativa.idTrabajoAdministrativo = TrabajoAdministrativo.idTrabajo', (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
  });
 
 /* Start server */
