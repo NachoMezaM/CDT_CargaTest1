@@ -640,15 +640,9 @@ export class CargaHorariaComponent {
     );
   }
 
-guardarCargaAdministrativa(idProfesor: string, nombre: string, planificacion: number, minutos: number): Promise<boolean> {
+guardarCargaAdministrativa(idProfesor: string, carga: string, Horas: number, minutos: number): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
-    this.http
-      .post<any>('http://localhost:3000/guardar-carga-administrativa', {
-        idProfesor,
-        nombre,
-        Horas: planificacion,
-        Hora_Minutos: minutos,
-      })
+    this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, carga, Horas , minutos,})
       .subscribe(
         (data) => {
           console.log('Carga administrativa guardada exitosamente:', data);
