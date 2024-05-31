@@ -60,7 +60,7 @@
             <input 
                 formControlName="Horas"
                 id="Horas" 
-                type="text" 
+                type="number" 
                 [(ngModel)]="post.Horas"
                 class="form-control">
             <div *ngIf="f['Horas'].touched && f['Horas'].invalid" class="alert alert-danger">
@@ -73,7 +73,7 @@
             <input 
                 formControlName="NumeroAlumnos"
                 id="NumeroAlumnos" 
-                type="text" 
+                type="number" 
                 [(ngModel)]="post.NumeroAlumnos"
                 class="form-control">
             <div *ngIf="f['NumeroAlumnos'].touched && f['NumeroAlumnos'].invalid" class="alert alert-danger">
