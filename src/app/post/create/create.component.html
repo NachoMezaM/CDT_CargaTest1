@@ -26,7 +26,7 @@
             <input 
                 formControlName="idPlanAcademico"
                 id="idPlanAcademico" 
-                type="text" 
+                type="number" 
                 class="form-control">
             <div *ngIf="f['idPlanAcademico'].touched && f['idPlanAcademico'].invalid" class="alert alert-danger">
                 <div *ngIf="f['idPlanAcademico'].errors && f['idPlanAcademico'].errors['required']">Se requiere un idPlanAcademico.</div>
@@ -73,7 +73,7 @@
             <input 
                 formControlName="NumeroAlumnos"
                 id="NumeroAlumnos" 
-                type="text" 
+                type="number" 
                 class="form-control">
             <div *ngIf="f['NumeroAlumnos'].touched && f['NumeroAlumnos'].invalid" class="alert alert-danger">
                 <div *ngIf="f['NumeroAlumnos'].errors && f['NumeroAlumnos'].errors['required']">Se requiere una cantidad de alumnos.</div>
@@ -86,7 +86,7 @@
             <input 
                 formControlName="Horas"
                 id="Horas" 
-                type="text" 
+                type="number" 
                 class="form-control">
             <div *ngIf="f['Horas'].touched && f['Horas'].invalid" class="alert alert-danger">
                 <div *ngIf="f['Horas'].errors && f['Horas'].errors['required']">Se requiere una cantidad de horas.</div>
