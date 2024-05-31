@@ -2,34 +2,24 @@
 
 /* CAMPO DATOS INGRESAR CARGA*/
 .containerflex {
-  margin-left: 20px;
-  width: 40%;
-  max-width: 800px; /* Añadido un ancho máximo */
-  min-width: 800px; /* Añadido un ancho mínimo */
-  background-color: #f2f2f2;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 15px;
-}
-
-
-/* CAMPO NOTAS */
-.containerflex4 {
+  margin-top: 30px;
+  margin-bottom: 20px;
   margin-left: 30px;
-  max-width: 500px; /* Añadido un ancho máximo */
-  min-width: 500px; /* Añadido un ancho mínimo */
-  min-height: 210px;
+  width: 70%;
+  min-width: 1200px; /* Añadido un ancho mínimo */
   background-color: #f2f2f2;
   padding: 10px;
   border: 2px solid #ccc;
   border-radius: 15px;
-  font-size: me;
 }
+
 /* DATOS PARA DOCENCIA DIRECTA*/
 .containerflex1 {
+
+  margin-bottom: 20px;
   margin-left: 30px;
-  max-width: 825px; /* Añadido un ancho máximo */
-  min-width: 805px; /* Añadido un ancho mínimo */
+  max-width: 1320px;
+  min-width: 1320px; /* Añadido un ancho mínimo */
   background-color: #f2f2f2;
   padding: 10px;
   border: 2px solid #ccc;
@@ -38,8 +28,11 @@
 }
 /* DATOS PARA  OTROS GESTION */
 .containerflex3 {
+  margin-top: 30px;
+  margin-bottom: 20px;
   margin-left: 30px;
   width: 80%;
+  max-width: 1320px;
   min-width: 500px; /* Añadido un ancho mínimo */
   min-height: 250px;
   background-color: #f2f2f2;
@@ -140,7 +133,7 @@
 }
 
 .col21, .col22 {
-  width: 43%;
+  width: 20%;
 }
 
 /* FONDO */
@@ -196,7 +189,6 @@ body::-webkit-scrollbar {
   text-align: left;
   margin-left: 2%;
   color: white;
-  margin-top: 10px;
   margin-bottom: 20px;
   font-size: 35px;
 }
