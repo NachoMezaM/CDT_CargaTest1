@@ -4,84 +4,102 @@
 <head>
   <title>Carga Academica</title>
 </head>
-
 <body>
   <app-barranavegacion></app-barranavegacion>
   <h1 class="titulo">Carga Academica</h1>
   <div class="border">
-    <form [formGroup]="form" class="container">
-      <div class="column">
-        <div class="form-group">
-          <label for="Facultad"><strong>Facultad</strong></label>
-          <select id="Facultad" class="form-control" formControlName="Facultad" (change)="onFacultadChange($event)">
-            <option value="1">FACS</option>
-            <option value="2">FAIN</option>
-            <option value="3">FEDUC</option>
-            <option value="4">FTEO</option>
-            <option value="5">FACIJS</option>
-          </select>
-        </div>
-        <div class="form-group" *ngIf="showCarrera">
-          <label for="Carrera"><strong>Carrera</strong></label>
-          <select id="Carrera" class="form-control" formControlName="Carrera" (change)="onSelectionChange($event, 'carrera')">
-            <option *ngFor="let carrera of carreras" [value]="carrera.value">{{ carrera.label }}</option>
-          </select>
+    <form [formGroup]="form">
+      <div class="form-group">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Facultad"><strong>Facultad</strong></label>
+            <select id="Facultad" class="form-control" formControlName="Facultad" (change)="onFacultadChange($event)">
+              <option value="1">FACS</option>
+              <option value="2">FAIN</option>
+              <option value="3">FEDUC</option>
+              <option value="4">FTEO </option>
+              <option value="5">FACIJS </option>
+            </select>
+          </div>
         </div>
       </div>
-      <div class="column">
-        <div class="form-group" *ngIf="showPlan">
-          <label for="Plan"><strong>Plan</strong></label>
-          <select id="Plan" class="form-control" formControlName="Plan" (change)="onSelectionChange($event, 'plan')">
-            <option value="1">Plan 2020</option>
-            <option value="2">Plan 2024</option>
-          </select>
-        </div>
-        <div class="form-group" *ngIf="showSemestre">
-          <label for="Semestre"><strong>Semestre</strong></label>
-          <select id="Semestre" class="form-control" formControlName="Semestre" (change)="onSelectionChange($event, 'semestre')">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="X">X</option>
-            <option value="XI">XI</option>
-          </select>
+      <div class="form-group" *ngIf="showCarrera">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Carrera"><strong>Carrera</strong></label>
+            <select id="Carrera" class="form-control" formControlName="Carrera" (change)="onCarreraChange($event)">
+              <option *ngFor="let carrera of carreras" [value]="carrera.value">{{ carrera.label }}</option>
+            </select>
+          </div>
         </div>
       </div>
+      <div class="form-group" *ngIf="showPlan">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Plan"><strong>Plan</strong></label>
+            <select id="Plan" class="form-control" formControlName="Plan" (change)="onPlanChange($event)">
+              <option value="1"> Plan 2020</option>
+              <option value="2"> Plan 2024 </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="showSemestre">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Semestre"><strong>Semestre</strong></label>
+            <select id="Semestre" class="form-control" formControlName="Semestre" (change)="onSeccionChange($event)">
+              <option value="1">1 </option>
+              <option value="2">2 </option>
+              <option value="3">3 </option>
+              <option value="4">4 </option>
+              <option value="5">5 </option>
+              <option value="6">6 </option>
+              <option value="7">7 </option>
+              <option value="8">8 </option>
+              <option value="9">9 </option>
+              <option value="X">X </option>
+              <option value="XI">XI </option>
+              
+              
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="form-group" *ngIf="showSeccion">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Seccion"><strong>Seccion</strong></label>
+            <select id="Seccion" class="form-control" formControlName="Seccion" (change)="setSeccion($event)">
+              <option value="1"> FI</option>
+              <option value="2"> FE </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="showAsignatura">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Asignatura"><strong>Asignatura</strong></label>
+            <select id="Asignatura" class="form-control" formControlName="Asignatura" (change)="setAsignatura($event)">
+              <option value="1"> FI</option>
+              <option value="2"> FE </option>
+            </select>
+          </div>
+        </div>
+      </div>
+       <div class="form-group" *ngIf="showHoras">
+        <div class="col1">
+          <div class="form-group">
+            <label for="Horas"><strong>Horas</strong></label>
+            <select id="Horas" class="form-control" formControlName="Horas" (change)="setHoras($event)">
+              <option value="1"> FI</option>
+              <option value="2"> FE </option>
+            </select>
+          </div>
+        </div>
+      </div> --> 
     </form>
-    <table class="table table-striped table-bordered">
-      <thead>
-        <tr>   
-
-          <th>Codigo de Asignatura</th>
-          <th>Rut</th>
-          <th>Nombre </th>
-          <th>Horas de Planificacion</th>
-          <th>Horas Minutos</th>
-          
-          
-        </tr>
-  </thead>
-  <tbody>
-        <tr *ngFor="let visualizarCA of filteredPosts">
-          <td>{{ visualizarCA.idCargaDocente }}</td>
-          <td>{{ visualizarCA.idProfesor }}</td>
-          <td>{{ visualizarCA.Nombre +" " +visualizarCA.Apellido }}</td>
-          
-          
-          <td>{{ visualizarCA.HorasPlanificacion }}</td>
-          <td>{{ visualizarCA.Horas_Minutos }}</td>
-         
-          
-          
-        </tr>
-  </tbody>
-  </table>
   </div>
 </body>
 </html>
