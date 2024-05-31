@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col1">
                         <label for="idProfesor"><strong>Rut:</strong></label>
-                        <input formControlName="idProfesor" id="idProfesor" type="text" class="form-control1" [(ngModel)]=" profesor.idProfesor" readonly>
+                        <input formControlName="idProfesor" id="idProfesor" type="number" class="form-control1" [(ngModel)]=" profesor.idProfesor" readonly>
                         
                     </div>
 
@@ -47,7 +47,7 @@
                 <div class="col1">
                     <div class="form-group">
                         <label for="Telefono"><strong>Teléfono:</strong></label>
-                        <input formControlName="Telefono" id="Telefono" type="text" class="form-control1" [(ngModel)]=" profesor.Telefono">
+                        <input formControlName="Telefono" id="Telefono" type="number" class="form-control1" [(ngModel)]=" profesor.Telefono">
                         <div *ngIf="f['Telefono'].touched && f['Telefono'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Telefono'].errors && f['Telefono'].errors['required']">Es necesario agregar Teléfono.</div>
                         </div>
@@ -114,7 +114,7 @@
                 <div class="col1">
                     <div class="form-group">
                         <label for="Horas"><strong>Horas semanales</strong></label>
-                        <input formControlName="Horas" id="Horas" type="text" class="form-control" [(ngModel)]=" profesor.Horas">
+                        <input formControlName="Horas" id="Horas" type="number" class="form-control" [(ngModel)]=" profesor.Horas">
 
                         <div *ngIf="f['Horas'].touched && f['Horas'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Horas'].errors && f['Horas'].errors['required']">Es necesario argregar Horas.</div>
@@ -124,7 +124,7 @@
                 <div class="col1">
                     <div class="form-group">
                         <label for="ValorHora"><strong>Valor/Hora</strong></label>
-                        <input formControlName="ValorHora" id="ValorHora" type="text" class="form-control" [(ngModel)]=" profesor.ValorHora">
+                        <input formControlName="ValorHora" id="ValorHora" type="number" class="form-control" [(ngModel)]=" profesor.ValorHora">
 
                         <div *ngIf="f['ValorHora'].touched && f['ValorHora'].invalid" class="alert alert-danger">
                             <div *ngIf="f['ValorHora'].errors && f['ValorHora'].errors['required']">Es necesario argregar ValorHora .</div>
