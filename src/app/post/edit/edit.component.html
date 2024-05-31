@@ -62,7 +62,8 @@
                 id="Horas" 
                 type="number" 
                 [(ngModel)]="post.Horas"
-                class="form-control">
+                class="form-control"
+                min="1">
             <div *ngIf="f['Horas'].touched && f['Horas'].invalid" class="alert alert-danger">
                 <div *ngIf="f['Horas'].errors && f['Horas'].errors['required']">Se requiere una cantidad de Horas.</div>
             </div>
@@ -75,7 +76,8 @@
                 id="NumeroAlumnos" 
                 type="number" 
                 [(ngModel)]="post.NumeroAlumnos"
-                class="form-control">
+                class="form-control"
+                min="1">
             <div *ngIf="f['NumeroAlumnos'].touched && f['NumeroAlumnos'].invalid" class="alert alert-danger">
                 <div *ngIf="f['NumeroAlumnos'].errors && f['NumeroAlumnos'].errors['required']">Se requiere una cantidad de alumnos.</div>
             </div>
