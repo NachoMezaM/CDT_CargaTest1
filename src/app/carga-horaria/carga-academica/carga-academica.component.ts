@@ -3,13 +3,16 @@ import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
+import { VisualizarCA} from '../visualizar-carga';
+import { VisualizarCargaService } from '../visualizar-carga.service';
 
 @Component({
   selector: 'app-carga-academica',
   standalone: true,
   templateUrl: './carga-academica.component.html',
   styleUrls: ['./carga-academica.component.css'],
-  imports: [BarranavegacionComponent, ReactiveFormsModule, FormsModule, CommonModule]
+  imports: [CommonModule, RouterModule, RouterOutlet, RouterLink, BarranavegacionComponent,ReactiveFormsModule, FormsModule]
 })
 export class CargaAcademicaComponent {
   form: FormGroup;
@@ -20,8 +23,11 @@ export class CargaAcademicaComponent {
   showAsignatura=false;
   showHoras=false;
   carreras: { value: string; label: string; }[] = [];
+  visualizarCA: VisualizarCA[] = [];
+  filteredPosts: any[] = [];  
+  busqueda: string = '';
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, public visualizarService: VisualizarCargaService) {
     this.form = this.fb.group({
       Facultad: [''],
       Carrera: [''],
@@ -29,6 +35,16 @@ export class CargaAcademicaComponent {
       Seccion:[''],
       Plan:[''],
     });
+    this.filteredPosts=this.visualizarCA;
+    
+  }
+  ngOnInit(): void {
+ 
+    this.visualizarService.getAll().subscribe((data: VisualizarCA[])=>{
+      this.visualizarCA = data;
+      this.filteredPosts = this.visualizarCA;
+      console.log(this.visualizarCA);
+    })  
   }
 
   onFacultadChange(event: Event) {
@@ -82,79 +98,58 @@ export class CargaAcademicaComponent {
     this.carreras = carrerasByFacultad[facultadId] || [];
     this.form.get('Carrera')?.setValue(this.carreras.length ? this.carreras[0].value : '');
   }
-
-  onCarreraChange(event: Event) {
+  onSelectionChange(event: Event, fieldName: string) {
     const target = event.target as HTMLSelectElement;
     const selectedValue = target.value; // Keep as string for indexing
-    console.log('Carrera seleccionada:', selectedValue);
+    console.log(`${fieldName} seleccionada:`, selectedValue);
 
-    // Lógica para mostrar el campo "semestre"
-    this.showPlan = !!selectedValue;
-  }
-  onPlanChange(event: Event) {
+    // Update the appropriate show field based on the fieldName
+    switch (fieldName) {
+        case 'carrera':
+            this.showPlan = !!selectedValue;
+            break;
+        case 'plan':
+            this.showSemestre = !!selectedValue;
+            break;
+        case 'semestre':
+            // Handle semester-specific logic if any
+            break;
+        case 'seccion':
+            this.showSeccion = !!selectedValue;
+            break;
+        case 'asignatura':
+            this.showAsignatura = !!selectedValue;
+            break;
+        case 'horas':
+            this.showHoras = !!selectedValue;
+            break;
+        default:
+            break;
+    }
+}
+
+setSelection(event: Event, fieldName: string) {
     const target = event.target as HTMLSelectElement;
     const selectedValue = target.value; // Keep as string for indexing
-    console.log('Carrera seleccionada:', selectedValue);
+    console.log(`${fieldName} seleccionado:`, selectedValue);
+}
 
-    // Lógica para mostrar el campo "semestre"
-    this.showSemestre = !!selectedValue;
-  }
 
-  setPlan(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const selectedValue = target.value; // Keep as string for indexing
-    console.log('Semestre seleccionado:', selectedValue);
-  }
 
-  setSemestre(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const selectedValue = target.value; // Keep as string for indexing
-    console.log('Semestre seleccionado:', selectedValue);
-  }
-  
-  onSeccionChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const selectedValue = target.value; // Keep as string for indexing
-    console.log('Seccion  seleccionada:', selectedValue);
 
-    // Lógica para mostrar el campo "semestre"
-    this.showSeccion = !!selectedValue;
-  }
+/*
+Busqueda por estado || Activo = "Activo" / Inactivo = "Inactivo"
+filterByEstado(estado: string) {
+this.filteredPosts = this.visualizarCA.filter(visualizarCA => visualizarCA.Estado === estado);
+}*/
+//Busqueda por letras, Busca por (Todo Mayuscula, Todo Minuscula, Mayusculas y Minusculas)
+onSearch(event: any) {
+this.busqueda = event.target.value;
+this.filteredPosts = this.visualizarCA.filter(visualizarCA => visualizarCA.idAsignaturaSeccion.toLocaleLowerCase().includes(this.busqueda) || visualizarCA.idProfesor.toLocaleLowerCase().includes(this.busqueda)
+|| visualizarCA.idProfesor.toLocaleUpperCase().includes(this.busqueda) || visualizarCA.idAsignaturaSeccion.toLocaleUpperCase().includes(this.busqueda) || visualizarCA.idAsignaturaSeccion.includes(this.busqueda) || visualizarCA.idProfesor.includes(this.busqueda));
+}
 
-  setSeccion(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const selectedValue = target.value; // Keep as string for indexing
-    console.log('Seccion seleccionado:', selectedValue);
-  }
-  onAsignaturaChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const selectedValue = target.value; // Keep as string for indexing
-    console.log('Asignatura  seleccionada:', selectedValue);
 
-    // Lógica para mostrar el campo "semestre"
-    this.showAsignatura = !!selectedValue;
-  }
 
-  setAsignatura(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const selectedValue = target.value; // Keep as string for indexing
-    console.log('Seccion seleccionado:', selectedValue);
-  }
-  onHorasChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const selectedValue = target.value; // Keep as string for indexing
-    console.log('Horas  seleccionada:', selectedValue);
-
-    // Lógica para mostrar el campo "semestre"
-    this.showHoras = !!selectedValue;
-  }
-
-  setHoras(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const selectedValue = target.value; // Keep as string for indexing
-    console.log('Seccion seleccionado:', selectedValue);
-  }
-  
-  
 
 }
