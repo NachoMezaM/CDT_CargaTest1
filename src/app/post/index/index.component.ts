@@ -29,7 +29,7 @@ export class IndexComponent {
 onSearch(event: any) {
   this.busqueda = event.target.value;
 
-  this.filteredPosts = this.posts.filter(post => post.Nombre.toLocaleLowerCase().includes(this.busqueda) || post.idAsignatura.toLocaleLowerCase().includes(this.busqueda)
+  this.filteredPosts = this.posts.filter(post => post.Nombre.toLocaleLowerCase().includes(this.busqueda) || post.idAsignatura.toLocaleLowerCase().includes(this.busqueda) || post.TipoAsignatura.toLocaleLowerCase().includes(this.busqueda) || post.TipoAsignatura.toLocaleUpperCase().includes(this.busqueda) || post.TipoAsignatura.includes(this.busqueda)
   || post.idAsignatura.toLocaleUpperCase().includes(this.busqueda) || post.Nombre.toLocaleUpperCase().includes(this.busqueda) || post.Nombre.includes(this.busqueda) || post.idAsignatura.includes(this.busqueda));
 }
 
