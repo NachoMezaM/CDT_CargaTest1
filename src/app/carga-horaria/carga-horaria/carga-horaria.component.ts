@@ -291,7 +291,6 @@ export class CargaHorariaComponent {
     const año = (document.getElementById('año') as HTMLInputElement).value;
 
     const filas = document.querySelectorAll('#asignaturas-body tr');
-    const filasAdministrativa = document.querySelectorAll('#carga-administrativa-body tr');
     let algunaFilaGuardada = false; // Variable para controlar si al menos una fila se guardó con éxito
 
     filas.forEach((fila) => {
@@ -641,10 +640,30 @@ export class CargaHorariaComponent {
     );
   }
 
-  guardarCargaAdministrativa(idProfesor: string, carga: string, Horas: number, minutos: number): Promise<boolean> {
+  guardarDatosAdministrativos() {
+    const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
+    const carga = (document.getElementById('Carga') as HTMLSelectElement).value;
+    const Hora = parseInt((document.getElementById('Horas') as HTMLInputElement).value);
+    const minutos = Hora * 60; // Calcular los minutos
+  
+    this.guardarCargaAdministrativa(idProfesor, carga, Hora, minutos)
+    .then((guardado) => {
+        if (guardado) {
+          alert('Se guardaron los datos correctamente.');
+        } else {
+          alert('No se guardaron los datos debido a duplicados.');
+        }
+      })
+    .catch((error) => {
+        console.error('Error al guardar los datos:', error);
+        alert('Ocurrió un error al guardar los datos. Por favor, inténtalo de nuevo más tarde.');
+      });
+  }
+
+  guardarCargaAdministrativa(idProfesor: string, idTrabajoAdministrativo: string, Hora: number, Hora_Minutos: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', { idProfesor, carga, Horas, minutos, })
-        .subscribe(
+      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos,})
+       .subscribe(
           (data) => {
             console.log('Carga administrativa guardada exitosamente:', data);
             resolve(true);
