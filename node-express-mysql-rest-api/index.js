@@ -283,7 +283,7 @@ app.get("/obtener-hora-maxima-docencia/:idJerarquia", (req, res) => {
   });
 });
 
-//Docencia Directa
+//--------------------------Docencia Directa---------------------------------
 
 // Ruta para obtener las secciones disponibles para un código de asignatura
 app.post("/obtener-secciones", (req, res) => {
@@ -344,13 +344,7 @@ app.get("/detalles-asignatura/:codigo/:seccion", (req, res) => {
 
 // Ruta para guardar la planificación y los minutos en la tabla CargaDocente
 app.post("/guardar-carga-docente", (req, res) => {
-  const {
-    idProfesor,
-    idAsignaturaSeccion,
-    HorasPlanificacion,
-    Horas_Minutos,
-    Anio,
-  } = req.body;
+  const {idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio, } = req.body;
 
   // Verificar si ya existe una entrada con los mismos valores de idProfesor, idAsignaturaSeccion y Anio
   db.query(
@@ -391,21 +385,15 @@ app.post("/buscar-datos-profesor", (req, res) => {
   const { rut } = req.body;
 
   // Realizar la consulta en la base de datos para obtener las filas relacionadas con el idProfesor
-  const query = `
-  SELECT CD.HorasPlanificacion, CD.Horas_Minutos, AS1.idAsignatura, AS1.idSeccion, AS1.Horas, AS1.Nombre
-FROM (
-    SELECT CD.*
-    FROM CargaDocente CD
-    JOIN AsignaturaSeccion AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion
-    JOIN Asignatura A ON AS1.idAsignatura = A.idAsignatura
-    WHERE CD.idProfesor = ?
-) AS CD
-JOIN (
-    SELECT AS2.*, A2.Nombre AS Nombre, A2.Horas AS Horas
-    FROM AsignaturaSeccion AS AS2
-    JOIN Asignatura A2 ON AS2.idAsignatura = A2.idAsignatura
-) AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion;
-  `;
+  const query = `SELECT CD.HorasPlanificacion, CD.Horas_Minutos, AS1.idAsignatura, AS1.idSeccion, AS1.Horas, AS1.Nombre
+                 FROM ( SELECT CD.*
+                 FROM CargaDocente CD
+                 JOIN AsignaturaSeccion AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion
+                 JOIN Asignatura A ON AS1.idAsignatura = A.idAsignatura
+                 WHERE CD.idProfesor = ? ) AS CD
+                 JOIN ( SELECT AS2.*, A2.Nombre AS Nombre, A2.Horas AS Horas
+                 FROM AsignaturaSeccion AS AS2
+                 JOIN Asignatura A2 ON AS2.idAsignatura = A2.idAsignatura ) AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion; `;
   const values = [rut];
 
   db.query(query, values, (err, result) => {
@@ -477,15 +465,15 @@ app.post("/eliminar-fila", (req, res) => {
   );
 });
 
+//--------------------------Carga Administrativa--------------------------------
+
 // Guardar carga administrativa
 app.post('/guardar-carga-administrativa', (req, res) => {
-  const { idProfesor, Horas, Hora_Minutos, idTrabajoAdministrativo  } = req.body;
+  const { idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos } = req.body;
+console.log('funca')
 
-  const query = `
-  INSERT INTO CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos)
-  VALUES (?, ?, ?, ?)
-  `;
-const values = [idProfesor, Horas, Hora_Minutos, idTrabajoAdministrativo];
+  const query = `INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos) VALUES (?, ?, ?, ?)`;
+  const values = [idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos ];
 
   db.query(query, values, (err, result) => {
     if (err) {
@@ -504,10 +492,10 @@ const values = [idProfesor, Horas, Hora_Minutos, idTrabajoAdministrativo];
 
     //Consulta para obtener los datos administrativos del profesor
    const query = `
-     SELECT CargaAdministrativa.*, TrabajoAdministrativo.Nombre AS nombre
-     FROM CargaAdministrativa
-     JOIN TrabajoAdministrativo ON CargaAdministrativa.idTrabajoAdministrativo = TrabajoAdministrativo.idTrabajo
-     WHERE CargaAdministrativa.idProfesor = ?
+   SELECT CargaAdministrativa.Hora AS horas, CargaAdministrativa.Hora_Minutos AS minutos, TrabajoAdministrativo.Nombre AS carga
+   FROM CargaAdministrativa
+   JOIN TrabajoAdministrativo ON CargaAdministrativa.idTrabajoAdministrativo = TrabajoAdministrativo.idTrabajo
+   WHERE CargaAdministrativa.idProfesor = ?
    `;
    const values = [rut];
 
@@ -521,6 +509,21 @@ const values = [idProfesor, Horas, Hora_Minutos, idTrabajoAdministrativo];
      res.status(200).json(result);
    });
  });
+
+// Ruta para obtener todos los nombres de trabajos administrativos
+app.get('/trabajos-administrativos', (req, res) => {
+  const query = 'SELECT Nombre AS carga FROM TrabajoAdministrativo';
+  
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error al obtener trabajos administrativos:', err);
+      res.status(500).send('Error al obtener trabajos administrativos');
+      return;
+    }
+    
+    res.status(200).json(results);
+  });
+});
 
 /* Start server */
 app.listen(port, () => {

@@ -32,8 +32,6 @@ export const routes: Routes = [
       { path: 'carga-horaria/carga-horaria', component: CargaHorariaComponent},
       { path: 'carga-horaria/visualizar-carga', component: VisualizarCargaComponent},
       { path: 'carga-horaria/cargarAcademica', component:CargaAcademicaComponent},
-
-
       { path: 'carga-horaria/visualizar-carga', component: VisualizarCargaComponent},
       {path:  'view-seccion/view-seccion', component: ViewSeccionesComponent}
 
