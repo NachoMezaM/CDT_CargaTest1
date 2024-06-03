@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col1">
                         <label for="idProfesor"><strong>Rut:</strong></label>
-                        <input formControlName="idProfesor" id="idProfesor" type="string" class="form-control1" (onchange)="verificarRut()">
+                        <input formControlName="idProfesor" id="idProfesor" type="string" class="form-control1" (change)="verificarRut()">
                         <div *ngIf="f['idProfesor'].touched && f['idProfesor'].invalid" class="alert alert-danger">
                             <div *ngIf="f['idProfesor'].errors && f['idProfesor'].errors['required']">Es necesario agregar rut.</div>
                         </div>
@@ -179,6 +179,5 @@
                 <button class="boton" type="submit" [disabled]="submitDisabled">Crear Docente</button>
             </div>
         </form>
-        <button (click)="verificarRut()" class="boton">Verificar Rut</button>
     </div>
 </body>
