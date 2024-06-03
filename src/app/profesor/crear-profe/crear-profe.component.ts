@@ -30,11 +30,10 @@ export class CrearProfeComponent {
         
 
 
-    verificarRut(): void {
-      const rut = this.form.value.idProfesor;
+    verificarRut(event: any) {
+      const rut = event.target.value;
   
       if (!rut) {
-          alert('Debes ingresar un Rut.');
           return;
       }
   
@@ -43,7 +42,7 @@ export class CrearProfeComponent {
       const digitoVerificador = partesRut[1];
   
       if (!numeroRut ||!digitoVerificador) {
-          alert('El formato de Rut es incorrecto. Debe ser xxxxxxxx-x');
+        this.form.get('idProfesor')!.setErrors({ required: true, rutInvalido: true });
           return;
       }
   
@@ -51,10 +50,10 @@ export class CrearProfeComponent {
   
       if (valid) {
         this.submitDisabled = false;
-          alert('El Rut es válido.');
+        this.form.get('idProfesor')!.setErrors(null);
       } else {
         this.submitDisabled = true;
-          alert('El Rut es inválido.');
+        this.form.get('idProfesor')!.setErrors({ rutInvalido: true });
       }
   }
   

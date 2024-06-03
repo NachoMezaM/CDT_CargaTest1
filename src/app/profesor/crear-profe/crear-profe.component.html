@@ -21,9 +21,10 @@
                 <div class="row">
                     <div class="col1">
                         <label for="idProfesor"><strong>Rut:</strong></label>
-                        <input formControlName="idProfesor" id="idProfesor" type="string" class="form-control1" (change)="verificarRut()">
+                        <input formControlName="idProfesor" id="idProfesor" type="string" class="form-control1" (change)="verificarRut($event)">
                         <div *ngIf="f['idProfesor'].touched && f['idProfesor'].invalid" class="alert alert-danger">
                             <div *ngIf="f['idProfesor'].errors && f['idProfesor'].errors['required']">Es necesario agregar rut.</div>
+                            <div *ngIf="f['idProfesor'].errors && f['idProfesor'].errors['rutInvalido']">El Rut es inválido.</div>
                         </div>
                     </div>
                     <div class="col21 ">
