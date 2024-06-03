@@ -16,7 +16,6 @@ export class VisualizarCargaComponent {
     filteredPosts: any[] = [];  
     busqueda: string = '';
   
- 
  /*
 Busqueda por estado || Activo = "Activo" / Inactivo = "Inactivo"
  filterByEstado(estado: string) {

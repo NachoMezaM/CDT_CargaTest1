@@ -14,15 +14,15 @@
         <div class="form-group">
           <label for="Facultad"><strong>Facultad</strong></label>
           <select id="Facultad" class="form-control" formControlName="Facultad" (change)="onFacultadChange($event)">
-            <option value="1">FACS</option>
-            <option value="2">FAIN</option>
-            <option value="3">FEDUC</option>
-            <option value="4">FTEO</option>
-            <option value="5">FACIJS</option>
+            <option value=1>FACS</option>
+            <option value=2>FAIN</option>
+            <option value=3>FEDUC</option>
+            <option value=4>FTEO</option>
+            <option value=5>FACIJS</option>
           </select>
         </div>
         <div class="form-group" *ngIf="showCarrera">
-          <label for="Carrera"><strong>Carrera</strong></label>
+          <label for="Carrera" ><strong>Carrera</strong></label>
           <select id="Carrera" class="form-control" formControlName="Carrera" (change)="onSelectionChange($event, 'carrera')">
             <option *ngFor="let carrera of carreras" [value]="carrera.value">{{ carrera.label }}</option>
           </select>
@@ -32,8 +32,7 @@
         <div class="form-group" *ngIf="showPlan">
           <label for="Plan"><strong>Plan</strong></label>
           <select id="Plan" class="form-control" formControlName="Plan" (change)="onSelectionChange($event, 'plan')">
-            <option value="1">Plan 2020</option>
-            <option value="2">Plan 2024</option>
+            <option *ngFor="let Plan of planes" [value]="Plan.value">{{ Plan.label }}</option>
           </select>
         </div>
         <div class="form-group" *ngIf="showSemestre">
@@ -53,32 +52,28 @@
           </select>
         </div>
       </div>
+      <div> 
+        <h2> </h2>
+      </div>
     </form>
+
     <table class="table table-striped table-bordered">
       <thead>
         <tr>   
 
-          <th>Codigo de Asignatura</th>
+          <th>Asignatura Seccion</th>
           <th>Rut</th>
           <th>Nombre </th>
-          <th>Horas de Planificacion</th>
-          <th>Horas Minutos</th>
-          
-          
+          <th>Horas de Planificacion (45')</th>
+
         </tr>
   </thead>
   <tbody>
         <tr *ngFor="let visualizarCA of filteredPosts">
-          <td>{{ visualizarCA.idCargaDocente }}</td>
+          <td>{{ visualizarCA.idAsignaturaSeccion }}</td>
           <td>{{ visualizarCA.idProfesor }}</td>
           <td>{{ visualizarCA.Nombre +" " +visualizarCA.Apellido }}</td>
-          
-          
           <td>{{ visualizarCA.HorasPlanificacion }}</td>
-          <td>{{ visualizarCA.Horas_Minutos }}</td>
-         
-          
-          
         </tr>
   </tbody>
   </table>
@@ -87,4 +82,4 @@
 </html>
 
 <!-- 
-SELECT PA.*, ASec.Semestre , Ca.Nombre as 'Carrera',Fa.Nombre as 'Facultad', Asig.*  FROM cargaacademica.PlanAcademico as PA , cargaacademica.Carrera as Ca , cargaacademica.Facultad as Fa, cargaacademica.AsignaturaSeccion as ASec, cargaacademica.Asignatura as Asig where Ca.idFacultad=Fa.idFacultad && PA.idCarrera=Ca.idCarrera && PA.idPlanAcademico=Asig.idPlanAcademico && ASec.idAsignatura=Asig.idAsignatura ; -->
+ -->

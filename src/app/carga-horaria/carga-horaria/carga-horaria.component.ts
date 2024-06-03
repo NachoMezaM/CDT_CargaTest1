@@ -27,7 +27,7 @@ export class CargaHorariaComponent {
   minutos!: number;
   rut!: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
 
@@ -44,7 +44,7 @@ export class CargaHorariaComponent {
     const rutInput = document.getElementById('rut') as HTMLInputElement;
     rutInput.addEventListener('input', () => {
       const rut = rutInput.value;
-        this.buscarDatosAdministrativos(rut);
+      this.buscarDatosAdministrativos(rut);
     });
   }
 
@@ -111,53 +111,53 @@ export class CargaHorariaComponent {
     const año = (document.getElementById('año') as HTMLInputElement).value;
 
     this.http.post<any>('http://localhost:3000/buscar-datos', { rut, nombre, año })
-    .subscribe((response) => {
-          //console.log('Datos encontrados:', response);
-          // Verificar si la respuesta es un array y contiene al menos un elemento
-          if (Array.isArray(response) && response.length > 0) {
-            // Buscar el resultado que coincide con el rut buscado o el nombre y apellido
-            const data = response.find(
-              (item) =>
-                item.idProfesor === rut ||
-                item.Nombre + ' ' + item.Apellido === nombre
-            );
-            if (data) {
-              // Concatenar nombre y apellido
-              const nombreCompleto = data.Nombre + ' ' + data.Apellido;
-              let jerarquia = '';
-              switch (data.idJerarquia) {
-                case 1:
-                  jerarquia = 'Instructor';
-                  break;
-                case 2:
-                  jerarquia = 'Asistente';
-                  break;
-                case 3:
-                  jerarquia = 'Asociado';
-                  break;
-                case 4:
-                  jerarquia = 'Titular';
-                  break;
-              }
-              // Actualizar los campos del formulario con los datos encontrados
-              (document.getElementById('nombre') as HTMLInputElement).value =nombreCompleto;
-              (document.getElementById('rut') as HTMLInputElement).value =data.idProfesor;
-              document.getElementById('grado')!.innerText = data.Grado;
-              document.getElementById('jerarquizacion')!.innerText = jerarquia;
-              document.getElementById('horascontrato')!.innerText = data.Horas;
-              // Aquí obtenemos las horas máximas de docencia desde la tabla jerarquia
-              this.obtenerHoraMaximaDocencia(data.idJerarquia);
-            } else {
-              console.error(
-                'No se encontraron registros con el rut o nombre/apellido proporcionados.'
-              );
+      .subscribe((response) => {
+        //console.log('Datos encontrados:', response);
+        // Verificar si la respuesta es un array y contiene al menos un elemento
+        if (Array.isArray(response) && response.length > 0) {
+          // Buscar el resultado que coincide con el rut buscado o el nombre y apellido
+          const data = response.find(
+            (item) =>
+              item.idProfesor === rut ||
+              item.Nombre + ' ' + item.Apellido === nombre
+          );
+          if (data) {
+            // Concatenar nombre y apellido
+            const nombreCompleto = data.Nombre + ' ' + data.Apellido;
+            let jerarquia = '';
+            switch (data.idJerarquia) {
+              case 1:
+                jerarquia = 'Instructor';
+                break;
+              case 2:
+                jerarquia = 'Asistente';
+                break;
+              case 3:
+                jerarquia = 'Asociado';
+                break;
+              case 4:
+                jerarquia = 'Titular';
+                break;
             }
+            // Actualizar los campos del formulario con los datos encontrados
+            (document.getElementById('nombre') as HTMLInputElement).value = nombreCompleto;
+            (document.getElementById('rut') as HTMLInputElement).value = data.idProfesor;
+            document.getElementById('grado')!.innerText = data.Grado;
+            document.getElementById('jerarquizacion')!.innerText = jerarquia;
+            document.getElementById('horascontrato')!.innerText = data.Horas;
+            // Aquí obtenemos las horas máximas de docencia desde la tabla jerarquia
+            this.obtenerHoraMaximaDocencia(data.idJerarquia);
           } else {
             console.error(
-              'La respuesta del servidor no es un array o está vacía.'
+              'No se encontraron registros con el rut o nombre/apellido proporcionados.'
             );
           }
-        },
+        } else {
+          console.error(
+            'La respuesta del servidor no es un array o está vacía.'
+          );
+        }
+      },
         (error) => {
           console.error('Error al buscar datos:', error);
         }
@@ -304,11 +304,11 @@ export class CargaHorariaComponent {
         const minutos = parseInt(columnas[4].innerText);
 
         this.guardarCargaDocente(idProfesor, `${codigo}${seccion}`, planificacion, minutos, año)
-        .then((guardado) => {
-          if (guardado) {
-            algunaFilaGuardada = true;
-          }
-        });
+          .then((guardado) => {
+            if (guardado) {
+              algunaFilaGuardada = true;
+            }
+          });
       }
     });
 
@@ -332,27 +332,28 @@ export class CargaHorariaComponent {
       }
     });
   }
-  
-  guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificacion: number, minutos: number, año: string ): Promise<boolean> {
+
+  guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificacion: number, minutos: number, año: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.http .post<any>('http://localhost:3000/guardar-carga-docente', { idProfesor, idAsignaturaSeccion, HorasPlanificacion: planificacion, Horas_Minutos: minutos, Anio: año,
+      this.http.post<any>('http://localhost:3000/guardar-carga-docente', {
+        idProfesor, idAsignaturaSeccion, HorasPlanificacion: planificacion, Horas_Minutos: minutos, Anio: año,
       }).subscribe(
         (data) => {
           console.log('Carga docente guardada exitosamente:', data);
           resolve(true); // Indicar que la fila se guardó con éxito
-        },(error) => {
+        }, (error) => {
           console.error('Error al guardar la carga docente:', error);
           if (
             error.status === 400 &&
             error.error.message === 'No se guardaron filas duplicadas'
-            ) {
-              resolve(false); // Indicar que la fila no se guardó debido a duplicados
-            } else {
-              alert('fila o filas duplicadas.');
-              reject(error);
-            }
+          ) {
+            resolve(false); // Indicar que la fila no se guardó debido a duplicados
+          } else {
+            alert('fila o filas duplicadas.');
+            reject(error);
           }
-        );
+        }
+      );
     });
   }
 
@@ -371,19 +372,19 @@ export class CargaHorariaComponent {
 
     // Realizar una solicitud POST al servidor para eliminar la fila
     this.http.post<any>('http://localhost:3000/eliminar-fila', { codigo, seccion, rut, })
-    .subscribe(
-      (data) => {
-        // Manejar la respuesta del servidor
-        console.log('Respuesta del servidor:', data);
-        if (data && data.message === 'Fila eliminada exitosamente') {
-          console.log('Fila eliminada exitosamente:', data);
-          // Eliminar la fila del DOM si se eliminó con éxito de la base de datos
-          if (row.parentNode) {
-            row.parentNode.removeChild(row);
-          }
-        } else {
-          console.error('Error al eliminar la fila:', data);
-          alert('Ocurrió un error al eliminar la fila en la base de datos. Por favor, inténtalo de nuevo más tarde.');
+      .subscribe(
+        (data) => {
+          // Manejar la respuesta del servidor
+          console.log('Respuesta del servidor:', data);
+          if (data && data.message === 'Fila eliminada exitosamente') {
+            console.log('Fila eliminada exitosamente:', data);
+            // Eliminar la fila del DOM si se eliminó con éxito de la base de datos
+            if (row.parentNode) {
+              row.parentNode.removeChild(row);
+            }
+          } else {
+            console.error('Error al eliminar la fila:', data);
+            alert('Ocurrió un error al eliminar la fila en la base de datos. Por favor, inténtalo de nuevo más tarde.');
           }
         },
         (error) => {
@@ -391,31 +392,31 @@ export class CargaHorariaComponent {
           alert('Ocurrió un error al eliminar la fila. Por favor, inténtalo de nuevo más tarde.');
         }
       );
-    }
+  }
 
   buscarDatosProfesor() {
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
 
     this.http.post<any>('http://localhost:3000/buscar-datos-profesor', { rut })
-    .subscribe(
-      (data) => {
-        const tbody = document.getElementById('asignaturas-body');
-        if (!tbody) {
-          console.error('No se encontró el elemento tbody.');
-          return;
-        }
-        // Limpiar la tabla antes de agregar nuevos datos
-        tbody.innerHTML = '';
-        
-        // Iterar sobre los datos y agregar una fila por cada resultado
-        data.forEach((profesor: { HorasPlanificacion: string; Horas_Minutos: string; idAsignatura: string; idSeccion: string; Nombre: any; Horas: any; }) => {
-          const newRow = document.createElement('tr');
-          const horas = parseInt(profesor.HorasPlanificacion);
-          const minutos = parseInt(profesor.Horas_Minutos); // Se obtienen los minutos directamente
-          const planificacion = Math.floor(minutos); // Calcular las horas
-          const totalMinutos = Math.floor(minutos + planificacion);
-          
-          newRow.innerHTML = `
+      .subscribe(
+        (data) => {
+          const tbody = document.getElementById('asignaturas-body');
+          if (!tbody) {
+            console.error('No se encontró el elemento tbody.');
+            return;
+          }
+          // Limpiar la tabla antes de agregar nuevos datos
+          tbody.innerHTML = '';
+
+          // Iterar sobre los datos y agregar una fila por cada resultado
+          data.forEach((profesor: { HorasPlanificacion: string; Horas_Minutos: string; idAsignatura: string; idSeccion: string; Nombre: any; Horas: any; }) => {
+            const newRow = document.createElement('tr');
+            const horas = parseInt(profesor.HorasPlanificacion);
+            const minutos = parseInt(profesor.Horas_Minutos); // Se obtienen los minutos directamente
+            const planificacion = Math.floor(minutos); // Calcular las horas
+            const totalMinutos = Math.floor(minutos + planificacion);
+
+            newRow.innerHTML = `
           <td>${profesor.idAsignatura}</td>
           <td>${profesor.idSeccion}</td>
           <td>${profesor.Nombre}</td>
@@ -425,46 +426,46 @@ export class CargaHorariaComponent {
           <td>${totalMinutos}</td>
           <td><input type="checkbox" class="confirm-checkbox" disabled></td>
           <td><label class="remove-checkbox">✘</label></td>`;
-          tbody.appendChild(newRow);
-          
-          // Centrar el texto en todas las celdas de la nueva fila
-          const cells = newRow.querySelectorAll('td');
-          cells.forEach((cell) => {
-            cell.style.textAlign = 'center';
-          });
-          // Agregar el evento de clic a la "x" para eliminar la fila
-          const removeLabel = newRow.querySelector('.remove-checkbox');
-          if (removeLabel) {
-            removeLabel.addEventListener('click', () => {
-              this.eliminarFila(newRow);
-              this.actualizarBotonGuardar();
+            tbody.appendChild(newRow);
+
+            // Centrar el texto en todas las celdas de la nueva fila
+            const cells = newRow.querySelectorAll('td');
+            cells.forEach((cell) => {
+              cell.style.textAlign = 'center';
             });
+            // Agregar el evento de clic a la "x" para eliminar la fila
+            const removeLabel = newRow.querySelector('.remove-checkbox');
+            if (removeLabel) {
+              removeLabel.addEventListener('click', () => {
+                this.eliminarFila(newRow);
+                this.actualizarBotonGuardar();
+              });
+            }
+
+            // Agregar el evento de clic al botón de eliminación
+            const deleteButton = newRow.querySelector('.remove-btn');
+            if (deleteButton) {
+              deleteButton.addEventListener('click', () => {
+                this.eliminarFila(newRow);
+                this.actualizarBotonGuardar();
+              });
+            }
+
+            // Agregar el evento de cambio al checkbox de confirmación
+            const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
+            if (confirmCheckbox) {
+              confirmCheckbox.addEventListener('change', () => {
+                this.actualizarBotonGuardar();
+              });
+            }
           }
-          
-          // Agregar el evento de clic al botón de eliminación
-          const deleteButton = newRow.querySelector('.remove-btn');
-          if (deleteButton) {
-            deleteButton.addEventListener('click', () => {
-              this.eliminarFila(newRow);
-              this.actualizarBotonGuardar();
-            });
-          }
-          
-          // Agregar el evento de cambio al checkbox de confirmación
-          const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
-          if (confirmCheckbox) {
-            confirmCheckbox.addEventListener('change', () => {
-              this.actualizarBotonGuardar();
-            });
-          }
+          );
+        },
+        (error) => {
+          console.error('Error al buscar datos del profesor:', error);
         }
       );
-    },
-    (error) => {
-      console.error('Error al buscar datos del profesor:', error);
-    }
-  );
-}
+  }
 
   limpiarTabla() {
     const tbody = document.getElementById('asignaturas-body');
@@ -478,17 +479,17 @@ export class CargaHorariaComponent {
     const codigo = (document.getElementById('codigo') as HTMLInputElement).value;
 
     this.http.post<any>('http://localhost:3000/obtener-secciones', { codigo })
-    .subscribe(
-      (data) => {
-        const seccionSelect = document.getElementById('seccion') as HTMLSelectElement;
-        seccionSelect.innerHTML = ''; // Limpiar opciones anteriores
-        if (Array.isArray(data)) {
-          data.forEach((Seccion) => {
-            const option = document.createElement('option');
-            option.value = Seccion.idSeccion;
-            option.textContent = Seccion.idSeccion;
-            seccionSelect.appendChild(option);
-          });
+      .subscribe(
+        (data) => {
+          const seccionSelect = document.getElementById('seccion') as HTMLSelectElement;
+          seccionSelect.innerHTML = ''; // Limpiar opciones anteriores
+          if (Array.isArray(data)) {
+            data.forEach((Seccion) => {
+              const option = document.createElement('option');
+              option.value = Seccion.idSeccion;
+              option.textContent = Seccion.idSeccion;
+              seccionSelect.appendChild(option);
+            });
           } else {
             console.error('La respuesta del servidor no es un array:', data);
           }
@@ -587,42 +588,42 @@ export class CargaHorariaComponent {
         <td><input type="checkbox" class="confirm-checkbox"></td>
         <td><label class="remove-checkbox">✘</label></td>
       `;
-    
-      tbody.appendChild(newRow);
 
-      // Centrar el texto en todas las celdas de la nueva fila
-      const cells = newRow.querySelectorAll('td');
-      cells.forEach((cell) => {
-        cell.style.textAlign = 'center';
-      });
+        tbody.appendChild(newRow);
 
-       // Agregar el evento de clic a la "x" para eliminar la fila
-       const removeLabel = newRow.querySelector('.remove-checkbox');
-       if (removeLabel) {
-         removeLabel.addEventListener('click', () => {
-           this.eliminarFila1(newRow);
-           this.actualizarBotonGuardar();
-         });
-       }
-
-       // Agregar el evento de clic al botón de eliminación
-       const deleteButton = newRow.querySelector('.remove-btn');
-       if (deleteButton) {
-         deleteButton.addEventListener('click', () => {
-           this.eliminarFila1(newRow);
-           this.actualizarBotonGuardar();
-         });
-       }
-
-       // Agregar el evento de cambio al checkbox de confirmación
-       const confirmCheckbox = newRow.querySelector(
-        '.confirm-checkbox'
-      ) as HTMLInputElement;
-      if (confirmCheckbox) {
-        confirmCheckbox.addEventListener('change', () => {
-          this.actualizarBotonGuardar();
+        // Centrar el texto en todas las celdas de la nueva fila
+        const cells = newRow.querySelectorAll('td');
+        cells.forEach((cell) => {
+          cell.style.textAlign = 'center';
         });
-      }
+
+        // Agregar el evento de clic a la "x" para eliminar la fila
+        const removeLabel = newRow.querySelector('.remove-checkbox');
+        if (removeLabel) {
+          removeLabel.addEventListener('click', () => {
+            this.eliminarFila1(newRow);
+            this.actualizarBotonGuardar();
+          });
+        }
+
+        // Agregar el evento de clic al botón de eliminación
+        const deleteButton = newRow.querySelector('.remove-btn');
+        if (deleteButton) {
+          deleteButton.addEventListener('click', () => {
+            this.eliminarFila1(newRow);
+            this.actualizarBotonGuardar();
+          });
+        }
+
+        // Agregar el evento de cambio al checkbox de confirmación
+        const confirmCheckbox = newRow.querySelector(
+          '.confirm-checkbox'
+        ) as HTMLInputElement;
+        if (confirmCheckbox) {
+          confirmCheckbox.addEventListener('change', () => {
+            this.actualizarBotonGuardar();
+          });
+        }
       }
     )
   }
@@ -640,50 +641,50 @@ export class CargaHorariaComponent {
     );
   }
 
-guardarCargaAdministrativa(idProfesor: string, carga: string, Horas: number, minutos: number): Promise<boolean> {
-  return new Promise<boolean>((resolve, reject) => {
-    this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, carga, Horas , minutos,})
-      .subscribe(
-        (data) => {
-          console.log('Carga administrativa guardada exitosamente:', data);
-          resolve(true);
-        },
-        (error) => {
-          console.error('Error al guardar la carga administrativa:', error);
-          reject(error);
-        }
-      );
-  });
-}
+  guardarCargaAdministrativa(idProfesor: string, carga: string, Horas: number, minutos: number): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', { idProfesor, carga, Horas, minutos, })
+        .subscribe(
+          (data) => {
+            console.log('Carga administrativa guardada exitosamente:', data);
+            resolve(true);
+          },
+          (error) => {
+            console.error('Error al guardar la carga administrativa:', error);
+            reject(error);
+          }
+        );
+    });
+  }
 
-cargarTrabajosAdministrativos() {
-  this.http.get<any[]>('http://localhost:3000/trabajos-administrativos').subscribe(
-    (data) => {
-      const selectElement = document.getElementById('Carga') as HTMLSelectElement;
-      data.forEach((trabajo) => {
-        const option = document.createElement('option');
-        option.value = trabajo.carga;
-        option.text = trabajo.carga;
-        selectElement.appendChild(option);
-      });
-    },
-    (error) => {
-      console.error('Error al cargar trabajos administrativos:', error);
+  cargarTrabajosAdministrativos() {
+    this.http.get<any[]>('http://localhost:3000/trabajos-administrativos').subscribe(
+      (data) => {
+        const selectElement = document.getElementById('Carga') as HTMLSelectElement;
+        data.forEach((trabajo) => {
+          const option = document.createElement('option');
+          option.value = trabajo.carga;
+          option.text = trabajo.carga;
+          selectElement.appendChild(option);
+        });
+      },
+      (error) => {
+        console.error('Error al cargar trabajos administrativos:', error);
+      }
+    );
+  }
+
+  eliminarFilaAdministrativa(row: HTMLElement) {
+    if (row.parentNode) {
+      row.parentNode.removeChild(row);
     }
-  );
-}
-
-eliminarFilaAdministrativa(row: HTMLElement) {
-  if (row.parentNode) {
-    row.parentNode.removeChild(row);
   }
-}
 
-limpiarFilasCargaAdministrativa() {
-  const tbody = document.getElementById('carga-administrativa-body');
-  if (tbody) {
-    tbody.innerHTML = ''; // Limpiar el contenido del tbody
+  limpiarFilasCargaAdministrativa() {
+    const tbody = document.getElementById('carga-administrativa-body');
+    if (tbody) {
+      tbody.innerHTML = ''; // Limpiar el contenido del tbody
+    }
   }
-}
 
 }
