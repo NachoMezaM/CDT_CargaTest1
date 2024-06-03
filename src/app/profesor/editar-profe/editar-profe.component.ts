@@ -14,7 +14,6 @@ import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.
     imports: [CommonModule, ReactiveFormsModule, RouterOutlet, RouterLink, BarranavegacionComponent]
 })
 export class EditarProfeComponent {
-
   idProfesor!: number;
   profesor!: Profesor;
   form!: FormGroup;
@@ -85,9 +84,11 @@ export class EditarProfeComponent {
   //        this.router.navigateByUrl('profesor/index-profe');
   //   })
   // }
+
+
   submit() {
     console.log(this.form.value);
-    this.profesorService.find(this.form.value).subscribe(
+    this.profesorService.update(this.idProfesor,this.form.value).subscribe(
       (res: any) => {
         console.log('Profesor creado exitosamente!');
         this.mensajeRespuesta = 'Profesor creado exitosamente';
