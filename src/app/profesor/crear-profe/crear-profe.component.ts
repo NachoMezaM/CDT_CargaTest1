@@ -15,7 +15,7 @@ import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.
 })
 export class CrearProfeComponent {
 
-  
+  submitDisabled: boolean = true;
     form!: FormGroup;
     mensajeRespuesta: string = '';
     /*------------------------------------------
@@ -50,8 +50,10 @@ export class CrearProfeComponent {
       const valid = this.validateRutChileno(rut);
   
       if (valid) {
+        this.submitDisabled = false;
           alert('El Rut es válido.');
       } else {
+        this.submitDisabled = true;
           alert('El Rut es inválido.');
       }
   }
@@ -100,7 +102,7 @@ export class CrearProfeComponent {
         Estado: new FormControl('', [Validators.required]),
         Apellido: new FormControl('', [Validators.required]),
 
-      },{validators: this.validateRut.bind(this)});
+      });
     }
         
     /**
@@ -139,26 +141,6 @@ export class CrearProfeComponent {
       }
       return null;
     }
-
-
-    validateRut(control: AbstractControl): ValidationErrors | null {
-      const rut = control.get('idProfesor')?.value;
-      const dv = control.get('dv')?.value;
-  
-      if (!rut ||!dv) {
-          return null;
-      }
-  
-      const rutStr = `${rut}-${dv}`;
-      const valid = this.validateRutChileno(rutStr);
-  
-      if (!valid) {
-          return { invalidRut: true };
-      }
-  
-      return null;
-  }
-
 
   }
 

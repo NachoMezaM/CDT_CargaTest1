@@ -176,7 +176,7 @@
 
             <div class="linear">
                 <button routerLink="/profesor/index-profe" class="boton">Lista de Docentes</button>
-                <button class="boton" type="submit" [disabled]="!form.valid">Crear Docente</button>
+                <button class="boton" type="submit" [disabled]="submitDisabled">Crear Docente</button>
             </div>
         </form>
         <button (click)="verificarRut()" class="boton">Verificar Rut</button>
