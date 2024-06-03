@@ -344,13 +344,7 @@ app.get("/detalles-asignatura/:codigo/:seccion", (req, res) => {
 
 // Ruta para guardar la planificación y los minutos en la tabla CargaDocente
 app.post("/guardar-carga-docente", (req, res) => {
-  const {
-    idProfesor,
-    idAsignaturaSeccion,
-    HorasPlanificacion,
-    Horas_Minutos,
-    Anio,
-  } = req.body;
+  const {idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio, } = req.body;
 
   // Verificar si ya existe una entrada con los mismos valores de idProfesor, idAsignaturaSeccion y Anio
   db.query(
@@ -391,21 +385,15 @@ app.post("/buscar-datos-profesor", (req, res) => {
   const { rut } = req.body;
 
   // Realizar la consulta en la base de datos para obtener las filas relacionadas con el idProfesor
-  const query = `
-  SELECT CD.HorasPlanificacion, CD.Horas_Minutos, AS1.idAsignatura, AS1.idSeccion, AS1.Horas, AS1.Nombre
-FROM (
-    SELECT CD.*
-    FROM CargaDocente CD
-    JOIN AsignaturaSeccion AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion
-    JOIN Asignatura A ON AS1.idAsignatura = A.idAsignatura
-    WHERE CD.idProfesor = ?
-) AS CD
-JOIN (
-    SELECT AS2.*, A2.Nombre AS Nombre, A2.Horas AS Horas
-    FROM AsignaturaSeccion AS AS2
-    JOIN Asignatura A2 ON AS2.idAsignatura = A2.idAsignatura
-) AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion;
-  `;
+  const query = `SELECT CD.HorasPlanificacion, CD.Horas_Minutos, AS1.idAsignatura, AS1.idSeccion, AS1.Horas, AS1.Nombre
+                 FROM ( SELECT CD.*
+                 FROM CargaDocente CD
+                 JOIN AsignaturaSeccion AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion
+                 JOIN Asignatura A ON AS1.idAsignatura = A.idAsignatura
+                 WHERE CD.idProfesor = ? ) AS CD
+                 JOIN ( SELECT AS2.*, A2.Nombre AS Nombre, A2.Horas AS Horas
+                 FROM AsignaturaSeccion AS AS2
+                 JOIN Asignatura A2 ON AS2.idAsignatura = A2.idAsignatura ) AS AS1 ON CD.idAsignaturaSeccion = AS1.idAsignaturaSeccion; `;
   const values = [rut];
 
   db.query(query, values, (err, result) => {
@@ -481,14 +469,13 @@ app.post("/eliminar-fila", (req, res) => {
 
 // Guardar carga administrativa
 app.post('/guardar-carga-administrativa', (req, res) => {
-  const { rut, Horas, Hora_Minutos } = req.body;
+  const { idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos } = req.body;
 console.log('funca')
 
   const query = `
-  INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos)
-  VALUES (?, ?, ?, ?)
+  INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos) VALUES (?, ?, ?, ?)
   `;
-const values = [rut, Horas, Hora_Minutos ];
+const values = [idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos ];
 
   db.query(query, values, (err, result) => {
     if (err) {
