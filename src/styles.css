@@ -1,4 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 body{
-    background-color: #003366;
+    background-color: #0062C4;  
+}
+.space{
+    background-color: #003366; /* Set the background color to blue */
+  height: 50px; /* Set the height of the footer bar */
+  width: 100%; /* Set the width of the footer bar to 100% */
+  position: absolute; /* Position the footer bar at the bottom of the page */
+  bottom: 0; /* Set the bottom margin to 0 */
+  left: 0; /* Set the left margin to 0 */
+  text-align: center; /* Center the text inside the footer bar */
+  padding: 10px; /* Add some padding to the footer bar */
 }
