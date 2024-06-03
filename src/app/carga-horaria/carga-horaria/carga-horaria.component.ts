@@ -642,10 +642,10 @@ export class CargaHorariaComponent {
   guardarDatosAdministrativos() {
     const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
     const carga = (document.getElementById('Carga') as HTMLSelectElement).value;
-    const horas = parseInt((document.getElementById('Horas') as HTMLInputElement).value);
-    const minutos = horas * 60; // Calcular los minutos
+    const Hora = parseInt((document.getElementById('Horas') as HTMLInputElement).value);
+    const minutos = Hora * 60; // Calcular los minutos
   
-    this.guardarCargaAdministrativa(idProfesor, carga, horas, minutos)
+    this.guardarCargaAdministrativa(idProfesor, carga, Hora, minutos)
     .then((guardado) => {
         if (guardado) {
           alert('Se guardaron los datos correctamente.');
@@ -661,7 +661,7 @@ export class CargaHorariaComponent {
 
   guardarCargaAdministrativa(idProfesor: string, idTrabajoAdministrativo: string, Hora: number, Hora_Minutos: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos})
+      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos,})
        .subscribe(
           (data) => {
             console.log('Carga administrativa guardada exitosamente:', data);

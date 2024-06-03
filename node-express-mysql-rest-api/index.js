@@ -472,10 +472,8 @@ app.post('/guardar-carga-administrativa', (req, res) => {
   const { idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos } = req.body;
 console.log('funca')
 
-  const query = `
-  INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos) VALUES (?, ?, ?, ?)
-  `;
-const values = [idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos ];
+  const query = `INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos) VALUES (?, ?, ?, ?)`;
+  const values = [idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos ];
 
   db.query(query, values, (err, result) => {
     if (err) {
