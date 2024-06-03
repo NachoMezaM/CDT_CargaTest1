@@ -21,12 +21,11 @@
                 <div class="row">
                     <div class="col1">
                         <label for="idProfesor"><strong>Rut:</strong></label>
-                        <input formControlName="idProfesor" id="idProfesor" type="number" class="form-control1">
+                        <input formControlName="idProfesor" id="idProfesor" type="string" class="form-control1">
                         <div *ngIf="f['idProfesor'].touched && f['idProfesor'].invalid" class="alert alert-danger">
                             <div *ngIf="f['idProfesor'].errors && f['idProfesor'].errors['required']">Es necesario agregar rut.</div>
                         </div>
                     </div>
-
                     <div class="col21 ">
                         <label for="Nombre"><strong>Nombre:</strong></label>
                         <input formControlName="Nombre" id="Nombre" type="text" class="form-control2">
@@ -180,5 +179,6 @@
                 <button class="boton" type="submit" [disabled]="!form.valid">Crear Docente</button>
             </div>
         </form>
+        <button (click)="verificarRut()" class="boton">Verificar Rut</button>
     </div>
 </body>
