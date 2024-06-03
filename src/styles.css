@@ -3,6 +3,7 @@ body{
     background-color: #0062C4;
     background-image: url('assets/media/LogoF12.png');
     background-size: cover;
+    background-attachment: fixed;
 
 }
 .space{
