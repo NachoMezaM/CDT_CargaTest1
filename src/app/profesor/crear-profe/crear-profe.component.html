@@ -21,23 +21,23 @@
                 <div class="row">
                     <div class="col1">
                         <label for="idProfesor"><strong>Rut:</strong></label>
-                        <input formControlName="idProfesor" id="idProfesor" type="string" class="form-control1" (change)="verificarRut($event)">
+                        <input formControlName="idProfesor" id="idProfesor" type="string" class="form-control1" (change)="verificarRut($event)" placeholder="12345678-9">
                         <div *ngIf="f['idProfesor'].touched && f['idProfesor'].invalid" class="alert alert-danger">
                             <div *ngIf="f['idProfesor'].errors && f['idProfesor'].errors['required']">Es necesario agregar rut.</div>
                             <div *ngIf="f['idProfesor'].errors && f['idProfesor'].errors['rutInvalido']">El Rut es inválido.</div>
                         </div>
                     </div>
                     <div class="col21 ">
-                        <label for="Nombre"><strong>Nombre:</strong></label>
-                        <input formControlName="Nombre" id="Nombre" type="text" class="form-control2">
+                        <label for="Nombre"><strong>Nombres:</strong></label>
+                        <input formControlName="Nombre" id="Nombre" type="text" class="form-control2" >
                         <div *ngIf="f['Nombre'].touched && f['Nombre'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Nombre'].errors && f['Nombre'].errors['required']">Es necesario agregar Nombre.</div>
                         </div>
                     </div>
                     <div class="col21">
 
-                        <label for="Apellido"><strong>Apellido:</strong></label>
-                        <input formControlName="Apellido" id="Apellido" type="text" class="form-control2">
+                        <label for="Apellido"><strong>Apellidos:</strong></label>
+                        <input formControlName="Apellido" id="Apellido" type="text" class="form-control2" >
                         <div *ngIf="f['Apellido'].touched && f['Apellido'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Apellido'].errors && f['Apellido'].errors['required']">Es necesario agregar Apellido .</div>
                         </div>
@@ -51,7 +51,7 @@
                 <div class="col1">
                     <div class="form-group">
                         <label for="Telefono"><strong>Teléfono:</strong></label>
-                        <input formControlName="Telefono" id="Telefono" type="number" class="form-control1">
+                        <input formControlName="Telefono" id="Telefono" type="number" class="form-control1" placeholder="912345678">
                         <div *ngIf="f['Telefono'].touched && f['Telefono'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Telefono'].errors && f['Telefono'].errors['required']">Es necesario agregar Teléfono.</div>
                         </div>
@@ -122,7 +122,7 @@
                 <div class="col1">
                     <div class="form-group">
                         <label for="Horas"><strong>Horas semanales</strong></label>
-                        <input formControlName="Horas" id="Horas" type="number" name="Horas" class="form-control" oninput="validarNumero()" min="0">
+                        <input formControlName="Horas" id="Horas" type="number" name="Horas" class="form-control" oninput="validarNumero()" min="0" placeholder="MAX 10">
 
                         <div *ngIf="f['Horas'].touched && f['Horas'].invalid" class="alert alert-danger">
                             <div *ngIf="f['Horas'].errors && f['Horas'].errors['required']">Es necesario agregar Horas.</div>
