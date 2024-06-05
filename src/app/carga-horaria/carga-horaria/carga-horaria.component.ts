@@ -517,12 +517,12 @@ export class CargaHorariaComponent {
         console.error('No se encontró el elemento tbody para carga administrativa.');
         return;
       }
-
+  
       tbody.innerHTML = '';
-
+  
       response.forEach((item: { carga: any; horas: any; minutos: any; }) => {
         const newRow = document.createElement('tr');
-
+  
         newRow.innerHTML = `
           <td>${item.carga}</td>
           <td>${item.horas}</td>
@@ -530,52 +530,33 @@ export class CargaHorariaComponent {
           <td><input type="checkbox" class="confirm-checkbox" disabled></td>
           <td><label class="remove-checkbox">✘</label></td>
         `;
-
+  
         tbody.appendChild(newRow);
-
-          // Centrar el texto en todas las celdas de la nueva fila
-          const cells = newRow.querySelectorAll('td');
-          cells.forEach((cell) => {
-            cell.style.textAlign = 'center';
+  
+        // Centrar el texto en todas las celdas de la nueva fila
+        const cells = newRow.querySelectorAll('td');
+        cells.forEach((cell) => {
+          cell.style.textAlign = 'center';
+        });
+  
+        // Agregar el evento de clic a la "x" para eliminar la fila
+        const removeLabel = newRow.querySelector('.remove-checkbox');
+        if (removeLabel) {
+          removeLabel.addEventListener('click', () => {
+            this.eliminarFilaAdministrativa1(newRow);
+            this.actualizarBotonGuardar();
           });
-
-          // Agregar el evento de clic a la "x" para eliminar la fila
-          const removeLabel = newRow.querySelector('.remove-checkbox');
-          if (removeLabel) {
-            removeLabel.addEventListener('click', () => {
-              this.eliminarFilaAdministrativa1(newRow);
-              this.actualizarBotonGuardar();
-            });
-          }
-
-          // Agregar el evento de clic al botón de eliminación
-          const deleteButton = newRow.querySelector('.remove-btn');
-          if (deleteButton) {
-            deleteButton.addEventListener('click', () => {
-              this.eliminarFilaAdministrativa1(newRow);
-              this.actualizarBotonGuardar();
-            });
-          }
-
-          // Agregar el evento de cambio al checkbox de confirmación
-          const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
-          if (confirmCheckbox) {
-            confirmCheckbox.addEventListener('change', () => {
-              this.actualizarBotonGuardar();
-            });
-          }
+        }
       });
     });
   }
 
   agregarFilaAdministrativa1() {
-
     const CargaInput = (document.getElementById('Carga') as HTMLInputElement);
     const HorasInput = document.getElementById('Horas') as HTMLInputElement;
-
-    this.http.get<any>(
-      'http://localhost:3000/trabajos-administrativos'
-    ).subscribe(
+  
+    this.http.get<any>('http://localhost:3000/trabajos-administrativos')
+    .subscribe(
       (data) => {
         const tbody = document.getElementById('carga-administrativa-body');
         if (!tbody) {
@@ -586,54 +567,43 @@ export class CargaHorariaComponent {
         const Carga = CargaInput.value;
         const Horas = parseInt(HorasInput.value);
         const minutos = Horas * 60; // Calcular los minutos
-
+  
         newRow.innerHTML = `
-        <td>${Carga}</td>
-        <td>${Horas}</td>
-        <td>${minutos}</td>
-        <td><input type="checkbox" class="confirm-checkbox"></td>
-        <td><label class="remove-checkbox">✘</label></td>
-      `;
-
+          <td>${Carga}</td>
+          <td>${Horas}</td>
+          <td>${minutos}</td>
+          <td><input type="checkbox" class="confirm-checkbox"></td>
+          <td><label class="remove-checkbox">✘</label></td>
+        `;
+  
         tbody.appendChild(newRow);
-
-          // Centrar el texto en todas las celdas de la nueva fila
-          const cells = newRow.querySelectorAll('td');
-          cells.forEach((cell) => {
-            cell.style.textAlign = 'center';
+  
+        // Centrar el texto en todas las celdas de la nueva fila
+        const cells = newRow.querySelectorAll('td');
+        cells.forEach((cell) => {
+          cell.style.textAlign = 'center';
+        });
+  
+        // Agregar el evento de clic a la "x" para eliminar la fila
+        const removeLabel = newRow.querySelector('.remove-checkbox');
+        if (removeLabel) {
+          removeLabel.addEventListener('click', () => {
+            this.eliminarFilaAdministrativa1(newRow);
+            this.actualizarBotonGuardar();
           });
-
-          // Agregar el evento de clic a la "x" para eliminar la fila
-          const removeLabel = newRow.querySelector('.remove-checkbox');
-          if (removeLabel) {
-            removeLabel.addEventListener('click', () => {
-              this.eliminarFilaAdministrativa1(newRow);
-              this.actualizarBotonGuardar();
-            });
-          }
-
-          // Agregar el evento de clic al botón de eliminación
-          const deleteButton = newRow.querySelector('.remove-btn');
-          if (deleteButton) {
-            deleteButton.addEventListener('click', () => {
-              this.eliminarFilaAdministrativa1(newRow);
-              this.actualizarBotonGuardar();
-            });
-          }
-
-          const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
-          if (confirmCheckbox) {
-            confirmCheckbox.addEventListener('change', () => {
-              this.actualizarBotonGuardar();
-              if (confirmCheckbox.checked) {
-                this.guardarDatosAdministrativos();
-              }
-            });
-          }
+        }
+  
+        // Agregar el evento de cambio al checkbox de confirmación
+        const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
+        if (confirmCheckbox) {
+          confirmCheckbox.addEventListener('change', () => {
+            this.actualizarBotonGuardar();
+          });
+        }
       }
-    )
+    );
   }
-
+  
   buscarDatosAdministrativos(rut: string) {
     return this.http.get<any>(`http://localhost:3000/buscar-datos-administrativos/${rut}`).pipe(
       map((response: any) => {
@@ -652,13 +622,13 @@ export class CargaHorariaComponent {
     const Carga = (document.getElementById('Carga') as HTMLSelectElement).value;
     const Hora = parseInt((document.getElementById('Horas') as HTMLInputElement).value);
     const minutos = Hora * 60; // Calcular los minutos
-
+  
     console.log('Datos a enviar:', { idProfesor, Carga, Hora, minutos });
-
+  
     const data = {
       idTrabajoAdministrativo: parseInt(Carga, 10) // Usa radix 10 para asegurar el análisis decimal
     };
-
+  
     if (data){
       let Carga = '';
       switch (data.idTrabajoAdministrativo) {
@@ -679,10 +649,9 @@ export class CargaHorariaComponent {
           console.log('Valor de Carga después de la declaración switch:', Carga);
           return;
       }
-
     }
   
-    this.guardarCargaAdministrativa(idProfesor,Carga, Hora, minutos)
+    this.guardarCargaAdministrativa(idProfesor, Carga, Hora, minutos)
       .then((guardado) => {
         if (guardado) {
           alert('Se guardaron los datos correctamente.');
@@ -699,7 +668,7 @@ export class CargaHorariaComponent {
 
   guardarCargaAdministrativa(idProfesor: string, idTrabajoAdministrativo: string, Hora: number, minutos: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, idTrabajoAdministrativo, Hora, minutos,})
+      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, idTrabajoAdministrativo, Hora, minutos})
         .subscribe(
           (data) => {
             console.log('Carga administrativa guardada exitosamente:', data);
@@ -737,27 +706,40 @@ export class CargaHorariaComponent {
   }
 
   eliminarFilaAdministrativa1(row: HTMLElement) {
-    const Carga= (row.querySelector('td:nth-child(1)') as HTMLElement).innerText;
-    const Hora = (row.querySelector('td:nth-child(2)') as HTMLElement).innerText;
-    const minutos = (row.querySelector('td:nth-child(3)') as HTMLElement).innerText;
-    const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
+    // Obtener los datos necesarios para identificar la fila
+    const carga = (row.querySelector('td:nth-child(1)') as HTMLElement).innerText;
+    const rut = (document.getElementById('rut') as HTMLInputElement).value;
   
-    this.eliminarFilaAdministrativa(row); // Elimina la fila de la interfaz de usuario
+    if (!carga || !rut) {
+      alert('Error: Carga y RUT son requeridos para eliminar la fila.');
+      return;
+    }
   
-    // Llama al método para eliminar los datos de la base de datos
-    this.http.post<any>('http://localhost:3000/eliminar-carga-administrativa', { idProfesor, Carga, Hora, minutos })
+    // Realizar una solicitud POST al servidor para eliminar la fila
+    this.http.post<any>('http://localhost:3000/eliminar-carga-administrativa', { carga, rut })
       .subscribe(
         (data) => {
-          console.log('Carga administrativa eliminada exitosamente:', data);
+          // Manejar la respuesta del servidor
+          console.log('Respuesta del servidor:', data);
+          if (data && data.message === 'Fila eliminada exitosamente') {
+            console.log('Fila eliminada exitosamente:', data);
+            // Eliminar la fila del DOM si se eliminó con éxito de la base de datos
+            if (row.parentNode) {
+              row.parentNode.removeChild(row);
+            }
+          } else {
+            console.error('Error al eliminar la fila:', data);
+            alert('No se encontró la fila para eliminar.');
+          }
         },
         (error) => {
-          console.error('Error al eliminar carga administrativa:', error);
-          alert('Ocurrió un error al eliminar la carga administrativa. Por favor, inténtalo de nuevo más tarde');
+          console.error('Error al eliminar la fila:', error);
+          alert('Ocurrió un error al eliminar la fila. Por favor, inténtalo de nuevo más tarde.');
         }
       );
   }
-
-  limpiarFilasCargaAdministrativa() {
+  
+  limpiarTablaCargaAdministrativa() {
     const tbody = document.getElementById('carga-administrativa-body');
     if (tbody) {
       tbody.innerHTML = ''; // Limpiar el contenido del tbody

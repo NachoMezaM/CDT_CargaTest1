@@ -525,23 +525,51 @@ app.get('/trabajos-administrativos', (req, res) => {
   });
 });
 
-/* Ruta para eliminar una fila de la tabla CargaDocente */
+
 app.post("/eliminar-carga-administrativa", (req, res) => {
-  const { idTrabajoAdministrativo, Hora, Hora_Minutos, idProfesor } = req.body;
-  //console.log(codigo,seccion);
-  db.query(
-    'DELETE FROM CargaAdministrativa WHERE idProfesor = ? AND idTrabajoAdministrativo = ? AND Hora = ? AND Hora_Minutos = ?',
-    [idTrabajoAdministrativo, Hora, Hora_Minutos, idProfesor],
-    (err, result) => {
+  const { rut, carga } = req.body;
+
+  console.log(`Intentando eliminar carga administrativa para rut: ${rut}, carga: ${carga}`);
+
+  // Consulta para obtener el idTrabajoAdministrativo desde el nombre de la carga
+  const getCargaIdQuery = 'SELECT idTrabajo FROM TrabajoAdministrativo WHERE Nombre = ?';
+  
+  db.query(getCargaIdQuery, [carga], (err, results) => {
+    if (err) {
+      console.error("Error al obtener el idTrabajoAdministrativo:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).json({ message: "No se encontró la carga administrativa con ese nombre" });
+      return;
+    }
+
+    const idTrabajoAdministrativo = results[0].idTrabajo;
+
+    // Eliminar la fila en CargaAdministrativa
+    const deleteQuery = 'DELETE FROM cargaacademica.CargaAdministrativa WHERE idProfesor = ? AND idTrabajoAdministrativo = ?';
+    
+    db.query(deleteQuery, [rut, idTrabajoAdministrativo], (err, result) => {
       if (err) {
         console.error("Error al eliminar la fila:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
-      res.status(200).json({ message: "Fila eliminada exitosamente" });
-    }
-  );
+
+      console.log("Resultado de la eliminación:", result);
+
+      if (result.affectedRows === 0) {
+        res.status(404).json({ message: "No se encontró la fila para eliminar" });
+      } else {
+        res.status(200).json({ message: "Fila eliminada exitosamente" });
+      }
+    });
+  });
 });
+
+
 
 //Llamado de carrera por idFacultad
 app.get("/facultad/:idFacultad", (req, res) => {
