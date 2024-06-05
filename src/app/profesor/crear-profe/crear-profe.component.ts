@@ -87,7 +87,7 @@ export class CrearProfeComponent {
      */
     ngOnInit(): void {
       this.form = new FormGroup({
-        idProfesor: new FormControl('', [Validators.required]),
+        idProfesor: new FormControl('', [Validators.required,]),
         Nombre: new FormControl('', [Validators.required]),
         Tipo: new FormControl('', Validators.required),
         Profesion: new FormControl('', [Validators.required]),
