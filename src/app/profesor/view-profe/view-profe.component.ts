@@ -32,9 +32,9 @@ export class ViewProfeComponent {
   ngOnInit(): void {
     this.idProfesor = this.route.snapshot.params['profesoridProfesor'];
    
-    this.profesorService.find( this.idProfesor).subscribe((data:Profesor) =>{
-      this.profesor=data;
-    });
+      this.profesorService.find(this.idProfesor).subscribe((data: Profesor) => {
+          this.profesor = data;
+      });
     }
 
     obtenerJerarquia(Jerarquia: number): string {

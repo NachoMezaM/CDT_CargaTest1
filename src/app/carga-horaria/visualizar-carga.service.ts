@@ -63,6 +63,18 @@ export class VisualizarCargaService {
     )
 
   }
+  facultad(idFacultad:number): Observable<any> {
+    return this.httpClient.get(this.apiURL+'/facultad/'+idFacultad)
+    .pipe(
+      catchError(this.errorHandler)
+    )
+  }
+  plan(idCarrera: number): Observable<any> {
+    return this.httpClient.get(this.apiURL+'/planes/'+idCarrera)
+    .pipe(
+      catchError(this.errorHandler)
+    )
+  }
  
   errorHandler(error:any) {
     let errorMessage = '';

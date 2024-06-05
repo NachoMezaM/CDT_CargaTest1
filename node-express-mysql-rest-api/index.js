@@ -522,6 +522,59 @@ const values = [idProfesor, Horas, Hora_Minutos, idTrabajoAdministrativo];
    });
  });
 
+// Ruta para obtener todos los nombres de trabajos administrativos
+app.get('/trabajos-administrativos', (req, res) => {
+  const query = 'SELECT Nombre AS carga FROM TrabajoAdministrativo';
+  
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error al obtener trabajos administrativos:', err);
+      res.status(500).send('Error al obtener trabajos administrativos');
+      return;
+    }
+    
+    res.status(200).json(results);
+  });
+});
+//Llamado de carrera por idFacultad
+app.get("/facultad/:idFacultad", (req, res) => {
+  const idFacultad = req.params.idFacultad;
+  db.query(
+    "SELECT * FROM  cargaacademica.Carrera as Ca where Ca.idFacultad= ?",
+    [idFacultad],
+    (err, result) => {
+      if (err) {
+        res.status(500).send("Error fetching Profesor");
+        return;
+      }
+      if (result.length === 0) {
+        res.status(404).send("Profesor not found");
+        return;
+      }
+      res.json(result);
+    }
+  );
+});
+app.get("/planes/:idCarrera", (req, res) => {
+  const idCarrera = req.params.idCarrera;
+  console.log(idCarrera);
+  db.query(
+    "SELECT AnioPlan FROM cargaacademica.PlanAcademico  where idCarrera=?",
+    [idCarrera],
+    (err, result) => {
+      if (err) {
+        res.status(500).send("Error fetching Profesor");
+        return;
+      }
+      if (result.length === 0) {
+        res.status(404).send("Profesor not found");
+        return;
+      }
+      res.json(result);
+    }
+  );
+});
+
 /* Start server */
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
