@@ -5,8 +5,9 @@
   margin-top: 30px;
   margin-bottom: 20px;
   margin-left: 15%;
-  width: 70%;
-  min-width: 1200px; /* Añadido un ancho mínimo */
+  width: 80%;
+  max-width: 1320px;
+  min-width: 500px; /* Añadido un ancho mínimo */
   background-color: #f2f2f2;
   padding: 10px;
   border: 2px solid #ccc;
@@ -17,8 +18,9 @@
 .containerflex1 {
   margin-bottom: 20px;
   margin-left: 15%;
+  width: 80%;
   max-width: 1320px;
-  min-width: 1320px; /* Añadido un ancho mínimo */
+  min-width: 500px; /* Añadido un ancho mínimo */
   background-color: #f2f2f2;
   padding: 10px;
   border: 2px solid #ccc;

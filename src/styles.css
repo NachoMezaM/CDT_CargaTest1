@@ -1,5 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 body{
-    background-color: #003366;
-    
+    background-color: #0062C4;
+    background-image: url("assets/media/LogoF12.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.space{
+  background-color: #003366;
+  text-align: center;
+  padding: 15px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
