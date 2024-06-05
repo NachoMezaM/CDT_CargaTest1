@@ -113,13 +113,13 @@
         <div class="form-group">
           <div class="row">
             <div class="col1">
-              <label for="Carga"><strong>Carga:</strong></label>
-              <select formControlName="Carga" id="Carga" class="form-control1"></select>
+              <label for="Horas"><strong>Hora</strong></label>
+              <input formControlName="Horas" type="text" id="Horas" class="form-control1" placeholder="Horas" uptwo>
             </div>
 
             <div class="col1">
-              <label for="Horas"><strong>Horas</strong></label>
-              <input formControlName="Horas" type="text" id="Horas" class="form-control1" placeholder="Horas">
+              <label for="Carga"><strong>Carga:</strong></label>
+              <select formControlName="Carga" id="Carga" class="form-control1" (change)="agregarFilaAdministrativa1()"></select>
             </div>
           </div>
         </div>

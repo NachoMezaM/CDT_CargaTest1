@@ -469,11 +469,11 @@ app.post("/eliminar-fila", (req, res) => {
 
 // Guardar carga administrativa
 app.post('/guardar-carga-administrativa', (req, res) => {
-  const { idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos } = req.body;
+  const { idProfesor, Carga, Hora, Hora_Minutos } = req.body;
 console.log('funca')
 
   const query = `INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos) VALUES (?, ?, ?, ?)`;
-  const values = [idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos ];
+  const values = [idProfesor, Carga, Hora, Hora_Minutos ];
 
   db.query(query, values, (err, result) => {
     if (err) {
@@ -524,6 +524,25 @@ app.get('/trabajos-administrativos', (req, res) => {
     res.status(200).json(results);
   });
 });
+
+/* Ruta para eliminar una fila de la tabla CargaDocente */
+app.post("/eliminar-carga-administrativa", (req, res) => {
+  const { idTrabajoAdministrativo, Hora, Hora_Minutos, idProfesor } = req.body;
+  //console.log(codigo,seccion);
+  db.query(
+    'DELETE FROM CargaAdministrativa WHERE idProfesor = ? AND idTrabajoAdministrativo = ? AND Hora = ? AND Hora_Minutos = ?',
+    [idTrabajoAdministrativo, Hora, Hora_Minutos, idProfesor],
+    (err, result) => {
+      if (err) {
+        console.error("Error al eliminar la fila:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      res.status(200).json({ message: "Fila eliminada exitosamente" });
+    }
+  );
+});
+
 //Llamado de carrera por idFacultad
 app.get("/facultad/:idFacultad", (req, res) => {
   const idFacultad = req.params.idFacultad;
