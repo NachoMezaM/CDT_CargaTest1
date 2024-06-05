@@ -17,6 +17,7 @@ import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.
 })
 export class SeccionComponent {
   url = '';
+  aux = '';
   datos: any = {};
   showresultado = false;
   id!: number;
@@ -121,13 +122,14 @@ export class SeccionComponent {
       this.form.patchValue({ Carrera: carreraValor });
     }
     this.url = `${idAsignatura}/${carreraValor}${Semestre}${grupos}`;
+    this.aux = `${carrera?.valor}${Semestre}${grupos}`
     console.log("Funca hasta aca")
     
     this.datos = {
       url: this.url,
       idAsignatura: this.form.value.idAsignatura,
       Semestre: this.form.value.Semestre,
-      carreraValor: carrera?.valor
+      aux: this.aux
     };
        console.log(this.datos)
    

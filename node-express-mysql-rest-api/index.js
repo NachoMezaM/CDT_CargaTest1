@@ -130,12 +130,12 @@ app.put("/posts/:id", (req, res) => {
 /* SECCION MANDAR */
 //-------------------------------------------------------------------------------------------------------------------//
 app.post("/posts/seccion", (req, res) => {
-  const hola= { url, Semestre, carreraValor, idAsignatura } =
+  const hola= { url, Semestre, aux, idAsignatura } =
     req.body;
 console.log("Funca")
   db.query(
     "INSERT INTO cargaacademica.AsignaturaSeccion (idAsignaturaSeccion, Semestre, idSeccion, idAsignatura) VALUES (?,?,?,?)",
-    [url, Semestre, carreraValor, idAsignatura],
+    [url, Semestre, aux, idAsignatura],
     (err, result) => {
       if (err) {
         res.status(500).send("Error creating cargaacademica.AsignaturaSeccion");

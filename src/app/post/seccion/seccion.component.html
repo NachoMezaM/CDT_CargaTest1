@@ -55,7 +55,7 @@
            <!-- resultado -->
            <div class="botones">
             <button class="boton" type="submit" >Crear</button>
-            
+            <button type="button" (click)="onresultadochange()"  (click)="mostrar()" class="boton" >Mostrar </button>
             </div>
       
     </form>
@@ -71,9 +71,6 @@
                 class="col1"
                 (change)="setresultado($event)">
            </div>
-           <div class="botones">
-            <button (click)="onresultadochange()"  (click)="mostrar()" class="boton" >Mostrar </button>
-          </div>
           </div>
       </div>
           <div class="row2">
