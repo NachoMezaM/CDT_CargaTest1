@@ -30,8 +30,8 @@
                 <td>{{ profesor.ValorHora }}</td>
                 <td>{{ obtenerJerarquia(profesor.idJerarquia) }}</td>
                 <td>
-                  <a href="#" [routerLink]="['/profesor/', profesor.idProfesor, 'view-profe']" class="btn btn-info">VER</a>
-                  <a href="#" [routerLink]="['/profesor/', profesor.idProfesor, 'editar-profe']" class="btn btn-primary">EDITAR</a>
+                  <button href="#" [routerLink]="['/profesor/', profesor.idProfesor, 'view-profe']" class="btn1">Ver</button>
+                  <button href="#" [routerLink]="['/profesor/', profesor.idProfesor, 'editar-profe']" class="btn2">Editar</button>
                  
                 </td>
               </tr>

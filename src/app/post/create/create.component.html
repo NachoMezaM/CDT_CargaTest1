@@ -61,7 +61,8 @@
                     formControlName="idAsignatura"
                     id="idAsignatura" 
                     type="text" 
-                    class="form-control">
+                    class="form-control"
+                    placeholder="ABC600">
                 <div *ngIf="f['idAsignatura'].touched && f['idAsignatura'].invalid" class="alert alert-danger">
                     <div *ngIf="f['idAsignatura'].errors && f['idAsignatura'].errors['required']">Se requiere un Codigo de Asignatura.</div>
                 </div>
@@ -93,7 +94,7 @@
         </div>
     </div>
     <div class="linea">
-        <button routerLink="/post/index" class="boton">Volver</button>
+        <button routerLink="/post/index" class="boton">Listar Asignaturas</button>
         <button class="boton" type="submit" [disabled]="!form.valid">Crear</button>
     </div>
 

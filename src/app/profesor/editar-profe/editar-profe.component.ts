@@ -87,7 +87,7 @@ export class EditarProfeComponent {
   // }
   submit() {
     console.log(this.form.value);
-    this.profesorService.find(this.form.value).subscribe(
+    this.profesorService.update(this.idProfesor,this.form.value).subscribe(
       (res: any) => {
         console.log('Profesor creado exitosamente!');
         this.mensajeRespuesta = 'Profesor creado exitosamente';

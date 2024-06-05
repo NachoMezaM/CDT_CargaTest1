@@ -17,6 +17,7 @@ import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.
 })
 export class SeccionComponent {
   url = '';
+  aux = '';
   datos: any = {};
   showresultado = false;
   id!: number;
@@ -25,6 +26,7 @@ export class SeccionComponent {
   form2!: FormGroup;
   facultades = [
     { id: 'FI', nombre: 'Facultad de Ingenieria y Negocios', carreras: [
+        { nombre: 'Seleccione Carrera', valor: '' },
         { nombre: 'FAIN', valor: 'FI' },
         { nombre: 'Agronomia', valor: 'AG' },
         { nombre: 'Contador Auditor Online', valor: 'CO' },
@@ -33,6 +35,7 @@ export class SeccionComponent {
         { nombre: 'Ingenieria Comercial', valor: 'IC' }
     ] },
     { id: 'FS', nombre: 'Facultad de Salud', carreras: [
+        { nombre: 'Seleccione Carrera', valor: '' },
         { nombre: 'Facultad', valor: 'FS' },
         { nombre: 'Enfermería', valor: 'EN' },
         { nombre: 'Nutricion y Dietetica', valor: 'NU' },
@@ -42,6 +45,7 @@ export class SeccionComponent {
         { nombre: 'Terapia Ocupacional', valor: 'TO' }
     ] },
     { id: 'FE', nombre: 'Facultad de Educacion', carreras: [
+        { nombre: 'Seleccione Carrera', valor: '' },
         { nombre: 'Facultad', valor: 'FE' },
         { nombre: 'Educación Parvularia', valor: 'EP' },
         { nombre: 'Licenciatura en Educacion', valor: 'LE' },
@@ -52,6 +56,7 @@ export class SeccionComponent {
         { nombre: 'Pedagogía en Música', valor: 'MU' },
     ] },
     { id: 'DE', nombre: 'Facultad de Ciencias Juridicas y Sociales', carreras: [
+        { nombre: 'Seleccione Carrera', valor: '' },
         { nombre: 'Facultad', valor: 'FD' },
         { nombre: 'Derecho', valor: 'DE' },
         { nombre: 'Psicología', valor: 'PS' },
@@ -59,9 +64,11 @@ export class SeccionComponent {
         { nombre: 'Licenciatura en Trabajo Social', valor: 'LS' }
     ] },
     { id: 'TE', nombre: 'Facultad de Teologia', carreras: [
+        { nombre: 'Seleccione Carrera', valor: '' },
         { nombre: 'Teologia', valor: 'TE' }
     ] },
     { id: 'XX', nombre: 'Complementario', carreras: [
+      { nombre: 'Seleccione Carrera', valor: '' },
       { nombre: 'Complementario', valor: 'CO' }
   ] }
 ];
@@ -121,13 +128,14 @@ export class SeccionComponent {
       this.form.patchValue({ Carrera: carreraValor });
     }
     this.url = `${idAsignatura}/${carreraValor}${Semestre}${grupos}`;
+    this.aux = `${carrera?.valor}${Semestre}${grupos}`
     console.log("Funca hasta aca")
     
     this.datos = {
       url: this.url,
       idAsignatura: this.form.value.idAsignatura,
       Semestre: this.form.value.Semestre,
-      carreraValor: carrera?.valor
+      aux: this.aux
     };
        console.log(this.datos)
    

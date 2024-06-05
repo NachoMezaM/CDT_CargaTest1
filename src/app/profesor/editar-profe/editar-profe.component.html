@@ -166,11 +166,11 @@
             <br>
             <br>
             <br>
-            
+            <div class="centrar">
+                <button routerLink="/profesor/index-profe" class="boton">Volver</button>
+                <button class="boton" type="submit" [disabled]="!form.valid">Actualizar Docente</button>
+            </div>
         </form>
     </div>
-    <div class="centrar">
-        <button routerLink="/profesor/index-profe" class="boton">Atrás</button>
-        <button class="boton" type="submit" [disabled]="!form.valid">Actualizar Docente</button>
-    </div>
+
 </body>
