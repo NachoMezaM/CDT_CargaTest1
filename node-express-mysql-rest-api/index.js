@@ -150,11 +150,11 @@ console.log("Funca")
 /* Crear un nuevo profesor */
 app.post("/profesor/crear-profe", (req, res) => {
   const {
-    idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
+    rutdb, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido } = req.body;
   // Si no existe, insertar el nuevo profesor en la base de datos0
   db.query(
     "INSERT INTO cargaacademica.Profesor (idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    [idProfesor, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido],
+    [rutdb, Nombre, Tipo, Profesion, Horas, ValorHora, idJerarquia, Direccion, Telefono, Grado, TituloGrado, Estado, Apellido],
     (err, result) => {
       if (err) {
         console.error("Error al crear Profesor:", err);

@@ -14,7 +14,8 @@ import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.
     imports: [CommonModule, ReactiveFormsModule, RouterOutlet, RouterLink, BarranavegacionComponent]
 })
 export class CrearProfeComponent {
-
+  datos: any = {};
+  rutdb!: string;
   submitDisabled: boolean = true;
     form!: FormGroup;
     mensajeRespuesta: string = '';
@@ -118,9 +119,44 @@ export class CrearProfeComponent {
      *
      * @return response()
      */
+
+    guardar(){
+      const rutsg = this.form.value.idProfesor.replace(/\D/g, '');
+      const Nombre = this.form.value.Nombre;
+      const Tipo = this.form.value.Tipo;
+      const Profesion = this.form.value.Profesion;
+      const Horas = this.form.value.Horas;
+      const ValorHora = this.form.value.ValorHora; 
+      const idJerarquia = this.form.value.idJerarquia; 
+      const Direccion = this.form.value.Direccion; 
+      const Telefono = this.form.value.Telefono; 
+      const Grado = this.form.value.Grado; 
+      const TituloGrado = this.form.value.TituloGrado; 
+      const Estado = this.form.value.Estado; 
+      const Apellido = this.form.value.Apellido;   
+      this.rutdb = `${rutsg}`
+      this.datos = {
+       rutdb: this.rutdb,
+       Nombre: this.form.value.Nombre,
+       Tipo: this.form.value.Tipo,
+       Profesion: this.form.value.Profesion,
+       Horas: this.form.value.Horas,
+       ValorHora: this.form.value.ValorHora, 
+       idJerarquia: this.form.value.idJerarquia, 
+       Direccion: this.form.value.Direccion, 
+       Telefono: this.form.value.Telefono, 
+       Grado: this.form.value.Grado, 
+       TituloGrado: this.form.value.TituloGrado, 
+       Estado: this.form.value.Estado, 
+       Apellido: this.form.value.Apellido
+      };  
+    }
+
+
     submit() {
-      console.log(this.form.value);
-      this.profesorService.create(this.form.value).subscribe(
+      this.guardar();
+      console.log(this.datos);
+      this.profesorService.create(this.datos).subscribe(
         (res: any) => {
           console.log('Profesor creado exitosamente!');
           this.mensajeRespuesta = 'Profesor creado exitosamente';
