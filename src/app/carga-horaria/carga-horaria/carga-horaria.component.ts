@@ -588,7 +588,7 @@ export class CargaHorariaComponent {
         const removeLabel = newRow.querySelector('.remove-checkbox');
         if (removeLabel) {
           removeLabel.addEventListener('click', () => {
-            this.eliminarFilaAdministrativa1(newRow);
+            this.eliminarFilaAdministrativa(newRow);
             this.actualizarBotonGuardar();
           });
         }
