@@ -15,13 +15,25 @@
             <div class="container-fluid"  id="navegador">
                 <ul >
                     <li><a routerLink="/menu">Menu</a></li>
-                    <li><a routerLink="/profesor/crear-profe">Crear docente</a></li>
-                    <li><a routerLink="/post/create">Crear asignatura</a></li>
-                    <li><a routerLink="/post/index">Listar Asignaturas</a></li>
-                    <li><a routerLink="/profesor/index-profe">Listar Docentes</a></li>
+                    <li>
+                        <a>Docente</a>
+                        <ul>
+                            <li><a routerLink="/profesor/crear-profe">Crear docente</a></li>
+                            <li><a routerLink="/profesor/index-profe">Listar Docentes</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a>Asignaturas</a>
+                        <ul>
+                            <li><a routerLink="/post/create">Crear asignatura</a></li>
+                            <li><a routerLink="/post/index">Listar Asignaturas</a></li>
+                        </ul>
+                    </li>
+                    
                     <li><a routerLink="/carga-horaria/carga-horaria">Asignar Carga</a></li>
                     <li><a routerLink="/carga-horaria/visualizar-carga"> Visualizar Carga Docentes</a> </li>
                     <li><a routerLink="/carga-horaria/cargarAcademica">  Carga Academica</a> </li>
+    
                 </ul>
             </div>
           </div>

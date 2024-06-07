@@ -1,28 +1,51 @@
-
-#navegador ul {
-   list-style-type: none;
-   text-align: center;
+nav ul {
+   list-style: none;
    margin: 0;
    padding: 0;
-}
-
-#navegador li {
+   display: flex;
+   flex-wrap: wrap;
+ }
+ 
+ nav ul li {
+   margin-right: 50px;
+   position: relative; /* Add this to parent menu items */
+ }
+ 
+ nav ul ul {
+   display: none;
+   position: absolute;
+   margin-top: 0px;
+   top: 120%; /* Adjust this value */
+   background-color: #003366;
+   border: 1px solid #003366;
+   padding: 10px;
+   width: 500px; /* add a width to the dropdown menu */
+ }
+ 
+ nav ul li:hover > ul {
+   display: block;
+ }
+ 
+ #navegador li {
    display: inline;
    text-align: center;
    margin: 0 10px 0 0;
-}
-
-#navegador li a {
-   padding: 10px 15px;
+ }
+ 
+ #navegador li a {
+   padding: 10px 30px;
    color: #fff;
    background-color: #003366;
    text-decoration: none;
-}
-
-#navegador li a:hover {
+ }
+ 
+ #navegador li a:hover {
    background-color: #002244;
    border-color: #002244;
-}
+ }
+
+
+
 
 .search-container {
    text-align: center;
