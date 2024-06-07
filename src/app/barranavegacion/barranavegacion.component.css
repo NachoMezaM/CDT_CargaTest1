@@ -8,6 +8,7 @@ nav ul {
  
  nav ul li {
    margin-right: 50px;
+   border-right: 1px solid #ccc;
    position: relative; /* Add this to parent menu items */
  }
  
