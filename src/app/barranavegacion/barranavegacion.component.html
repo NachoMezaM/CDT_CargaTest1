@@ -4,24 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=none, initial-scale=1.0">
-    <title>Buscador con Imágenes</title>
+    <title>Navegacion</title>
     <link rel="stylesheet">
    
 </head>
 
 <body>
-            <div class="center">
-                <ul>
+    <nav class="navbar" style="background-color: #003366">
+       <div class="container-fluid">
+            <div class="container-fluid"  id="navegador">
+            <div style=" display: grid; place-items: center;">
+                <ul >
                     <button class="dropbtn" routerLink="/menu">Menu</button>
                     <div class="dropdown">
-                        <button class="dropbtn">Dropdown</button>
+                        <button class="dropbtn">Profesores</button>
                         <div class="dropdown-content">
-                        <a href="#">Crear Profesor</a>
-                        <a href="#">Listar Profesor</a>
+                        <a href="/profesor/crear-profe">Crear Profesor</a>
+                        <a href="/profesor/index-profe">Listar Profesor</a>
                         </div>
                       </div>                            
                       <div class="dropdown">
-                        <button class="dropbtn">Dropdown</button>
+                        <button class="dropbtn">Asignaturas</button>
                         <div class="dropdown-content">
                         <a routerLink="/post/create">Crear asignatura</a>
                         <a routerLink="/post/index">Listar Asignaturas</a>
@@ -32,7 +35,9 @@
                     <button class="dropbtn" routerLink="/carga-horaria/cargarAcademica">  Carga Academica</button>
                 </ul>
             </div>
-
+            </div>
+          </div>
+    </nav>
     <!-- <div class="search-container">
       <input type="text" placeholder="Buscar...">
       <button type="submit">Buscar</button>
