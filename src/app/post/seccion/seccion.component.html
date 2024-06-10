@@ -55,11 +55,13 @@
            <!-- resultado -->
            <div class="botones">
             <button class="boton" type="submit" >Crear</button>
-            <button type="button" (click)="onresultadochange()"  (click)="mostrar()" class="boton" >Mostrar </button>
+            <button type="button" (click)="onresultadochange()"  (click)="mostrar()"  (click)="crearseccion()"class="boton" >Mostrar </button>
             </div>
       
     </form>
-    
+    <div *ngIf="showSuccessMessage" class="success-message">
+      <p>Seccion creada con éxito!</p>
+    </div>
     <div class="form-group" *ngIf="showresultado">
       <label for="AsignaturaSeccion"><strong>Resultado:</strong></label>
             <input 
