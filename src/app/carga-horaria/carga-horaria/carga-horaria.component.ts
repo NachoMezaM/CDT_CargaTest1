@@ -619,56 +619,46 @@ export class CargaHorariaComponent {
 
   guardarDatosAdministrativos() {
     const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
-    const Carga = (document.getElementById('Carga') as HTMLSelectElement).value;
-    const Hora = parseInt((document.getElementById('Horas') as HTMLInputElement).value);
-    const minutos = Hora * 60; // Calcular los minutos
   
-    console.log('Datos a enviar:', { idProfesor, Carga, Hora, minutos });
+    const filaAdministrativa = document.querySelectorAll('#carga-administrativa-body tr');
+    const promesas: any[] = [];
   
-    const data = {
-      idTrabajoAdministrativo: parseInt(Carga, 10) // Usa radix 10 para asegurar el análisis decimal
-    };
+    filaAdministrativa.forEach((filaA) => {
+      const checkbox = filaA.querySelector('.confirm-checkbox') as HTMLInputElement;
+      if (checkbox.checked) {
+        const columnas = filaA.querySelectorAll('td');
+        const Carga = columnas[0].innerText; // Ajuste el índice si es necesario
+        const Hora = parseInt(columnas[1].innerText); // Ajuste el índice si es necesario
+        const Hora_Minutos = parseInt(columnas[2].innerText); // Ajuste el índice si es necesario
   
-    if (data){
-      let Carga = '';
-      switch (data.idTrabajoAdministrativo) {
-        case 1:
-          Carga = 'Claustro';
-          break;
-        case 2:
-          Carga = 'Planificacion';
-          break;
-        case 3:
-          Carga = 'Clases';
-          break;
-        case 4:
-          Carga = 'Administrivo';
-          break;
-        default:
-          console.error(`Valor de carga desconocido: ${data.idTrabajoAdministrativo}`);
-          console.log('Valor de Carga después de la declaración switch:', Carga);
-          return;
-      }
-    }
-  
-    this.guardarCargaAdministrativa(idProfesor, Carga, Hora, minutos)
-      .then((guardado) => {
-        if (guardado) {
-          alert('Se guardaron los datos correctamente.');
+        if (Carga) { // Verifica que idTrabajoAdministrativo no sea null
+          const promesa = this.guardarCargaAdministrativa(idProfesor, Carga, Hora, Hora_Minutos);
+          promesas.push(promesa);
         } else {
-          alert('No se guardaron los datos debido a duplicados.');
+          console.error('idTrabajoAdministrativo es null o undefined');
         }
+      }
+    });
+  
+    Promise.all(promesas)
+      .then((resultados) => {
+        const algunaFilaGuardada = resultados.some((guardado) => guardado);
+        if (algunaFilaGuardada) {
+          alert('Se guardaron las filas correctamente.');
+        } else {
+          alert('No se guardaron filas.');
+        }
+        this.limpiarFilasGuardadas();
       })
       .catch((error) => {
-        console.error('Error al guardar los datos:', error);
-        alert('Ocurrió un error al guardar los datos. Por favor, inténtalo de nuevo más tarde.');
+        console.error('Error al guardar las filas:', error);
+        alert('Hubo un error al guardar las filas. Por favor, inténtalo de nuevo.');
       });
   }
-  
 
-  guardarCargaAdministrativa(idProfesor: string, idTrabajoAdministrativo: string, Hora: number, minutos: number): Promise<boolean> {
+  guardarCargaAdministrativa(idProfesor: string, Carga: string, Hora: number, Hora_Minutos: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, idTrabajoAdministrativo, Hora, minutos})
+      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, Carga, Hora, Hora_Minutos})
         .subscribe(
           (data) => {
             console.log('Carga administrativa guardada exitosamente:', data);
