@@ -731,7 +731,7 @@ export class CargaHorariaComponent {
   }
 
 //-------------------------------Notas-------------------------------
-
+/*
 document.addEventListener('DOMContentLoaded', (event) => {
   var modal = document.getElementById("noteModal");
   var btn = document.getElementById("openModalBtn");
@@ -758,5 +758,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
     modal.style.display = "none";
   }
 });
-
+*/
 }

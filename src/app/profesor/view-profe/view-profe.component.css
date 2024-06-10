@@ -2,11 +2,7 @@
 .container {
     padding: 20px;
 }
-body{
-    background-color: #0062C4;
-    width: 100%;
-    height:100%;
-}
+
 .card {
     border: 1px solid #ddd;
     border-radius: 10px;

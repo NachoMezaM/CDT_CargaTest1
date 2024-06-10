@@ -2,7 +2,7 @@
  /* BOTONES PARA  BARRA NAV*/
  .dropbtn {
  
-  background-color: #003366;
+  background-color: #001E3B;
   color: white;
   padding: 10px;
   font-size: 16px;
@@ -10,8 +10,8 @@
   cursor: pointer;
 }
 .dropbtn:hover{
-  background-color: #002244;
-  border-color: #002244;
+  background-color: #0062C4;
+  border-color: #0062C4;
 }
 
 .dropdown {
@@ -42,7 +42,7 @@
 }
 
 .dropdown:hover .dropbtn {
-  background-color: #002244;
+  background-color: #0062C4;
 }
 /* UL */
 .center{
@@ -73,7 +73,7 @@ body{
 .search-container button {
    padding: 10px 20px;
    margin-left: 10px;
-   background-color: #003366;
+   background-color: #0062C4;
    color: #fff;
    border: none;
    border-radius: 5px;
