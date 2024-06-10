@@ -10,34 +10,29 @@
 </head>
 
 <body>
-    <nav class="navbar" style="background-color: #003366; padding: 9px;">
-       <div class="container-fluid">
-            <div class="container-fluid"  id="navegador">
-                <ul >
-                    <li><a routerLink="/menu">Menu</a></li>
-                    <li>
-                        <a>Docente</a>
-                        <ul>
-                            <li><a routerLink="/profesor/crear-profe">Crear docente</a></li>
-                            <li><a routerLink="/profesor/index-profe">Listar Docentes</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a>Asignaturas</a>
-                        <ul>
-                            <li><a routerLink="/post/create">Crear asignatura</a></li>
-                            <li><a routerLink="/post/index">Listar Asignaturas</a></li>
-                        </ul>
-                    </li>
-                    
-                    <li><a routerLink="/carga-horaria/carga-horaria">Asignar Carga</a></li>
-                    <li><a routerLink="/carga-horaria/visualizar-carga"> Visualizar Carga Docentes</a> </li>
-                    <li><a routerLink="/carga-horaria/cargarAcademica">  Carga Academica</a> </li>
-    
+            <div class="center">
+                <ul>
+                    <button class="dropbtn" routerLink="/menu">Menu</button>
+                    <div class="dropdown">
+                        <button class="dropbtn">Dropdown</button>
+                        <div class="dropdown-content">
+                        <a href="#">Crear Profesor</a>
+                        <a href="#">Listar Profesor</a>
+                        </div>
+                      </div>                            
+                      <div class="dropdown">
+                        <button class="dropbtn">Dropdown</button>
+                        <div class="dropdown-content">
+                        <a routerLink="/post/create">Crear asignatura</a>
+                        <a routerLink="/post/index">Listar Asignaturas</a>
+                        </div>
+                      </div>      
+                    <button class="dropbtn" routerLink="/carga-horaria/carga-horaria">Asignar Carga</button>
+                    <button class="dropbtn" routerLink="/carga-horaria/visualizar-carga"> Visualizar Carga Docentes</button> 
+                    <button class="dropbtn" routerLink="/carga-horaria/cargarAcademica">  Carga Academica</button>
                 </ul>
             </div>
-          </div>
-    </nav>
+
     <!-- <div class="search-container">
       <input type="text" placeholder="Buscar...">
       <button type="submit">Buscar</button>
