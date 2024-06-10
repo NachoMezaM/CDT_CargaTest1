@@ -18,7 +18,11 @@ import { BarranavegacionComponent } from "../../barranavegacion/barranavegacion.
 export class SeccionComponent {
   url = '';
   aux = '';
+  showSuccessMessage = false;
+  TipoSeccion: string = "C";
+  Estado: string = "A";
   datos: any = {};
+  seccion: any = {};
   showresultado = false;
   id!: number;
   post!: Post;
@@ -139,12 +143,28 @@ export class SeccionComponent {
     };
        console.log(this.datos)
    
+    this.seccion = {
+      aux: this.aux,
+      Nombre: `${carrera?.nombre}`,
+      TipoSeccion: this.TipoSeccion,
+      Estado: this.Estado
+    }
+    console.log(this.seccion)
   }
     submit(){
       this.postService.crear(this.datos).subscribe((res:any) => {
-        console.log("ola")
         console.log('Seccion created successfully!');
-        this.router.navigateByUrl('post/index');
+        this.showSuccessMessage = true;
+        setTimeout(() => {
+          this.router.navigateByUrl('post/index');
+        }, 3000); // Redirige después de 2 segundos
+   })  
+    }
+
+    crearseccion(){
+      this.postService.crearSec(this.seccion).subscribe((res:any) => {
+        console.log('Seccion created successfully!');
+        
    })  
     }
   }
