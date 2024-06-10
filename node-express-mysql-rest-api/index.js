@@ -469,11 +469,12 @@ app.post("/eliminar-fila", (req, res) => {
 
 // Guardar carga administrativa
 app.post('/guardar-carga-administrativa', (req, res) => {
-  const { idProfesor, Carga, Hora, Hora_Minutos } = req.body;
+  const { idProfesor, carga, Hora, Hora_Minutos } = req.body;
+  console.log(req.body)
 console.log('funca')
 
   const query = `INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos) VALUES (?, ?, ?, ?)`;
-  const values = [idProfesor, Carga, Hora, Hora_Minutos ];
+  const values = [idProfesor, carga, Hora, Hora_Minutos ];
 
   db.query(query, values, (err, result) => {
     if (err) {

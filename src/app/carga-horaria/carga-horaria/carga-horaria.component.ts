@@ -630,9 +630,16 @@ export class CargaHorariaComponent {
         const Carga = columnas[0].innerText; // Ajuste el índice si es necesario
         const Hora = parseInt(columnas[1].innerText); // Ajuste el índice si es necesario
         const Hora_Minutos = parseInt(columnas[2].innerText); // Ajuste el índice si es necesario
-  
+        console.log(Carga)
+        let carga = 0
+        switch(Carga){
+          case 'Planificación':
+            carga=2;
+            break;
+
+        }
         if (Carga) { // Verifica que idTrabajoAdministrativo no sea null
-          const promesa = this.guardarCargaAdministrativa(idProfesor, Carga, Hora, Hora_Minutos);
+          const promesa = this.guardarCargaAdministrativa(idProfesor, carga, Hora, Hora_Minutos);
           promesas.push(promesa);
         } else {
           console.error('idTrabajoAdministrativo es null o undefined');
@@ -640,25 +647,12 @@ export class CargaHorariaComponent {
       }
     });
   
-    Promise.all(promesas)
-      .then((resultados) => {
-        const algunaFilaGuardada = resultados.some((guardado) => guardado);
-        if (algunaFilaGuardada) {
-          alert('Se guardaron las filas correctamente.');
-        } else {
-          alert('No se guardaron filas.');
-        }
-        this.limpiarFilasGuardadas();
-      })
-      .catch((error) => {
-        console.error('Error al guardar las filas:', error);
-        alert('Hubo un error al guardar las filas. Por favor, inténtalo de nuevo.');
-      });
+  
   }
 
-  guardarCargaAdministrativa(idProfesor: string, Carga: string, Hora: number, Hora_Minutos: number): Promise<boolean> {
+  guardarCargaAdministrativa(idProfesor: string, carga: number, Hora: number, Hora_Minutos: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, Carga, Hora, Hora_Minutos})
+      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, carga, Hora, Hora_Minutos})
         .subscribe(
           (data) => {
             console.log('Carga administrativa guardada exitosamente:', data);
