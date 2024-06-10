@@ -10,7 +10,7 @@
 }
 .boton{
     color: white;
-    background-color: #003366;
+    background-color: #001E3B;
     text-align: center;
     margin-right: 20px;
     margin-top: 10px;
@@ -20,7 +20,7 @@
     border: 0px;
 }
 .boton:hover{
-    background-color: #002244;
+    background-color: #0062C4;
     color: white;
 }
 .btn1{
