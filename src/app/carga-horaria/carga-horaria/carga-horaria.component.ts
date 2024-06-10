@@ -732,4 +732,31 @@ export class CargaHorariaComponent {
 
 //-------------------------------Notas-------------------------------
 
+document.addEventListener('DOMContentLoaded', (event) => {
+  var modal = document.getElementById("noteModal");
+  var btn = document.getElementById("openModalBtn");
+  var span = document.getElementsByClassName("close")[0];
+  var saveBtn = document.getElementById("saveNoteBtn");
+
+  btn.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+  saveBtn.onclick = function() {
+    var noteText = document.getElementById("noteText").value;
+    console.log("Nota guardada:", noteText);
+    modal.style.display = "none";
+  }
+});
+
 }

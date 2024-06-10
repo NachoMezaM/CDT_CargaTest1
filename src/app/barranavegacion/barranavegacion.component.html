@@ -29,10 +29,15 @@
                         <a routerLink="/post/create">Crear asignatura</a>
                         <a routerLink="/post/index">Listar Asignaturas</a>
                         </div>
-                      </div>      
-                    <button class="dropbtn" routerLink="/carga-horaria/carga-horaria">Asignar Carga</button>
-                    <button class="dropbtn" routerLink="/carga-horaria/visualizar-carga"> Visualizar Carga Docentes</button> 
-                    <button class="dropbtn" routerLink="/carga-horaria/cargarAcademica">  Carga Academica</button>
+                      </div>
+                      <div class="dropdown">
+                        <button class="dropbtn">Carga</button>
+                        <div class="dropdown-content">
+                          <a routerLink="/carga-horaria/carga-horaria">Asignar Carga</a>
+                          <a routerLink="/carga-horaria/visualizar-carga">Visualizar Carga Docentes</a>
+                          <a routerLink="/carga-horaria/cargarAcademica">Carga Academica</a>
+                        </div>
+                      </div>
                 </ul>
             </div>
             </div>
