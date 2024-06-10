@@ -82,17 +82,6 @@ export class CargaHorariaComponent {
     }
   }
 
-  //  @HostListener('keydown.enter', ['$event'])
-  //  onEnterKey1(event: KeyboardEvent) {
-  //    // Prevenir la actualización de la página
-  //    event.preventDefault();
-
-  //    const target = event.target as HTMLInputElement;
-  //    if (target.id === 'horas') {
-  //     this.agregarFilaAdministrativa1();
-  //    }
-  //  }
-
   limpiarPagina() {
     // Limpiar los campos del formulario
     (document.getElementById('nombre') as HTMLInputElement).value = '';
@@ -633,10 +622,21 @@ export class CargaHorariaComponent {
         console.log(Carga)
         let carga = 0
         switch(Carga){
-          case 'Planificación':
-            carga=2;
+          case 'Claustro':
+            carga = 1;
             break;
-
+          case 'Planificación':
+            carga = 2;
+            break;
+          case 'Clases':
+            carga = 3;
+            break;
+          case 'Administrativo':
+            carga = 4;
+            break;
+          case 'Contrato':
+            carga = 5;
+            break; 
         }
         if (Carga) { // Verifica que idTrabajoAdministrativo no sea null
           const promesa = this.guardarCargaAdministrativa(idProfesor, carga, Hora, Hora_Minutos);
@@ -729,5 +729,7 @@ export class CargaHorariaComponent {
       tbody.innerHTML = ''; // Limpiar el contenido del tbody
     }
   }
+
+//-------------------------------Notas-------------------------------
 
 }
