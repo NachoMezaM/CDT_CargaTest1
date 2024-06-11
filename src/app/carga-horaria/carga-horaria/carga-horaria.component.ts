@@ -102,6 +102,7 @@ export class CargaHorariaComponent {
     // }
   }
 
+  //-------------------------------------Ingresar Carga----------------------------------------------
   buscarDatos() {
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
     const nombre = (document.getElementById('nombre') as HTMLInputElement).value.trim();
@@ -472,12 +473,21 @@ export class CargaHorariaComponent {
   // Método para buscar las secciones disponibles para un código de asignatura dado
   buscarSecciones() {
     const codigo = (document.getElementById('codigo') as HTMLInputElement).value;
-
+  
     this.http.post<any>('http://localhost:3000/obtener-secciones', { codigo })
       .subscribe(
         (data) => {
           const seccionSelect = document.getElementById('seccion') as HTMLSelectElement;
           seccionSelect.innerHTML = ''; // Limpiar opciones anteriores
+  
+          // Agregar opción predeterminada "Seleccionar"
+          const defaultOption = document.createElement('option');
+          defaultOption.value = '';
+          defaultOption.textContent = 'Seleccionar';
+          defaultOption.disabled = true;
+          defaultOption.selected = true;
+          seccionSelect.appendChild(defaultOption);
+  
           if (Array.isArray(data)) {
             data.forEach((Seccion) => {
               const option = document.createElement('option');
@@ -670,6 +680,15 @@ export class CargaHorariaComponent {
     this.http.get<any[]>('http://localhost:3000/trabajos-administrativos').subscribe(
       (data) => {
         const selectElement = document.getElementById('Carga') as HTMLSelectElement;
+  
+        // Agregar la opción "Seleccionar" al principio del select
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.text = 'Seleccionar';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        selectElement.appendChild(defaultOption);
+  
         data.forEach((trabajo) => {
           const option = document.createElement('option');
           option.value = trabajo.carga;
@@ -731,32 +750,5 @@ export class CargaHorariaComponent {
   }
 
 //-------------------------------Notas-------------------------------
-/*
-document.addEventListener('DOMContentLoaded', (event) => {
-  var modal = document.getElementById("noteModal");
-  var btn = document.getElementById("openModalBtn");
-  var span = document.getElementsByClassName("close")[0];
-  var saveBtn = document.getElementById("saveNoteBtn");
 
-  btn.onclick = function() {
-    modal.style.display = "block";
-  }
-
-  span.onclick = function() {
-    modal.style.display = "none";
-  }
-
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
-
-  saveBtn.onclick = function() {
-    var noteText = document.getElementById("noteText").value;
-    console.log("Nota guardada:", noteText);
-    modal.style.display = "none";
-  }
-});
-*/
 }
