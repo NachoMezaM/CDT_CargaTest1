@@ -224,7 +224,7 @@ body::-webkit-scrollbar {
 }
 
 #close-popup {
-  background-color: #003366;
+  background-color: #002244;
   color: #fff;
   padding: 10px 20px;
   border: none;
@@ -233,5 +233,5 @@ body::-webkit-scrollbar {
 }
 
 #close-popup:hover {
-  background-color: #002244;
+  background-color: #003366;
 }

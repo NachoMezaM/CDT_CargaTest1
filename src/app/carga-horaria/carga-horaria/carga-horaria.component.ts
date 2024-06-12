@@ -676,9 +676,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         }
 
         // Agregar el evento de cambio al checkbox de confirmación
-        const confirmCheckbox = newRow.querySelector(
-          '.confirm-checkbox'
-        ) as HTMLInputElement;
+        const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
         if (confirmCheckbox) {
           confirmCheckbox.addEventListener('change', () => {
             this.actualizarBotonGuardar();
@@ -688,11 +686,8 @@ export class CargaHorariaComponent implements AfterViewInit {
   }
 
   buscarDatosAdministrativos(rut: string) {
-    return this.http
-      .get<any>(`http://localhost:3000/buscar-datos-administrativos/${rut}`)
-      .pipe(
-        map((response: any) => {
-          console.log('Datos recibidos:', response);
+    return this.http.get<any>(`http://localhost:3000/buscar-datos-administrativos/${rut}`)
+    .pipe( map((response: any) => { console.log('Datos recibidos:', response);
           return response;
         }),
         catchError((error: any) => {
@@ -703,18 +698,12 @@ export class CargaHorariaComponent implements AfterViewInit {
   }
 
   guardarDatosAdministrativos() {
-    const idProfesor = (document.getElementById('rut') as HTMLInputElement)
-      .value;
-
-    const filaAdministrativa = document.querySelectorAll(
-      '#carga-administrativa-body tr'
-    );
+    const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
+    const filaAdministrativa = document.querySelectorAll('#carga-administrativa-body tr');
     const promesas: any[] = [];
 
     filaAdministrativa.forEach((filaA) => {
-      const checkbox = filaA.querySelector(
-        '.confirm-checkbox'
-      ) as HTMLInputElement;
+      const checkbox = filaA.querySelector('.confirm-checkbox') as HTMLInputElement;
       if (checkbox.checked) {
         const columnas = filaA.querySelectorAll('td');
         const Carga = columnas[0].innerText; // Ajuste el índice si es necesario
@@ -741,12 +730,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         }
         if (Carga) {
           // Verifica que idTrabajoAdministrativo no sea null
-          const promesa = this.guardarCargaAdministrativa(
-            idProfesor,
-            carga,
-            Hora,
-            Hora_Minutos
-          );
+          const promesa = this.guardarCargaAdministrativa(idProfesor, carga, Hora, Hora_Minutos);
           promesas.push(promesa);
         } else {
           console.error('idTrabajoAdministrativo es null o undefined');
@@ -755,20 +739,9 @@ export class CargaHorariaComponent implements AfterViewInit {
     });
   }
 
-  guardarCargaAdministrativa(
-    idProfesor: string,
-    carga: number,
-    Hora: number,
-    Hora_Minutos: number
-  ): Promise<boolean> {
+  guardarCargaAdministrativa(idProfesor: string,carga: number,Hora: number,Hora_Minutos: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.http
-        .post<any>('http://localhost:3000/guardar-carga-administrativa', {
-          idProfesor,
-          carga,
-          Hora,
-          Hora_Minutos,
-        })
+      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, carga, Hora, Hora_Minutos,})
         .subscribe(
           (data) => {
             console.log('Carga administrativa guardada exitosamente:', data);
@@ -783,13 +756,10 @@ export class CargaHorariaComponent implements AfterViewInit {
   }
 
   cargarTrabajosAdministrativos() {
-    this.http
-      .get<any[]>('http://localhost:3000/trabajos-administrativos')
+    this.http.get<any[]>('http://localhost:3000/trabajos-administrativos')
       .subscribe(
         (data) => {
-          const selectElement = document.getElementById(
-            'Carga'
-          ) as HTMLSelectElement;
+          const selectElement = document.getElementById('Carga') as HTMLSelectElement;
 
           // Agregar la opción "Seleccionar" al principio del select
           const defaultOption = document.createElement('option');
@@ -820,8 +790,7 @@ export class CargaHorariaComponent implements AfterViewInit {
 
   eliminarFilaAdministrativa1(row: HTMLElement) {
     // Obtener los datos necesarios para identificar la fila
-    const carga = (row.querySelector('td:nth-child(1)') as HTMLElement)
-      .innerText;
+    const carga = (row.querySelector('td:nth-child(1)') as HTMLElement).innerText;
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
 
     if (!carga || !rut) {
@@ -830,11 +799,7 @@ export class CargaHorariaComponent implements AfterViewInit {
     }
 
     // Realizar una solicitud POST al servidor para eliminar la fila
-    this.http
-      .post<any>('http://localhost:3000/eliminar-carga-administrativa', {
-        carga,
-        rut,
-      })
+    this.http.post<any>('http://localhost:3000/eliminar-carga-administrativa', {carga, rut,})
       .subscribe(
         (data) => {
           // Manejar la respuesta del servidor
