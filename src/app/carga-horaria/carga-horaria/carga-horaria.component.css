@@ -197,3 +197,41 @@ body::-webkit-scrollbar {
 .sidebar {
   visibility: hidden;
 }
+
+#floating-button {
+  position: fixed;
+  bottom: 30px;
+  right: 50px;
+  z-index: 1;
+}
+
+/* Ventana emergente */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  display: none; /* Ocultar la ventana emergente por defecto */
+  z-index: 2; /* Mostrar la ventana emergente encima de otros elementos */
+}
+
+.popup-content {
+  text-align: center;
+}
+
+#close-popup {
+  background-color: #003366;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#close-popup:hover {
+  background-color: #002244;
+}
