@@ -27,6 +27,7 @@ export class SeccionComponent {
   facultades = [
     { id: 'FI', nombre: 'Facultad de Ingenieria y Negocios', carreras: [
         { nombre: 'Seleccione Carrera', valor: '' },
+        //Propiedad de Fobi
         { nombre: 'FAIN', valor: 'FI' },
         { nombre: 'Agronomia', valor: 'AG' },
         { nombre: 'Contador Auditor Online', valor: 'CO' },

@@ -24,12 +24,14 @@ export class CargaAcademicaComponent {
   carreras: { value: string; label: string; }[] = [];
   planes: { value: string; label: number; }[] = [];
   visualizarCA: VisualizarCA[] = [];
-  cargaAcademica: CargaAcademica[] = [];
   filteredPosts: any[] = [];
   busqueda: string = '';
   carrerasByFacultad: { [key: string]: { value: string; label: string; }[] } = {};
   planesByFacultad: { [key: string]: { value: string; label: number; }[] } = {};
-
+  selectedFacultad: string = '';
+  selectedCarrera: string = '';
+  selectedPlan: string = '';
+  selectedSemestre: string = '';
 
   constructor(private fb: FormBuilder, public visualizarService: VisualizarCargaService) {
     this.form = this.fb.group({
@@ -43,6 +45,53 @@ export class CargaAcademicaComponent {
   ngOnInit(): void {
 
     this.visualizarService.getAll().subscribe((data: VisualizarCA[]) => {
+      this.visualizarCA = data;
+      this.filteredPosts = this.visualizarCA;
+      console.log(this.visualizarCA);
+    });
+    this.form.get('Facultad')?.valueChanges.subscribe(value => {
+      this.selectedFacultad = value;
+      this.showCarrera = false;
+      this.showPlan = false;
+      this.showSemestre = false;
+      this.filtro(this.selectedFacultad, this.selectedCarrera, this.selectedPlan, this.selectedSemestre);
+    });
+
+    this.form.get('Carrera')?.valueChanges.subscribe(value => {
+      this.selectedCarrera = value;
+      this.showPlan = false;
+      this.showSemestre = false;
+      this.filtro(this.selectedFacultad, this.selectedCarrera, this.selectedPlan, this.selectedSemestre);
+    });
+
+    this.form.get('Plan')?.valueChanges.subscribe(value => {
+      this.selectedPlan = value;
+      this.showSemestre = false;
+      this.filtro(this.selectedFacultad, this.selectedCarrera, this.selectedPlan, this.selectedSemestre);
+    });
+
+    this.form.get('Semestre')?.valueChanges.subscribe(value => {
+      this.selectedSemestre = value;
+      this.filtro(this.selectedFacultad, this.selectedCarrera, this.selectedPlan, this.selectedSemestre);
+    });
+
+  }
+
+  filtro(facultad: string, carrera: string, plan: string, semestre: string) {
+    facultad = facultad || '0';
+    carrera = carrera || '0';
+    plan = plan || '0';
+    semestre = semestre || '0';
+    let link = [facultad,carrera,plan,semestre];
+    // Aquí puedes implementar la lógica de filtrado basada en los valores seleccionados
+    console.log('Filtro aplicado con los valores:', link);
+
+    this.ConsultaFiltro(link)
+
+  }
+
+  ConsultaFiltro(link: any) {
+    this.visualizarService.filtrotabla(link).subscribe((data: VisualizarCA[]) => {
       this.visualizarCA = data;
       this.filteredPosts = this.visualizarCA;
       console.log(this.visualizarCA);
@@ -67,38 +116,33 @@ export class CargaAcademicaComponent {
 
       this.carrerasByFacultad[facultadId] = carreras;
       this.carreras = this.carrerasByFacultad[facultadId] || [];
-      if (this.carreras.length > 0) {
-        this.form.get('Carrera')?.setValue(this.carreras[0].value);
-      }
+      this.form.get('Carrera')?.setValue('');
       console.log(this.carrerasByFacultad);
     });
   }
 
-  onSelectionChange(event: Event, fieldName: string) {
+  onCarreraChange(event: Event, fieldName: string) {
     const target = event.target as HTMLSelectElement;
     const selectedValue = Number(target.value);
     // Keep as string for indexing
     console.log(selectedValue);
     this.setPlan(selectedValue, fieldName)
 
-    // Update the appropriate show field based on the fieldName
-    switch (fieldName) {
-      case 'carrera':
-        this.showPlan = !!selectedValue;
-        break;
-      case 'plan':
-        this.showSemestre = !!selectedValue;
-
-        break;
-      case 'semestre':
-        // Handle semester-specific logic if any
-        break;
-      default:
-        break;
-    }
+    this.showPlan = true;
+  }
+  onPlanChange(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    const selectedValue = Number(target.value);
+    console.log(selectedValue);
+    this.showSemestre = true;
+  }
+  onSemestreChange(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    const selectedValue = Number(target.value);
+    console.log(selectedValue);
+    this.showSemestre = true;
   }
   setPlan(year: number, fieldName: string) {
-
     this.visualizarService.plan(year).subscribe((data: CargaAcademica[]) => {
       const planes = data.map(CargaAcademica => ({
         value: `${CargaAcademica.AnioPlan}`,
@@ -106,10 +150,7 @@ export class CargaAcademicaComponent {
       }));
       this.planesByFacultad[fieldName] = planes;
       this.planes = this.planesByFacultad[fieldName] || [];
-      
-        this.form.get('Plan')?.setValue(this.carreras.length ? this.carreras[0].value : '');
-      
-      console.log(this.planesByFacultad);
+      this.form.get('Plan')?.setValue('');
     });
   }
 

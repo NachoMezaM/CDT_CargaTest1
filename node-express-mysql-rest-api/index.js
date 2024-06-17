@@ -6,6 +6,8 @@ const cors = require("cors");
 const app = express();
 const port = 3000;
 
+//Fobi estuvo aqui
+
 /* MySQL Connection */
 const db = mysql.createConnection({
   host: "144.22.57.157", //host de la base de datos
@@ -130,18 +132,18 @@ app.put("/posts/:id", (req, res) => {
 /* SECCION MANDAR */
 //-------------------------------------------------------------------------------------------------------------------//
 app.post("/posts/seccion", (req, res) => {
-  const hola= { url, Semestre, aux, idAsignatura } =
-    req.body;
-console.log("Funca")
+  const{ url, Semestre, aux, idAsignatura } =req.body;
+console.log(req.body )
   db.query(
     "INSERT INTO cargaacademica.AsignaturaSeccion (idAsignaturaSeccion, Semestre, idSeccion, idAsignatura) VALUES (?,?,?,?)",
     [url, Semestre, aux, idAsignatura],
     (err, result) => {
+      console.log(err)
       if (err) {
-        res.status(500).send("Error creating cargaacademica.AsignaturaSeccion");
+        res.status(500).send("Error creating cargaacademica.AsignaturaSeccion asdad");
         return;
       }
-      res.status(201).json(req.body);
+      res.status(201).json(result);
     }
     
   );
@@ -470,7 +472,7 @@ app.post("/eliminar-fila", (req, res) => {
 // Guardar carga administrativa
 app.post('/guardar-carga-administrativa', (req, res) => {
   const { idProfesor, Carga, Hora, Hora_Minutos } = req.body;
-console.log('funca')
+//console.log('funca')
 
   const query = `INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos) VALUES (?, ?, ?, ?)`;
   const values = [idProfesor, Carga, Hora, Hora_Minutos ];
@@ -529,7 +531,7 @@ app.get('/trabajos-administrativos', (req, res) => {
 app.post("/eliminar-carga-administrativa", (req, res) => {
   const { rut, carga } = req.body;
 
-  console.log(`Intentando eliminar carga administrativa para rut: ${rut}, carga: ${carga}`);
+  //console.log(`Intentando eliminar carga administrativa para rut: ${rut}, carga: ${carga}`);
 
   // Consulta para obtener el idTrabajoAdministrativo desde el nombre de la carga
   const getCargaIdQuery = 'SELECT idTrabajo FROM TrabajoAdministrativo WHERE Nombre = ?';
@@ -574,6 +576,7 @@ app.post("/eliminar-carga-administrativa", (req, res) => {
 //Llamado de carrera por idFacultad
 app.get("/facultad/:idFacultad", (req, res) => {
   const idFacultad = req.params.idFacultad;
+  //console.log(req.params)
   db.query(
     "SELECT * FROM  cargaacademica.Carrera as Ca where Ca.idFacultad= ?",
     [idFacultad],
@@ -592,7 +595,7 @@ app.get("/facultad/:idFacultad", (req, res) => {
 });
 app.get("/planes/:idCarrera", (req, res) => {
   const idCarrera = req.params.idCarrera;
-  console.log(idCarrera);
+  //console.log(req.params)
   db.query(
     "SELECT AnioPlan FROM cargaacademica.PlanAcademico  where idCarrera=?",
     [idCarrera],
@@ -601,6 +604,38 @@ app.get("/planes/:idCarrera", (req, res) => {
         res.status(500).send("Error fetching Profesor");
         return;
       }
+      if (result.length === 0) {
+        res.status(404).send("Profesor not found");
+        return;
+      }
+      res.json(result);
+    }
+  );
+});
+app.post("/filtro/", (req, res) => {
+
+  const [idFacultad, idCarrera, AnioPlan, Semestre]   = req.body;
+  console.log(idFacultad, idCarrera, AnioPlan, Semestre); 
+
+  db.query(`
+    SELECT ASi.Nombre, ASiS.idAsignaturaSeccion, Pr.Nombre, Pr.idProfesor, CD.HorasPlanificacion, ASi.idAsignatura
+FROM cargaacademica.Facultad AS FA
+JOIN cargaacademica.Carrera AS CA ON FA.idFacultad = CA.idFacultad
+JOIN cargaacademica.PlanAcademico AS PL ON CA.idCarrera = PL.idCarrera
+JOIN cargaacademica.Asignatura AS ASi ON ASi.idPlanAcademico = PL.idPlanAcademico
+LEFT JOIN cargaacademica.AsignaturaSeccion AS ASiS ON ASi.idAsignatura = ASiS.idAsignatura
+LEFT JOIN cargaacademica.CargaDocente AS CD ON ASiS.idAsignaturaSeccion = CD.idAsignaturaSeccion
+LEFT JOIN cargaacademica.Profesor AS Pr ON CD.idProfesor = Pr.idProfesor
+WHERE (FA.idFacultad = ? OR ? = 0) AND (CA.idCarrera = ? OR ? = 0) AND (PL.AnioPlan = ? OR ? = 0) AND (ASiS.Semestre = ? OR ? = 0);
+  `,
+    [idFacultad, idFacultad, idCarrera, idCarrera, AnioPlan, AnioPlan, Semestre, Semestre],
+    (err, result) => {
+      if (err) {
+        console.error("Error fetching Profesor:", err);
+        res.status(500).send("Error fetching Profesor");
+        return;
+      }
+      console.log("Query result:", result);
       if (result.length === 0) {
         res.status(404).send("Profesor not found");
         return;
