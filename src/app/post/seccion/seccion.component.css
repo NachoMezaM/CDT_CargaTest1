@@ -59,3 +59,10 @@
 .r1{
     width: 40%;
 }
+.success-message {
+    background-color: #dff0d8; /* Greenish background color */
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    color: #3c763d; /* Dark green text color */
+  }

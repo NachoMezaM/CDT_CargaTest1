@@ -4,37 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=none, initial-scale=1.0">
-    <title>Buscador con Imágenes</title>
+    <title>Navegacion</title>
     <link rel="stylesheet">
    
 </head>
 
 <body>
-    <nav class="navbar" style="background-color: #003366; padding: 9px;">
+    <nav class="navbar" style="background-color: #001E3B">
        <div class="container-fluid">
             <div class="container-fluid"  id="navegador">
+            <div style=" display: grid; place-items: center;">
                 <ul >
-                    <li><a routerLink="/menu">Menu</a></li>
-                    <li>
-                        <a>Docente</a>
-                        <ul>
-                            <li><a routerLink="/profesor/crear-profe">Crear docente</a></li>
-                            <li><a routerLink="/profesor/index-profe">Listar Docentes</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a>Asignaturas</a>
-                        <ul>
-                            <li><a routerLink="/post/create">Crear asignatura</a></li>
-                            <li><a routerLink="/post/index">Listar Asignaturas</a></li>
-                        </ul>
-                    </li>
-                    
-                    <li><a routerLink="/carga-horaria/carga-horaria">Asignar Carga</a></li>
-                    <li><a routerLink="/carga-horaria/visualizar-carga"> Visualizar Carga Docentes</a> </li>
-                    <li><a routerLink="/carga-horaria/cargarAcademica">  Carga Academica</a> </li>
-    
+                    <button class="dropbtn" routerLink="/menu">Menu</button>
+                    <div class="dropdown">
+                        <button class="dropbtn">Profesores</button>
+                        <div class="dropdown-content">
+                        <a href="/profesor/crear-profe">Crear Profesor</a>
+                        <a href="/profesor/index-profe">Listar Profesor</a>
+                        </div>
+                      </div>                            
+                      <div class="dropdown">
+                        <button class="dropbtn">Asignaturas</button>
+                        <div class="dropdown-content">
+                        <a routerLink="/post/create">Crear asignatura</a>
+                        <a routerLink="/post/index">Listar Asignaturas</a>
+                        </div>
+                      </div>
+                      <div class="dropdown">
+                        <button class="dropbtn">Carga</button>
+                        <div class="dropdown-content">
+                          <a routerLink="/carga-horaria/carga-horaria">Asignar Carga</a>
+                          <a routerLink="/carga-horaria/visualizar-carga">Visualizar Carga Docentes</a>
+                          <a routerLink="/carga-horaria/cargarAcademica">Carga Academica</a>
+                        </div>
+                      </div>
                 </ul>
+            </div>
             </div>
           </div>
     </nav>

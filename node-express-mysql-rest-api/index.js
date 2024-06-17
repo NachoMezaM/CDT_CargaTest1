@@ -129,7 +129,7 @@ app.put("/posts/:id", (req, res) => {
 
 
 
-/* SECCION MANDAR */
+/* SECCION MANDAR ASIGNATURA SECCION */
 //-------------------------------------------------------------------------------------------------------------------//
 app.post("/posts/seccion", (req, res) => {
   const{ url, Semestre, aux, idAsignatura } =req.body;
@@ -144,6 +144,40 @@ console.log(req.body )
         return;
       }
       res.status(201).json(result);
+    }
+    
+  );
+});
+app.post("/posts/secciones", (req, res) => {
+  const { aux, Nombre, TipoSeccion, Estado } =
+    req.body;
+console.log("Funca")
+  db.query(
+    "INSERT INTO cargaacademica.Seccion (idSeccion, Nombre, TipoSeccion, Estado) VALUES (?,?,?,?)",
+    [aux, Nombre, TipoSeccion, Estado],
+    (err, result) => {
+      if (err) {
+        res.status(500).send("Error creating cargaacademica.AsignaturaSeccion");
+        return;
+      }
+      res.status(201).json(req.body);
+    }
+    
+  );
+});
+app.post("/posts/secciones", (req, res) => {
+  const { aux, Nombre, TipoSeccion, Estado } =
+    req.body;
+console.log("Funca")
+  db.query(
+    "INSERT INTO cargaacademica.Seccion (idSeccion, Nombre, TipoSeccion, Estado) VALUES (?,?,?,?)",
+    [aux, Nombre, TipoSeccion, Estado],
+    (err, result) => {
+      if (err) {
+        res.status(500).send("Error creating cargaacademica.AsignaturaSeccion");
+        return;
+      }
+      res.status(201).json(req.body);
     }
     
   );
@@ -471,11 +505,12 @@ app.post("/eliminar-fila", (req, res) => {
 
 // Guardar carga administrativa
 app.post('/guardar-carga-administrativa', (req, res) => {
-  const { idProfesor, Carga, Hora, Hora_Minutos } = req.body;
-//console.log('funca')
+  const { idProfesor, carga, Hora, Hora_Minutos } = req.body;
+  console.log(req.body)
+console.log('funca')
 
   const query = `INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos) VALUES (?, ?, ?, ?)`;
-  const values = [idProfesor, Carga, Hora, Hora_Minutos ];
+  const values = [idProfesor, carga, Hora, Hora_Minutos ];
 
   db.query(query, values, (err, result) => {
     if (err) {

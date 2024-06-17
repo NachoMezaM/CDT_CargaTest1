@@ -60,10 +60,8 @@
     </div>
   </form>
 
-
   <div class="fila_titulo">
     <h1 class="titulo">Docencia Directa</h1>
-    
     </div>
   <div class="fila">
     <!-- Docencia Directa -->
@@ -106,6 +104,7 @@
         </table>
       </div>
     </form>
+
     <h1 class="titulo" >Carga Administrativa</h1>
     <form>
       <div class="containerflex3">
@@ -142,6 +141,16 @@
         </table>
       </div>
     </form>
+  </div>
+  <button id="floating-button" #floatingButton class="boton">Notas</button>
+
+  <!-- Ventana emergente -->
+  <div id="popup" #popup class="popup">
+    <div class="popup-content">
+      <label for="Observacion"><strong>Observacion</strong></label>
+      <textarea #Notas formControlName="Observacion" type="text" id="Observacion" class="form-control1" placeholder="Escribe tus notas aquí" ></textarea>
+      <button id="close-popup" #closePopupButton>Cerrar</button>
+    </div>
   </div>
 </body>
 </html>
