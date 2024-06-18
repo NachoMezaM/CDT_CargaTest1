@@ -587,7 +587,29 @@ app.post("/eliminar-carga-administrativa", (req, res) => {
   });
 });
 
+// Ruta para guardar observaciones junto con el rut del profesor
+app.post('/guardar-observacion', (req, res) => {
+  const { rut, observacion } = req.body;
+  console.log('Datos recibidos:', req.body);
 
+  if (!observacion) {
+    res.status(400).send('La observación no puede estar vacía');
+    return;
+  }
+
+  const query = `INSERT INTO Observaciones (idProfesor, observacion) VALUES (?, ?)`;
+  const values = [rut, observacion];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al guardar la observación:', err);
+      res.status(500).send('Error al guardar la observación');
+    } else {
+      console.log('Observación guardada exitosamente:', result);
+      res.status(200).json({ message: 'Observación guardada exitosamente' });
+    }
+  });
+});
 
 //Llamado de carrera por idFacultad
 app.get("/facultad/:idFacultad", (req, res) => {

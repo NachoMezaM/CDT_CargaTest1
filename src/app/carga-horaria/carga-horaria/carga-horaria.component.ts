@@ -112,10 +112,9 @@ export class CargaHorariaComponent implements AfterViewInit {
   //-------------------------------------Ingresar Carga----------------------------------------------
   buscarDatos() {
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
-    const nombre = (
-      document.getElementById('nombre') as HTMLInputElement
-    ).value.trim();
+    const nombre = (document.getElementById('nombre') as HTMLInputElement).value.trim();
     const año = (document.getElementById('año') as HTMLInputElement).value;
+    this.rut = rut;
 
     this.http
       .post<any>('http://localhost:3000/buscar-datos', { rut, nombre, año })
@@ -846,14 +845,43 @@ export class CargaHorariaComponent implements AfterViewInit {
       this.closePopupButton.nativeElement.addEventListener('click', () => {
         this.popup.nativeElement.style.display = 'none';
       });
-      this.Notas.nativeElement.addEventListener(
-        'input',
-        this.adjustTextareaHeight.bind(this)
-      );
+      this.Notas.nativeElement.addEventListener('input', (event: Event) => {
+        const input = event.target as HTMLTextAreaElement;
+        this.notas = input.value;
+        this.adjustTextareaHeight();
+      });
     } else {
       console.error('Error: Uno o más elementos HTML no se encontraron');
     }
   }
+
+ guardarNota() {
+    const nota = this.notas;
+    if (!nota.trim()) {
+      console.error('La nota no puede estar vacía');
+      return;
+    }
+
+    const datos = {
+      rut: this.rut,
+      observacion: nota
+    };
+
+    console.log('Datos que se enviarán al backend:', datos);
+
+    this.http.post<any>('http://localhost:3000/guardar-observacion', datos)
+      .subscribe(
+        (response) => {
+          console.log('Nota guardada correctamente:', response);
+        },
+        (error) => {
+          console.error('Error al guardar la nota:', error);
+        }
+      );
+
+    this.popup.nativeElement.style.display = 'none';
+  }
+  
 
   private adjustTextareaHeight(): void {
     const textarea = this.Notas.nativeElement;

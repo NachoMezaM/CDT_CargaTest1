@@ -142,14 +142,15 @@
       </div>
     </form>
   </div>
-  <button id="floating-button" #floatingButton class="boton">Notas</button>
+  <button id="floating-button" #floatingButton class="boton">Observacion</button>
 
   <!-- Ventana emergente -->
   <div id="popup" #popup class="popup">
     <div class="popup-content">
       <label for="Observacion"><strong>Observacion</strong></label>
       <textarea #Notas formControlName="Observacion" type="text" id="Observacion" class="form-control1" placeholder="Escribe tus notas aquí" ></textarea>
-      <button id="close-popup" #closePopupButton>Cerrar</button>
+      <button class="boton" id="guardar-nota-button" (click)="guardarNota()">Guardar Nota</button>
+      <button class="boton" id="close-popup" #closePopupButton>Cerrar</button>
     </div>
   </div>
 </body>
