@@ -14,6 +14,7 @@
         <div class="form-group">
           <label for="Facultad"><strong>Facultad</strong></label>
           <select id="Facultad" class="form-control" formControlName="Facultad" (change)="onFacultadChange($event)">
+            <option value="" disabled selected>Seleccione una Facultad</option>
             <option value=1>FACS</option>
             <option value=2>FAIN</option>
             <option value=3>FEDUC</option>
@@ -22,8 +23,9 @@
           </select>
         </div>
         <div class="form-group" *ngIf="showCarrera">
-          <label for="Carrera" ><strong>Carrera</strong></label>
-          <select id="Carrera" class="form-control" formControlName="Carrera" (change)="onSelectionChange($event, 'carrera')">
+          <label for="Carrera"><strong>Carrera</strong></label>
+          <select id="Carrera" class="form-control" formControlName="Carrera" (change)="onCarreraChange($event, 'carrera')">
+            <option value="" disabled selected>Seleccione una Carrera</option>
             <option *ngFor="let carrera of carreras" [value]="carrera.value">{{ carrera.label }}</option>
           </select>
         </div>
@@ -31,13 +33,15 @@
       <div class="column">
         <div class="form-group" *ngIf="showPlan">
           <label for="Plan"><strong>Plan</strong></label>
-          <select id="Plan" class="form-control" formControlName="Plan" (change)="onSelectionChange($event, 'plan')">
+          <select id="Plan" class="form-control" formControlName="Plan" (change)="onPlanChange($event)">
+            <option value="" disabled selected>Seleccione un Plan</option>
             <option *ngFor="let Plan of planes" [value]="Plan.value">{{ Plan.label }}</option>
           </select>
         </div>
         <div class="form-group" *ngIf="showSemestre">
           <label for="Semestre"><strong>Semestre</strong></label>
-          <select id="Semestre" class="form-control" formControlName="Semestre" (change)="onSelectionChange($event, 'semestre')">
+          <select id="Semestre" class="form-control" formControlName="Semestre" (change)="onSemestreChange($event)">
+            <option value="" disabled selected>Seleccione un Semestre</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>

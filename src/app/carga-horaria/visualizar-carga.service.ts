@@ -4,6 +4,8 @@ import {  Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { VisualizarCA } from './visualizar-carga';
 import { Profesor } from '../profesor/profesor';
+import { CargaAcademica } from './CargaAcademica';
+import { CargaAcademica1 } from './CargaAcademicaA';
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +77,12 @@ export class VisualizarCargaService {
       catchError(this.errorHandler)
     )
   }
+  filtrotabla(link:CargaAcademica1): Observable<any> {
+    return this.httpClient.post<any>(`${this.apiURL}/filtro/`, link, this.httpOptions)
+    .pipe(
+      catchError(this.errorHandler)
+    )
+  }
  
   errorHandler(error:any) {
     let errorMessage = '';
@@ -82,7 +90,7 @@ export class VisualizarCargaService {
       errorMessage = error.error.message;
       
     } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message} nosirve `;
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}  `;
     }
     return throwError(errorMessage);
  }
