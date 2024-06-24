@@ -265,7 +265,9 @@ export class CargaHorariaComponent implements AfterViewInit {
           <td><input type="checkbox" class="confirm-checkbox"></td>
           <td><label class="remove-checkbox">✘</label></td>`;
           tbody.appendChild(newRow);
+
           this.calcularTotalMinutosAsignatura();
+
           // Centrar el texto en todas las celdas de la nueva fila
           const cells = newRow.querySelectorAll('td');
           cells.forEach((cell) => {
@@ -429,12 +431,7 @@ export class CargaHorariaComponent implements AfterViewInit {
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
 
     // Realizar una solicitud POST al servidor para eliminar la fila
-    this.http
-      .post<any>('http://localhost:3000/eliminar-fila', {
-        codigo,
-        seccion,
-        rut,
-      })
+    this.http.post<any>('http://localhost:3000/eliminar-fila', {codigo, seccion, rut })
       .subscribe(
         (data) => {
           
@@ -445,6 +442,7 @@ export class CargaHorariaComponent implements AfterViewInit {
             // Eliminar la fila del DOM si se eliminó con éxito de la base de datos
             if (row.parentNode) {
               row.parentNode.removeChild(row);
+              this.calcularTotalMinutosAsignatura();
             }
           } else {
             console.error('Error al eliminar la fila:', data);
@@ -828,6 +826,7 @@ export class CargaHorariaComponent implements AfterViewInit {
             // Eliminar la fila del DOM si se eliminó con éxito de la base de datos
             if (row.parentNode) {
               row.parentNode.removeChild(row);
+              this.calcularTotalMinutosCarga();
             }
           } else {
             console.error('Error al eliminar la fila:', data);
