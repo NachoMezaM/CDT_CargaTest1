@@ -31,8 +31,7 @@ export class CargaHorariaComponent implements AfterViewInit {
   carga!: string;
   horas!: number;
   minutos!: number;
-  rut!: string;
-  notas: string = '';
+  rut: string = '';
 
   constructor(private http: HttpClient) {}
 
@@ -120,7 +119,7 @@ export class CargaHorariaComponent implements AfterViewInit {
       .post<any>('http://localhost:3000/buscar-datos', { rut, nombre, año })
       .subscribe(
         (response) => {
-          //console.log('Datos encontrados:', response);
+          this.obtenerObservaciones();
           // Verificar si la respuesta es un array y contiene al menos un elemento
           if (Array.isArray(response) && response.length > 0) {
             // Buscar el resultado que coincide con el rut buscado o el nombre y apellido
@@ -832,60 +831,93 @@ export class CargaHorariaComponent implements AfterViewInit {
 
   //-------------------------------Notas-------------------------------
 
-  @ViewChild('floatingButton') floatingButton!: ElementRef;
-  @ViewChild('popup') popup!: ElementRef;
-  @ViewChild('closePopupButton') closePopupButton!: ElementRef;
-  @ViewChild('Notas') Notas!: ElementRef;
+@ViewChild('floatingButton') floatingButton!: ElementRef;
+@ViewChild('popup') popup!: ElementRef;
+@ViewChild('closePopupButton') closePopupButton!: ElementRef;
+@ViewChild('Notas') Notas!: ElementRef;
 
-  ngAfterViewInit(): void {
-    if (this.floatingButton && this.popup && this.closePopupButton) {
-      this.floatingButton.nativeElement.addEventListener('click', () => {
-        this.popup.nativeElement.style.display = 'block';
-      });
-      this.closePopupButton.nativeElement.addEventListener('click', () => {
-        this.popup.nativeElement.style.display = 'none';
-      });
-      this.Notas.nativeElement.addEventListener('input', (event: Event) => {
-        const input = event.target as HTMLTextAreaElement;
-        this.notas = input.value;
-        this.adjustTextareaHeight();
-      });
+observacion: string = '';
+
+ngAfterViewInit(): void {
+    if (this.floatingButton && this.popup && this.closePopupButton && this.Notas) {
+        this.floatingButton.nativeElement.addEventListener('click', () => {
+            this.popup.nativeElement.style.display = 'block';
+            this.obtenerObservaciones();
+        });
+        this.closePopupButton.nativeElement.addEventListener('click', () => {
+            this.popup.nativeElement.style.display = 'none';
+        });
+        this.Notas.nativeElement.addEventListener('input', (event: Event) => {
+            const input = event.target as HTMLTextAreaElement;
+            this.observacion = input.value;
+            this.adjustTextareaHeight();
+        });
     } else {
-      console.error('Error: Uno o más elementos HTML no se encontraron');
+        console.error('Error: Uno o más elementos HTML no se encontraron');
     }
-  }
+}
 
- guardarNota() {
-    const nota = this.notas;
-    if (!nota.trim()) {
+guardarNota() {
+  const nota = this.observacion;
+  if (!nota.trim()) {
       console.error('La nota no puede estar vacía');
       return;
-    }
+  }
 
-    const datos = {
+  const datos = {
       rut: this.rut,
       observacion: nota
-    };
+  };
 
-    console.log('Datos que se enviarán al backend:', datos);
+  console.log('Datos que se enviarán al backend:', datos);
 
-    this.http.post<any>('http://localhost:3000/guardar-observacion', datos)
+  this.http.post<any>('http://localhost:3000/guardar-observacion', datos)
       .subscribe(
-        (response) => {
-          console.log('Nota guardada correctamente:', response);
-        },
-        (error) => {
-          console.error('Error al guardar la nota:', error);
-        }
+          (response) => {
+              console.log('Nota guardada correctamente:', response);
+              this.obtenerObservaciones();
+          },
+          (error) => {
+              console.error('Error al guardar la nota:', error);
+          }
       );
 
-    this.popup.nativeElement.style.display = 'none';
-  }
-  
+  this.popup.nativeElement.style.display = 'none';
+}
 
-  private adjustTextareaHeight(): void {
-    const textarea = this.Notas.nativeElement;
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
+obtenerObservaciones() {
+  if (!this.rut) {
+      console.error('RUT no está definido.');
+      return;
   }
+
+  this.http.get<any>(`http://localhost:3000/obtener-observaciones/${this.rut}`)
+      .subscribe(
+          (response) => {
+              console.log('Response de obtenerObservaciones:', response);
+
+              // Verificar si la respuesta contiene observaciones
+              if (response.length > 0) {
+                  console.log('Primera observacion en la respuesta:', response[0]);
+                  this.observacion = response[0].Observacion; // Asegúrate de que el nombre del campo coincida con la respuesta de la API
+                  this.Notas.nativeElement.value = this.observacion; // Actualiza el área de texto con la nota obtenida
+                  console.log('Nota obtenida:', this.observacion);
+              } else {
+                  this.observacion = '';
+                  this.Notas.nativeElement.value = this.observacion; // Limpia el área de texto si no hay notas
+                  console.log('No se encontraron notas, textarea limpiada');
+              }
+              this.adjustTextareaHeight();
+          },
+          (error) => {
+              console.error('Error al obtener las observaciones:', error);
+          }
+      );
+}
+
+private adjustTextareaHeight(): void {
+  const textarea = this.Notas.nativeElement;
+  textarea.style.height = 'auto';
+  textarea.style.height = textarea.scrollHeight + 'px';
+}
 }
