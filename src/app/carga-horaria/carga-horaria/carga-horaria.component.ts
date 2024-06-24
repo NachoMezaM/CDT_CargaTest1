@@ -608,16 +608,19 @@ export class CargaHorariaComponent implements AfterViewInit {
         );
         return;
       }
-      
+
+
       tbody.innerHTML = '';
 
       response.forEach((item: { carga: any; horas: any; minutos: any }) => {
         const newRow = document.createElement('tr');
+        const totalCarga = Math.floor(item.minutos);
 
         newRow.innerHTML = `
           <td>${item.carga}</td>
           <td>${item.horas}</td>
           <td>${item.minutos}</td>
+          <td>${totalCarga}</td>
           <td><input type="checkbox" class="confirm-checkbox" disabled></td>
           <td><label class="remove-checkbox">✘</label></td>
         `;
@@ -662,11 +665,13 @@ export class CargaHorariaComponent implements AfterViewInit {
         const Carga = CargaInput.value;
         const Horas = parseInt(HorasInput.value);
         const minutos = Horas * 60; // Calcular los minutos
+        const totalCarga = Math.floor(minutos);
 
         newRow.innerHTML = `
           <td>${Carga}</td>
           <td>${Horas}</td>
           <td>${minutos}</td>
+          <td>${totalCarga}</td>
           <td><input type="checkbox" class="confirm-checkbox"></td>
           <td><label class="remove-checkbox">✘</label></td>
         `;
