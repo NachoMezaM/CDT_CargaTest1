@@ -606,29 +606,60 @@ app.post("/eliminar-carga-administrativa", (req, res) => {
   });
 });
 
-// Ruta para guardar observaciones junto con el rut del profesor
+// Ruta para guardar o actualizar la observación de un profesor por su rut
 app.post('/guardar-observacion', (req, res) => {
   const { rut, observacion } = req.body;
-  console.log('Datos recibidos:', req.body);
 
-  if (!observacion) {
-    res.status(400).send('La observación no puede estar vacía');
-    return;
-  }
+  const queryCheck = 'SELECT * FROM Observacion WHERE idProfesor = ?';
+  const queryInsert = 'INSERT INTO Observacion (idProfesor, Observacion) VALUES (?, ?)';
+  const queryUpdate = 'UPDATE Observacion SET Observacion = ? WHERE idProfesor = ?';
 
-  const query = `INSERT INTO Observaciones (idProfesor, observacion) VALUES (?, ?)`;
-  const values = [rut, observacion];
-
-  db.query(query, values, (err, result) => {
+  db.query(queryCheck, [rut], (err, results) => {
     if (err) {
-      console.error('Error al guardar la observación:', err);
-      res.status(500).send('Error al guardar la observación');
+      console.error('Error al comprobar observación:', err);
+      res.status(500).send('Error al comprobar observación');
+      return;
+    }
+
+    if (results.length > 0) {
+      // Actualizar observación existente
+      db.query(queryUpdate, [observacion, rut], (err, results) => {
+        if (err) {
+          console.error('Error al actualizar observación:', err);
+          res.status(500).send('Error al actualizar observación');
+          return;
+        }
+        res.status(200).send('Observación actualizada correctamente');
+      });
     } else {
-      console.log('Observación guardada exitosamente:', result);
-      res.status(200).json({ message: 'Observación guardada exitosamente' });
+      // Insertar nueva observación
+      db.query(queryInsert, [rut, observacion], (err, results) => {
+        if (err) {
+          console.error('Error al insertar observación:', err);
+          res.status(500).send('Error al insertar observación');
+          return;
+        }
+        res.status(200).send('Observación guardada correctamente');
+      });
     }
   });
 });
+
+// Ruta para obtener las observaciones de un profesor por su rut
+app.get('/obtener-observaciones/:rut', (req, res) => {
+  const rut = req.params.rut;
+
+  const query = 'SELECT Observacion FROM Observacion WHERE idProfesor = ?';
+  db.query(query, [rut], (err, results) => {
+    if (err) {
+      console.error('Error al obtener observaciones:', err);
+      res.status(500).send('Error al obtener observaciones');
+      return;
+    }
+    res.status(200).json(results);
+  });
+});
+
 
 //Llamado de carrera por idFacultad
 app.get("/facultad/:idFacultad", (req, res) => {
@@ -650,6 +681,7 @@ app.get("/facultad/:idFacultad", (req, res) => {
     }
   );
 });
+
 app.get("/planes/:idCarrera", (req, res) => {
   const idCarrera = req.params.idCarrera;
   //console.log(req.params)
@@ -669,6 +701,7 @@ app.get("/planes/:idCarrera", (req, res) => {
     }
   );
 });
+
 app.post("/filtro/", (req, res) => {
 
   const [idFacultad, idCarrera, AnioPlan, Semestre]   = req.body;
