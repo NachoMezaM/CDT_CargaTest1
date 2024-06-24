@@ -82,7 +82,7 @@
           </div>
         </div>
 
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" #tabla1>
           <thead>
             <tr>
               <th>Codigo</th>
@@ -100,8 +100,10 @@
           <tbody id="asignaturas-body">
             <!-- Aquí se agregarán las filas dinámicamente -->
           </tbody>
-          <button type="submit" id="guardar-button" class="boton" (click)="guardarDatos()">Guardar</button>
+          
         </table>
+        <tr>Total: {{totalasignaturas}}</tr>
+        <button type="submit" id="guardar-button" class="boton" (click)="guardarDatos()">Guardar</button>
       </div>
     </form>
 
@@ -113,16 +115,16 @@
           <div class="row">
             <div class="col1">
               <label for="Carga"><strong>Actividad:</strong></label>
-              <select formControlName="Carga" id="Carga" class="form-control1" (change)="agregarFilaAdministrativa1()"></select>
+              <select formControlName="Carga" id="Carga" class="form-control1" ></select>
             </div>
             <div class="col1">
               <label for="Horas"><strong>Hora</strong></label>
-              <input formControlName="Horas" type="text" id="Horas" class="form-control1" placeholder="Horas" uptwo>
+              <input formControlName="Horas" type="text" id="Horas" class="form-control1" placeholder="Horas" uptwo (change)="agregarFilaAdministrativa1()">
             </div>
           </div>
         </div>
 
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" #tabla>
           <thead>
             <tr>
               <th>Carga</th>
@@ -131,13 +133,16 @@
               <th>Confirmar</th>
               <th>Eliminar</th>
             </tr>
+           
           </thead>
           <tbody id="carga-administrativa-body">
             <!-- Aquí se agregarán las filas dinámicamente -->
           </tbody>
-          <!-- <button type="button" class="boton" (click)="agregarFilaAdministrativa1()">Agregar</button> -->
-          <button type="submit" class="boton" id="guardar-button" (click)="guardarDatosAdministrativos()">Guardar</button>
+          
         </table>
+        <tr>Total: {{totalcarga}}</tr>
+        <!-- <button type="button" class="boton" (click)="agregarFilaAdministrativa1()">Agregar</button> -->
+        <button type="submit" class="boton" id="guardar-button" (click)="guardarDatosAdministrativos()">Guardar</button>
       </div>
     </form>
   </div>

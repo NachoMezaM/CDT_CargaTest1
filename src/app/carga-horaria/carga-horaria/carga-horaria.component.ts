@@ -23,6 +23,8 @@ import { parse } from 'node:path';
 })
 export class CargaHorariaComponent implements AfterViewInit {
   asignaturas: any[] = [];
+  @ViewChild('tabla') tabla!: ElementRef;
+  @ViewChild('tabla1') tabla1!: ElementRef;
   totalHoras: number = 0;
   totalMinutos: number = 0;
   currentYear: number | undefined;
@@ -32,6 +34,8 @@ export class CargaHorariaComponent implements AfterViewInit {
   horas!: number;
   minutos!: number;
   rut: string = '';
+  totalcarga: number = 0;
+  totalasignaturas: number = 0;
 
   constructor(private http: HttpClient) {}
 
@@ -51,6 +55,9 @@ export class CargaHorariaComponent implements AfterViewInit {
       const rut = rutInput.value;
       this.buscarDatosAdministrativos(rut);
     });
+
+
+
 
     const guardarButton = document.getElementById(
       'guardar-button'
@@ -108,6 +115,26 @@ export class CargaHorariaComponent implements AfterViewInit {
     // }
   }
 
+
+  
+  calcularTotalMinutosCarga() {
+    const filas = this.tabla.nativeElement.rows;
+    this.totalcarga = 0;
+    for (let i = 1; i < filas.length; i++) {
+      const minutosTd = filas[i].cells[2]; // suponiendo que la columna de minutos es la tercera
+      const minutos = parseInt(minutosTd.textContent, 10);
+      this.totalcarga += minutos;
+    }
+  }
+  calcularTotalMinutosAsignatura() {
+    const filas = this.tabla1.nativeElement.rows;
+    this.totalasignaturas = 0;
+    for (let i = 1; i < filas.length; i++) {
+      const minutosTd = filas[i].cells[6]; // suponiendo que la columna de minutos es la tercera
+      const minutos = parseInt(minutosTd.textContent, 10);
+      this.totalasignaturas += minutos;
+    }
+  }
   //-------------------------------------Ingresar Carga----------------------------------------------
   buscarDatos() {
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
@@ -238,7 +265,7 @@ export class CargaHorariaComponent implements AfterViewInit {
           <td><input type="checkbox" class="confirm-checkbox"></td>
           <td><label class="remove-checkbox">✘</label></td>`;
           tbody.appendChild(newRow);
-
+          this.calcularTotalMinutosAsignatura();
           // Centrar el texto en todas las celdas de la nueva fila
           const cells = newRow.querySelectorAll('td');
           cells.forEach((cell) => {
@@ -252,6 +279,7 @@ export class CargaHorariaComponent implements AfterViewInit {
               this.eliminarFila1(newRow);
               this.actualizarBotonGuardar();
             });
+            
           }
 
           // Agregar el evento de clic al botón de eliminación
@@ -260,6 +288,7 @@ export class CargaHorariaComponent implements AfterViewInit {
             deleteButton.addEventListener('click', () => {
               this.eliminarFila1(newRow);
               this.actualizarBotonGuardar();
+              
             });
           }
 
@@ -406,6 +435,7 @@ export class CargaHorariaComponent implements AfterViewInit {
     // Remover la fila del DOM
     if (row.parentNode) {
       row.parentNode.removeChild(row);
+      this.calcularTotalMinutosAsignatura();
     }
   }
 
@@ -426,6 +456,7 @@ export class CargaHorariaComponent implements AfterViewInit {
       })
       .subscribe(
         (data) => {
+          
           // Manejar la respuesta del servidor
           console.log('Respuesta del servidor:', data);
           if (data && data.message === 'Fila eliminada exitosamente') {
@@ -492,6 +523,7 @@ export class CargaHorariaComponent implements AfterViewInit {
           <td><input type="checkbox" class="confirm-checkbox" disabled></td>
           <td><label class="remove-checkbox">✘</label></td>`;
               tbody.appendChild(newRow);
+              this.calcularTotalMinutosAsignatura();
 
               // Centrar el texto en todas las celdas de la nueva fila
               const cells = newRow.querySelectorAll('td');
@@ -595,7 +627,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         );
         return;
       }
-
+      
       tbody.innerHTML = '';
 
       response.forEach((item: { carga: any; horas: any; minutos: any }) => {
@@ -610,7 +642,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         `;
 
         tbody.appendChild(newRow);
-
+        this.calcularTotalMinutosCarga();
         // Centrar el texto en todas las celdas de la nueva fila
         const cells = newRow.querySelectorAll('td');
         cells.forEach((cell) => {
@@ -622,6 +654,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         if (removeLabel) {
           removeLabel.addEventListener('click', () => {
             this.eliminarFilaAdministrativa1(newRow);
+            this.calcularTotalMinutosCarga();
             this.actualizarBotonGuardar();
           });
         }
@@ -643,6 +676,7 @@ export class CargaHorariaComponent implements AfterViewInit {
           );
           return;
         }
+        
         const newRow = document.createElement('tr');
         const Carga = CargaInput.value;
         const Horas = parseInt(HorasInput.value);
@@ -655,15 +689,15 @@ export class CargaHorariaComponent implements AfterViewInit {
           <td><input type="checkbox" class="confirm-checkbox"></td>
           <td><label class="remove-checkbox">✘</label></td>
         `;
-
+          
         tbody.appendChild(newRow);
-
+        
         // Centrar el texto en todas las celdas de la nueva fila
         const cells = newRow.querySelectorAll('td');
         cells.forEach((cell) => {
           cell.style.textAlign = 'center';
         });
-
+        this.calcularTotalMinutosCarga();
         // Agregar el evento de clic a la "x" para eliminar la fila
         const removeLabel = newRow.querySelector('.remove-checkbox');
         if (removeLabel) {
@@ -783,6 +817,7 @@ export class CargaHorariaComponent implements AfterViewInit {
   eliminarFilaAdministrativa(row: HTMLElement) {
     if (row.parentNode) {
       row.parentNode.removeChild(row);
+      this.calcularTotalMinutosCarga();
     }
   }
 
@@ -828,6 +863,10 @@ export class CargaHorariaComponent implements AfterViewInit {
       tbody.innerHTML = ''; // Limpiar el contenido del tbody
     }
   }
+
+
+
+
 
   //-------------------------------Notas-------------------------------
 
@@ -914,6 +953,7 @@ obtenerObservaciones() {
           }
       );
 }
+
 
 private adjustTextareaHeight(): void {
   const textarea = this.Notas.nativeElement;
