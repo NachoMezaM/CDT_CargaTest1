@@ -318,9 +318,7 @@ export class CargaHorariaComponent implements AfterViewInit {
     let algunaFilaGuardada = false; // Variable para controlar si al menos una fila se guardó con éxito
 
     filas.forEach((fila) => {
-      const checkbox = fila.querySelector(
-        '.confirm-checkbox'
-      ) as HTMLInputElement;
+      const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
       if (checkbox.checked) {
         const columnas = fila.querySelectorAll('td');
         const codigo = columnas[0].innerText;
@@ -328,13 +326,8 @@ export class CargaHorariaComponent implements AfterViewInit {
         const planificacion = parseInt(columnas[5].innerText);
         const minutos = parseInt(columnas[4].innerText);
 
-        this.guardarCargaDocente(
-          idProfesor,
-          `${codigo}${seccion}`,
-          planificacion,
-          minutos,
-          año
-        ).then((guardado) => {
+        this.guardarCargaDocente(idProfesor,`${codigo}${seccion}`,planificacion,minutos,año)
+        .then((guardado) => {
           if (guardado) {
             algunaFilaGuardada = true;
           }
@@ -365,22 +358,10 @@ export class CargaHorariaComponent implements AfterViewInit {
     });
   }
 
-  guardarCargaDocente(
-    idProfesor: string,
-    idAsignaturaSeccion: string,
-    planificacion: number,
-    minutos: number,
-    año: string
-  ): Promise<boolean> {
+  guardarCargaDocente(idProfesor: string,idAsignaturaSeccion: string,planificacion: number,minutos: number,año: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       this.http
-        .post<any>('http://localhost:3000/guardar-carga-docente', {
-          idProfesor,
-          idAsignaturaSeccion,
-          HorasPlanificacion: planificacion,
-          Horas_Minutos: minutos,
-          Anio: año,
-        })
+        .post<any>('http://localhost:3000/guardar-carga-docente', {idProfesor,idAsignaturaSeccion,HorasPlanificacion: planificacion,Horas_Minutos: minutos,Anio: año,})
         .subscribe(
           (data) => {
             console.log('Carga docente guardada exitosamente:', data);
