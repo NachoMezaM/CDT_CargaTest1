@@ -110,13 +110,19 @@ export class CargaHorariaComponent implements AfterViewInit {
   }
 
   
-  calcularTotalMinutosCarga() {
+  calcularTotalHorasCarga() {
     const filas = this.tabla.nativeElement.rows;
     this.totalcarga = 0;
     for (let i = 1; i < filas.length; i++) {
-      const minutosTd = filas[i].cells[2]; // suponiendo que la columna de minutos es la tercera
-      const minutos = parseInt(minutosTd.textContent, 10);
-      this.totalcarga += minutos;
+      const horasTd = filas[i].cells[1]; // suponiendo que la columna de horas es la tercera
+      const horas = parseInt(horasTd.textContent, 10);
+      this.totalcarga += horas;
+    }
+    if (this.totalcarga > 42) {
+      alert('El total de horas de carga no puede exceder las 42 horas.');
+      // Si se supera el límite, puedes optar por restar los minutos de la fila que causó la superación.
+      this.totalcarga -= parseInt(filas[filas.length - 1].cells[1].textContent, 10);
+      this.eliminarFila1(filas[filas.length - 1]);
     }
   }
 
@@ -586,7 +592,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         `;
 
         tbody.appendChild(newRow);
-        this.calcularTotalMinutosCarga();
+        this.calcularTotalHorasCarga();
         // Centrar el texto en todas las celdas de la nueva fila
         const cells = newRow.querySelectorAll('td');
         cells.forEach((cell) => {
@@ -598,7 +604,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         if (removeLabel) {
           removeLabel.addEventListener('click', () => {
             this.eliminarFilaAdministrativa1(newRow);
-            this.calcularTotalMinutosCarga();
+            this.calcularTotalHorasCarga();
             this.actualizarBotonGuardar();
           });
         }
@@ -624,6 +630,13 @@ export class CargaHorariaComponent implements AfterViewInit {
         const minutos = Horas * 60; // Calcular los minutos
         const totalCarga = Math.floor(minutos);
 
+        
+        // Verificar si al agregar estos horas se exceden las 42 horas
+        if (this.totalcarga + Horas > 42) {
+          alert('No se puede agregar esta carga. El total de horas no puede exceder las 42 horas.');
+          return; // Salir de la función si se excede el límite
+        }
+
         newRow.innerHTML = `
           <td>${Carga}</td>
           <td>${Horas}</td>
@@ -640,7 +653,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         cells.forEach((cell) => {
           cell.style.textAlign = 'center';
         });
-        this.calcularTotalMinutosCarga();
+        this.calcularTotalHorasCarga();
 
         // Agregar el evento de clic a la "x" para eliminar la fila
         const removeLabel = newRow.querySelector('.remove-checkbox');
@@ -761,7 +774,7 @@ export class CargaHorariaComponent implements AfterViewInit {
   eliminarFilaAdministrativa(row: HTMLElement) {
     if (row.parentNode) {
       row.parentNode.removeChild(row);
-      this.calcularTotalMinutosCarga();
+      this.calcularTotalHorasCarga();
     }
   }
 
@@ -786,7 +799,7 @@ export class CargaHorariaComponent implements AfterViewInit {
             // Eliminar la fila del DOM si se eliminó con éxito de la base de datos
             if (row.parentNode) {
               row.parentNode.removeChild(row);
-              this.calcularTotalMinutosCarga();
+              this.calcularTotalHorasCarga();
             }
           } else {
             console.error('Error al eliminar la fila:', data);
