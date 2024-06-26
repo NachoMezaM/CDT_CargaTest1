@@ -125,16 +125,19 @@ export class CargaHorariaComponent implements AfterViewInit {
   calcularTotalMinutosAsignatura() {
     const filas = this.tabla1.nativeElement.rows;
     this.totalasignaturas = 0;
+    const minutosasignatura = parseInt(document.getElementById('PosibleHorasDeDocencia')!.innerText, 10);
+  
     for (let i = 1; i < filas.length; i++) {
-      const minutosTd = filas[i].cells[6]; // suponiendo que la columna de minutos es la tercera
+      const minutosTd = filas[i].cells[6]; // suponiendo que la columna de horas es la segunda
       const minutos = parseInt(minutosTd.textContent, 10);
+  
+      if (this.totalasignaturas + minutos > minutosasignatura * 60) {
+        alert('El total de minutos de docencia no puede exceder las horas de docencia.');
+        this.eliminarFila1(filas[i]);
+        return;
+      }
+  
       this.totalasignaturas += minutos;
-    }
-    if (this.totalasignaturas > 1200) {
-      alert('El total de minutos de docencia no puede exceder los 1200 minutos.');
-      // Si se supera el límite, puedes optar por restar los minutos de la fila que causó la superación.
-      this.totalasignaturas -= parseInt(filas[filas.length - 1].cells[6].textContent, 10);
-      this.eliminarFila1(filas[filas.length - 1]);
     }
   }
 
@@ -279,11 +282,11 @@ export class CargaHorariaComponent implements AfterViewInit {
           const planificacion = Math.floor(minutos); // Calcular las horas
           const totalHoras = Math.floor(minutos + planificacion);
 
-        // Verificar si al agregar estos minutos se exceden los 1200 minutos
-        if (this.totalasignaturas + totalHoras > 1200) {
-          alert('No se puede agregar esta asignatura. El total de minutos de docencia no puede exceder los 1200 minutos.');
-          return; // Salir de la función si se excede el límite
-        }
+        // // Verificar si al agregar estos minutos se exceden los 1200 minutos
+        // if (this.totalasignaturas + totalHoras > 1200) {
+        //   alert('No se puede agregar esta asignatura. El total de minutos de docencia no puede exceder los 1200 minutos.');
+        //   return; // Salir de la función si se excede el límite
+        // }
 
           newRow.innerHTML = `
           <td>${codigo}</td>
