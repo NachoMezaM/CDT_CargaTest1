@@ -13,13 +13,7 @@ import { parse } from 'node:path';
   templateUrl: './carga-horaria.component.html',
   styleUrls: ['./carga-horaria.component.css'],
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    RouterOutlet,
-    RouterLink,
-    BarranavegacionComponent,
-  ],
+  imports: [CommonModule, RouterModule, RouterOutlet, RouterLink, BarranavegacionComponent],
 })
 export class CargaHorariaComponent implements AfterViewInit {
   asignaturas: any[] = [];
@@ -444,8 +438,7 @@ export class CargaHorariaComponent implements AfterViewInit {
   buscarDatosProfesor() {
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
 
-    this.http
-      .post<any>('http://localhost:3000/buscar-datos-profesor', { rut })
+    this.http.post<any>('http://localhost:3000/buscar-datos-profesor', { rut })
       .subscribe(
         (data) => {
           const tbody = document.getElementById('asignaturas-body');
