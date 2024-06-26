@@ -90,39 +90,35 @@ export class CargaHorariaComponent implements AfterViewInit {
   }
 
   limpiarPagina() {
-    // Limpiar los campos del formulario
     (document.getElementById('nombre') as HTMLInputElement).value = '';
     (document.getElementById('rut') as HTMLInputElement).value = '';
-    (document.getElementById('grado') as HTMLElement).innerText = '';
-    (document.getElementById('jerarquizacion') as HTMLElement).innerText = '';
-    (document.getElementById('horascontrato') as HTMLElement).innerText = '';
-    (document.getElementById('PosibleHorasDeDocencia') as HTMLElement).innerText = '';
-
-    // Limpiar la tabla de asignaturas
-    const tbody = document.getElementById('asignaturas-body');
-    if (tbody) {
-      tbody.innerHTML = '';
+    document.getElementById('grado')!.innerText = '';
+    document.getElementById('jerarquizacion')!.innerText = '';
+    document.getElementById('horascontrato')!.innerText = '';
+    this.limpiarTablaCargaAdministrativa();
+    this.observacion = '';
+    if (this.Notas && this.Notas.nativeElement) {
+      this.Notas.nativeElement.value = '';
     }
-    // const tbodyAdmin = document.getElementById('carga-administrativa-body');
-    // if (tbodyAdmin) {
-    //   tbodyAdmin.innerHTML='';
-    // }
   }
 
   
   calcularTotalHorasCarga() {
     const filas = this.tabla.nativeElement.rows;
     this.totalcarga = 0;
+    const horasContrato = parseInt(document.getElementById('horascontrato')!.innerText, 10);
+  
     for (let i = 1; i < filas.length; i++) {
-      const horasTd = filas[i].cells[1]; // suponiendo que la columna de horas es la tercera
+      const horasTd = filas[i].cells[1]; // suponiendo que la columna de horas es la segunda
       const horas = parseInt(horasTd.textContent, 10);
+  
+      if (this.totalcarga + horas > horasContrato) {
+        alert('El total de horas de carga no puede exceder las horas de contrato.');
+        this.eliminarFila1(filas[i]);
+        return;
+      }
+  
       this.totalcarga += horas;
-    }
-    if (this.totalcarga > 42) {
-      alert('El total de horas de carga no puede exceder las 42 horas.');
-      // Si se supera el límite, puedes optar por restar los minutos de la fila que causó la superación.
-      this.totalcarga -= parseInt(filas[filas.length - 1].cells[1].textContent, 10);
-      this.eliminarFila1(filas[filas.length - 1]);
     }
   }
 
@@ -145,66 +141,103 @@ export class CargaHorariaComponent implements AfterViewInit {
 
   //-------------------------------------Ingresar Carga----------------------------------------------
   buscarDatos() {
-    const rut = (document.getElementById('rut') as HTMLInputElement).value;
+    const rut = (document.getElementById('rut') as HTMLInputElement).value.trim();
     const nombre = (document.getElementById('nombre') as HTMLInputElement).value.trim();
     const año = (document.getElementById('año') as HTMLInputElement).value;
-
-    this.http.post<any>('http://localhost:3000/buscar-datos', { rut, nombre, año })
+  
+    if (!rut && !nombre) {
+      console.error('Debe ingresar un RUT o un nombre para buscar.');
+      return;
+    }
+  
+    // Limpiar los campos y la tabla antes de realizar la búsqueda
+    this.limpiarPagina();
+  
+    if (rut) {
+      this.buscarPorRut(rut, año);
+    } else if (nombre) {
+      this.buscarPorNombre(nombre, año);
+    }
+  }
+  
+  buscarPorRut(rut: string, año: string) {
+    this.http.post<any>('http://localhost:3000/buscar-datos', { rut})
       .subscribe(
         (response) => {
-          // Verificar si la respuesta es un array y contiene al menos un elemento
+          this.procesarRespuestaBusqueda(response, rut);
+        },
+        (error) => {
+          console.error('Error al buscar datos por RUT:', error);
+        }
+      );
+  }
+  
+  buscarPorNombre(nombre: string, año: string) {
+    this.http.post<any>('http://localhost:3000/buscar-datos', { nombre})
+      .subscribe(
+        (response) => {
           if (Array.isArray(response) && response.length > 0) {
-            // Buscar el resultado que coincide con el rut buscado o el nombre y apellido
             const data = response.find(
-              (item) =>
-                item.idProfesor === rut ||
-                (item.Nombre + ' ' + item.Apellido).trim() === nombre
-              );
+              (item) => (item.Nombre + ' ' + item.Apellido).trim() === nombre
+            );
             if (data) {
-              // Concatenar nombre y apellido
-              const nombreCompleto = data.Nombre + ' ' + data.Apellido;
-              let jerarquia = '';
-              switch (data.idJerarquia) {
-                case 1:
-                  jerarquia = 'Instructor';
-                  break;
-                case 2:
-                  jerarquia = 'Asistente';
-                  break;
-                case 3:
-                  jerarquia = 'Asociado';
-                  break;
-                case 4:
-                  jerarquia = 'Titular';
-                  break;
-              }
-              // Actualizar los campos del formulario con los datos encontrados
-              (document.getElementById('nombre') as HTMLInputElement).value = nombreCompleto;
-              (document.getElementById('rut') as HTMLInputElement).value = data.idProfesor;
-              document.getElementById('grado')!.innerText = data.Grado;
-              document.getElementById('jerarquizacion')!.innerText = jerarquia;
-              document.getElementById('horascontrato')!.innerText = data.Horas;
-              // Aquí obtenemos las horas máximas de docencia desde la tabla jerarquia
-              this.obtenerHoraMaximaDocencia(data.idJerarquia);
-              this.rut = data.idProfesor;
-              this.buscarDatosProfesor();
-              this.agregarFilaAdministrativa(data.idProfesor);
-              this.obtenerObservaciones(data.idProfesor);
+              this.procesarRespuestaBusqueda([data], data.idProfesor);
             } else {
-              console.error('No se encontraron registros con el rut o nombre/apellido proporcionados.');
+              console.error('No se encontraron registros con el nombre/apellido proporcionados.');
             }
           } else {
             console.error('La respuesta del servidor no es un array o está vacía.');
           }
         },
         (error) => {
-          console.error('Error al buscar datos:', error);
+          console.error('Error al buscar datos por nombre:', error);
         }
       );
-    // this.buscarDatosProfesor();
-    this.agregarFilaAdministrativa(rut);
-    this.limpiarPagina();
   }
+  
+  procesarRespuestaBusqueda(response: any, rut: string) {
+  console.log('Respuesta del servidor:', response); // Verifica la respuesta del servidor
+  if (Array.isArray(response) && response.length > 0) {
+    const data = response.find(item => item.idProfesor === rut);
+    if (data) {
+      const nombreCompleto = data.Nombre + ' ' + data.Apellido;
+      let jerarquia = '';
+      switch (data.idJerarquia) {
+        case 1:
+          jerarquia = 'Instructor';
+          break;
+        case 2:
+          jerarquia = 'Asistente';
+          break;
+        case 3:
+          jerarquia = 'Asociado';
+          break;
+        case 4:
+          jerarquia = 'Titular';
+          break;
+      }
+      (document.getElementById('nombre') as HTMLInputElement).value = nombreCompleto;
+      (document.getElementById('rut') as HTMLInputElement).value = data.idProfesor;
+      document.getElementById('grado')!.innerText = data.Grado;
+      document.getElementById('jerarquizacion')!.innerText = jerarquia;
+      document.getElementById('horascontrato')!.innerText = data.Horas;
+
+      // Actualiza el valor de this.rut solo si la búsqueda se hizo por rut
+      if (response.length === 1 && response[0].idProfesor === rut) {
+        this.rut = rut;
+      }
+
+      this.obtenerHoraMaximaDocencia(data.idJerarquia);
+      this.buscarDatosProfesor();
+      this.agregarFilaAdministrativa(data.idProfesor);
+      this.obtenerObservaciones(data.idProfesor);
+    } else {
+      console.error('No se encontraron registros con el rut proporcionado.');
+    }
+  } else {
+    console.error('La respuesta del servidor no es un array o está vacía.');
+  }
+}
 
   obtenerHoraMaximaDocencia(idJerarquia: string) {
     this.http.get<any>(`http://localhost:3000/obtener-hora-maxima-docencia/${idJerarquia}`)
@@ -879,33 +912,33 @@ guardarNota() {
 }
 
 obtenerObservaciones(rut: string) {
-  // if (!this.rut) {
-  //     console.error('RUT no está definido.');
-  //     return;
-  // }
+  if (!rut) {
+    console.error('RUT no está definido.');
+    return;
+  }
 
-  this.http.get<any>(`http://localhost:3000/obtener-observaciones/${this.rut}`)
-      .subscribe(
-          (response) => {
-              console.log('Response de obtenerObservaciones:', response);
+  this.http.get<any>(`http://localhost:3000/obtener-observaciones/${rut}`)
+    .subscribe(
+      (response) => {
+        console.log('Response de obtenerObservaciones:', response);
 
-              // Verificar si la respuesta contiene observaciones
-              if (response.length > 0) {
-                  console.log('Primera observacion en la respuesta:', response[0]);
-                  this.observacion = response[0].Observacion; // Asegúrate de que el nombre del campo coincida con la respuesta de la API
-                  this.Notas.nativeElement.value = this.observacion; // Actualiza el área de texto con la nota obtenida
-                  console.log('Nota obtenida:', this.observacion);
-              } else {
-                  this.observacion = '';
-                  this.Notas.nativeElement.value = this.observacion; // Limpia el área de texto si no hay notas
-                  console.log('No se encontraron notas, textarea limpiada');
-              }
-              this.adjustTextareaHeight();
-          },
-          (error) => {
-              console.error('Error al obtener las observaciones:', error);
-          }
-      );
+        // Verificar si la respuesta contiene observaciones
+        if (response.length > 0) {
+          console.log('Primera observacion en la respuesta:', response[0]);
+          this.observacion = response[0].Observacion; // Asegúrate de que el nombre del campo coincida con la respuesta de la API
+          this.Notas.nativeElement.value = this.observacion; // Actualiza el área de texto con la nota obtenida
+          console.log('Nota obtenida:', this.observacion);
+        } else {
+          this.observacion = '';
+          this.Notas.nativeElement.value = this.observacion; // Limpia el área de texto si no hay notas
+          console.log('No se encontraron notas, textarea limpiada');
+        }
+        this.adjustTextareaHeight();
+      },
+      (error) => {
+        console.error('Error al obtener las observaciones:', error);
+      }
+    );
 }
 
 
