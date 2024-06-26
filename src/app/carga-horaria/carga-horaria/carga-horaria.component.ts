@@ -50,6 +50,12 @@ export class CargaHorariaComponent implements AfterViewInit {
       this.buscarDatosAdministrativos(rut);
     });
 
+    const nombreInput = document.getElementById('nombre') as HTMLInputElement;
+    if (nombreInput) {
+      nombreInput.addEventListener('textarea', () => {
+        this.buscarDatos(); // Llamar a buscarDatos cuando se ingrese un nombre
+      });
+    }
 
     const guardarButton = document.getElementById('guardar-button') as HTMLButtonElement;
     if (guardarButton) {
@@ -142,21 +148,18 @@ export class CargaHorariaComponent implements AfterViewInit {
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
     const nombre = (document.getElementById('nombre') as HTMLInputElement).value.trim();
     const año = (document.getElementById('año') as HTMLInputElement).value;
-    this.rut = rut;
 
-    this.http
-      .post<any>('http://localhost:3000/buscar-datos', { rut, nombre, año })
+    this.http.post<any>('http://localhost:3000/buscar-datos', { rut, nombre, año })
       .subscribe(
         (response) => {
-          this.obtenerObservaciones();
           // Verificar si la respuesta es un array y contiene al menos un elemento
           if (Array.isArray(response) && response.length > 0) {
             // Buscar el resultado que coincide con el rut buscado o el nombre y apellido
             const data = response.find(
               (item) =>
                 item.idProfesor === rut ||
-                item.Nombre + ' ' + item.Apellido === nombre
-            );
+                (item.Nombre + ' ' + item.Apellido).trim() === nombre
+              );
             if (data) {
               // Concatenar nombre y apellido
               const nombreCompleto = data.Nombre + ' ' + data.Apellido;
@@ -183,6 +186,10 @@ export class CargaHorariaComponent implements AfterViewInit {
               document.getElementById('horascontrato')!.innerText = data.Horas;
               // Aquí obtenemos las horas máximas de docencia desde la tabla jerarquia
               this.obtenerHoraMaximaDocencia(data.idJerarquia);
+              this.rut = data.idProfesor;
+              this.buscarDatosProfesor();
+              this.agregarFilaAdministrativa(data.idProfesor);
+              this.obtenerObservaciones(data.idProfesor);
             } else {
               console.error('No se encontraron registros con el rut o nombre/apellido proporcionados.');
             }
@@ -194,9 +201,9 @@ export class CargaHorariaComponent implements AfterViewInit {
           console.error('Error al buscar datos:', error);
         }
       );
-    this.buscarDatosProfesor();
-    this.limpiarPagina();
+    // this.buscarDatosProfesor();
     this.agregarFilaAdministrativa(rut);
+    this.limpiarPagina();
   }
 
   obtenerHoraMaximaDocencia(idJerarquia: string) {
@@ -826,7 +833,7 @@ export class CargaHorariaComponent implements AfterViewInit {
     if (this.floatingButton && this.popup && this.closePopupButton && this.Notas) {
       this.floatingButton.nativeElement.addEventListener('click', () => {
       this.popup.nativeElement.style.display = 'block';
-      this.obtenerObservaciones();
+      this.obtenerObservaciones(this.rut);
     });
     
     this.closePopupButton.nativeElement.addEventListener('click', () => {
@@ -861,7 +868,7 @@ guardarNota() {
       .subscribe(
           (response) => {
               console.log('Nota guardada correctamente:', response);
-              this.obtenerObservaciones();
+              this.obtenerObservaciones(this.rut);
           },
           (error) => {
               console.error('Error al guardar la nota:', error);
@@ -871,11 +878,11 @@ guardarNota() {
   this.popup.nativeElement.style.display = 'none';
 }
 
-obtenerObservaciones() {
-  if (!this.rut) {
-      console.error('RUT no está definido.');
-      return;
-  }
+obtenerObservaciones(rut: string) {
+  // if (!this.rut) {
+  //     console.error('RUT no está definido.');
+  //     return;
+  // }
 
   this.http.get<any>(`http://localhost:3000/obtener-observaciones/${this.rut}`)
       .subscribe(
