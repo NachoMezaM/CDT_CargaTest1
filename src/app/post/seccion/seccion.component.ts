@@ -132,7 +132,7 @@ export class SeccionComponent {
     if (carreraValor) {
       this.form.patchValue({ Carrera: carreraValor });
     }
-    this.url = `${idAsignatura}/${carreraValor}${Semestre}${grupos}`;
+    this.url = `${idAsignatura}${carreraValor}${Semestre}${grupos}`;
     this.aux = `${carrera?.valor}${Semestre}${grupos}`
     console.log("Funca hasta aca")
     

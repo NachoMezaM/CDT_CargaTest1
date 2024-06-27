@@ -61,7 +61,7 @@
   </form>
 
   <div class="fila_titulo">
-    <h1 class="titulo">Docencia Directa</h1>
+    <h1 class="titulo">Carga Docente</h1>
     </div>
   <div class="fila">
     <!-- Docencia Directa -->
@@ -82,7 +82,7 @@
           </div>
         </div>
 
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" #tabla1>
           <thead>
             <tr>
               <th>Codigo</th>
@@ -100,57 +100,66 @@
           <tbody id="asignaturas-body">
             <!-- Aquí se agregarán las filas dinámicamente -->
           </tbody>
-          <button type="submit" id="guardar-button" class="boton" (click)="guardarDatos()">Guardar</button>
+          
         </table>
+        <tr>Total: {{totalasignaturas}} Minutos</tr>
+        <button type="submit" id="guardar-button" class="boton" (click)="guardarDatos()">Guardar</button>
       </div>
     </form>
 
-    <h1 class="titulo" >Carga Administrativa</h1>
+    <h1 class="titulo" >Trabajo Administrativo</h1>
     <form>
       <div class="containerflex3">
 
         <div class="form-group">
           <div class="row">
             <div class="col1">
-              <label for="Horas"><strong>Hora</strong></label>
-              <input formControlName="Horas" type="text" id="Horas" class="form-control1" placeholder="Horas" uptwo>
+              <label for="Carga"><strong>Actividad:</strong></label>
+              <select formControlName="Carga" id="Carga" class="form-control1" ></select>
             </div>
-
             <div class="col1">
-              <label for="Carga"><strong>Carga:</strong></label>
-              <select formControlName="Carga" id="Carga" class="form-control1" (change)="agregarFilaAdministrativa1()"></select>
+              <label for="Horas"><strong>Hora</strong></label>
+              <input formControlName="Horas" type="text" id="Horas" class="form-control1" placeholder="Horas" (change)="agregarFilaAdministrativa1()" uptwo>
             </div>
           </div>
         </div>
 
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" #tabla>
           <thead>
             <tr>
               <th>Carga</th>
               <th>Horas 60'</th>
               <th>Minutos</th>
+              <th>Total</th>
               <th>Confirmar</th>
               <th>Eliminar</th>
             </tr>
+           
           </thead>
           <tbody id="carga-administrativa-body">
             <!-- Aquí se agregarán las filas dinámicamente -->
           </tbody>
-          <!-- <button type="button" class="boton" (click)="agregarFilaAdministrativa1()">Agregar</button> -->
-          <button type="submit" class="boton" id="guardar-button" (click)="guardarDatosAdministrativos()">Guardar</button>
+          
         </table>
+        <tr>Total: {{totalcarga}} Horas</tr>
+        <!-- <button type="button" class="boton" (click)="agregarFilaAdministrativa1()">Agregar</button> -->
+        <button type="submit" class="boton" id="guardar-button" (click)="guardarDatosAdministrativos()">Guardar</button>
       </div>
     </form>
   </div>
-  <button id="floating-button" #floatingButton class="boton">Notas</button>
 
-  <!-- Ventana emergente -->
-  <div id="popup" #popup class="popup">
-    <div class="popup-content">
-      <label for="Observacion"><strong>Observacion</strong></label>
-      <textarea #Notas formControlName="Observacion" type="text" id="Observacion" class="form-control1" placeholder="Escribe tus notas aquí" ></textarea>
-      <button id="close-popup" #closePopupButton>Cerrar</button>
-    </div>
+<!-- Botón Observacion -->
+<button id="floating-button" #floatingButton class="boton">Observacion</button>
+
+<!-- Ventana emergente -->
+<div id="popup" #popup class="popup">
+  <div class="popup-content">
+    <label for="Observacion"><strong>Observacion</strong></label>
+    <textarea #Notas formControlName="Observacion" id="Observacion" class="form-control1" placeholder="Escribe tus notas aquí"></textarea>
+    <button class="boton" id="guardar-nota-button" (click)="guardarNota()">Guardar</button>
+    <button class="boton" id="close-popup" #closePopupButton>Cerrar</button>
   </div>
+</div>
+
 </body>
 </html>
