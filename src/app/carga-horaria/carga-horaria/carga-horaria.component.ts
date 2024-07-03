@@ -34,7 +34,6 @@ export class CargaHorariaComponent implements AfterViewInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    
     this.cargarTrabajosAdministrativos();
     // Obtener el año actual al inicializar el componente
     this.currentYear = new Date().getFullYear();
@@ -283,12 +282,6 @@ export class CargaHorariaComponent implements AfterViewInit {
           const planificacion = Math.floor(minutos); // Calcular las horas
           const totalHoras = Math.floor(minutos + planificacion);
 
-        // // Verificar si al agregar estos minutos se exceden los 1200 minutos
-        // if (this.totalasignaturas + totalHoras > 1200) {
-        //   alert('No se puede agregar esta asignatura. El total de minutos de docencia no puede exceder los 1200 minutos.');
-        //   return; // Salir de la función si se excede el límite
-        // }
-
           newRow.innerHTML = `
           <td>${codigo}</td>
           <td>${seccion}</td>
@@ -363,41 +356,47 @@ export class CargaHorariaComponent implements AfterViewInit {
     }
   }
 
-  guardarDatos() {
+guardarDatos() {
     const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
     const año = (document.getElementById('año') as HTMLInputElement).value;
 
     const filas = document.querySelectorAll('#asignaturas-body tr');
     let algunaFilaGuardada = false; // Variable para controlar si al menos una fila se guardó con éxito
 
-    filas.forEach((fila) => {
-      const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
-      if (checkbox.checked) {
-        const columnas = fila.querySelectorAll('td');
-        const codigo = columnas[0].innerText;
-        const seccion = columnas[1].innerText;
-        const planificacion = parseInt(columnas[5].innerText);
-        const minutos = parseInt(columnas[4].innerText);
+    const promises = Array.from(filas).map((fila) => {
+        const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
+        if (checkbox.checked) {
+            const columnas = fila.querySelectorAll('td');
+            const codigo = columnas[0].innerText;
+            const seccion = columnas[1].innerText;
+            const planificacion = parseInt(columnas[5].innerText);
+            const minutos = parseInt(columnas[4].innerText);
 
-        this.guardarCargaDocente(idProfesor,`${codigo}${seccion}`,planificacion,minutos,año)
-        .then((guardado) => {
-          if (guardado) {
-            algunaFilaGuardada = true;
-          }
-        });
-      }
+            return this.guardarCargaDocente(idProfesor, `${codigo}${seccion}`, planificacion, minutos, año)
+                .then((guardado) => {
+                    if (guardado) {
+                        algunaFilaGuardada = true;
+                    }
+                });
+        }
+        return Promise.resolve();
     });
 
-    // Mostrar mensaje dependiendo de si se guardó al menos una fila o no
-    if (algunaFilaGuardada) {
-      alert('Se guardaron las filas correctamente.');
-      this.limpiarFilasGuardadas();
-    } else {
-      // alert('No se guardaron filas duplicadas.');
-    }
-    // Limpiar las filas guardadas después de guardar
-    this.limpiarFilasGuardadas();
-  }
+    Promise.all(promises).then(() => {
+        // Mostrar mensaje dependiendo de si se guardó al menos una fila o no
+        if (algunaFilaGuardada) {
+            alert('Se guardaron las filas correctamente.');
+            this.limpiarFilasGuardadas();
+            this.buscarDatosProfesor(); // Llamar a buscarDatosProfesor después de guardar
+        } else {
+            // alert('No se guardaron filas duplicadas.');
+        }
+        // Limpiar las filas guardadas después de guardar
+        this.limpiarFilasGuardadas();
+    });
+
+    event?.preventDefault();
+}
 
   limpiarFilasGuardadas() {
     const filasGuardadas = document.querySelectorAll('#asignaturas-body tr');
