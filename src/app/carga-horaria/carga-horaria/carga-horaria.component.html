@@ -118,7 +118,7 @@
               <select formControlName="Carga" id="Carga" class="form-control1" ></select>
             </div>
             <div class="col1">
-              <label for="Horas"><strong>Hora</strong></label>
+              <label for="Horas"><strong>Hora:</strong></label>
               <input formControlName="Horas" type="text" id="Horas" class="form-control1" placeholder="Horas" (change)="agregarFilaAdministrativa1()" uptwo>
             </div>
           </div>
@@ -155,7 +155,7 @@
 <div id="popup" #popup class="popup">
   <div class="popup-content">
     <label for="Observacion"><strong>Observacion</strong></label>
-    <textarea #Notas formControlName="Observacion" id="Observacion" class="form-control1" placeholder="Escribe tus notas aquí"></textarea>
+    <textarea #Notas formControlName="Observacion" id="Observacion" class="form-control1" placeholder="Escribe tus observaciones aquí"></textarea>
     <button class="boton" id="guardar-nota-button" (click)="guardarNota()">Guardar</button>
     <button class="boton" id="close-popup" #closePopupButton>Cerrar</button>
   </div>

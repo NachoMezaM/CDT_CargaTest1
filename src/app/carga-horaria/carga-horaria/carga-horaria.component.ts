@@ -34,6 +34,7 @@ export class CargaHorariaComponent implements AfterViewInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
+    
     this.cargarTrabajosAdministrativos();
     // Obtener el año actual al inicializar el componente
     this.currentYear = new Date().getFullYear();
@@ -668,10 +669,10 @@ export class CargaHorariaComponent implements AfterViewInit {
 
         
         // Verificar si al agregar estos horas se exceden las 42 horas
-        if (this.totalcarga + Horas > 42) {
-          alert('No se puede agregar esta carga. El total de horas no puede exceder las 42 horas.');
-          return; // Salir de la función si se excede el límite
-        }
+        // if (this.totalcarga + Horas > 42) {
+        //   alert('No se puede agregar esta carga. El total de horas no puede exceder las 42 horas.');
+        //   return; // Salir de la función si se excede el límite
+        // }
 
         newRow.innerHTML = `
           <td>${Carga}</td>
