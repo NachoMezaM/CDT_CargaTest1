@@ -396,7 +396,7 @@ app.post("/guardar-carga-docente", (req, res) => {
       // Verificar si se encontró alguna entrada
       if (result[0].count > 0) {
         // Si ya existe una entrada, devolver un mensaje indicando que no se guardará
-        res.status(400).json({ message: "fila duplicada o filas duplicadas" });
+        res.status(400).json({ message: "Asignatura duplicada o Asignaturas duplicadas" });
       } else {
         // Si no se encontró ninguna entrada, insertar los datos en la base de datos
         db.query(
@@ -404,7 +404,7 @@ app.post("/guardar-carga-docente", (req, res) => {
           [idProfesor, idAsignaturaSeccion, HorasPlanificacion, Horas_Minutos, Anio],
           (err, result) => {
             if (err) {
-              console.error("solo se guardaron las filas no duplicadas", err);
+              console.error("solo se guardaron las Asignatura no duplicadas", err);
               res.status(500).send("Error interno del servidor");
               return;
             }
@@ -492,11 +492,11 @@ app.post("/eliminar-fila", (req, res) => {
     [codigo, seccion, rut],
     (err, result) => {
       if (err) {
-        console.error("Error al eliminar la fila:", err);
+        console.error("Error al eliminar la Asignatura:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
-      res.status(200).json({ message: "Fila eliminada exitosamente" });
+      res.status(200).json({ message: "Asignatura eliminada exitosamente" });
     }
   );
 });

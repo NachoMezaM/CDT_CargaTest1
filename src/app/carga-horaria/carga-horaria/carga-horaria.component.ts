@@ -385,7 +385,7 @@ guardarDatos() {
     Promise.all(promises).then(() => {
         // Mostrar mensaje dependiendo de si se guardó al menos una fila o no
         if (algunaFilaGuardada) {
-            alert('Se guardaron las filas correctamente.');
+            alert('Se guardaron las Asignaturas correctamente.');
             this.limpiarFilasGuardadas();
             this.buscarDatosProfesor(); // Llamar a buscarDatosProfesor después de guardar
         } else {
@@ -420,11 +420,11 @@ guardarDatos() {
             console.error('Error al guardar la carga docente:', error);
             if (
               error.status === 400 &&
-              error.error.message === 'No se guardaron filas duplicadas'
+              error.error.message === 'No se guardaron Asignaturas duplicadas'
             ) {
               resolve(false); // Indicar que la fila no se guardó debido a duplicados
             } else {
-              alert('fila o filas duplicadas.');
+              alert('Asignatura o Asignaturas duplicadas.');
               reject(error);
             }
           }
@@ -455,24 +455,24 @@ guardarDatos() {
           
           // Manejar la respuesta del servidor
           console.log('Respuesta del servidor:', data);
-          if (data && data.message === 'Fila eliminada exitosamente') {
-            console.log('Fila eliminada exitosamente:', data);
+          if (data && data.message === 'Asignatura eliminada exitosamente') {
+            console.log('Asignatura eliminada exitosamente:', data);
             // Eliminar la fila del DOM si se eliminó con éxito de la base de datos
             if (row.parentNode) {
               row.parentNode.removeChild(row);
               this.calcularTotalMinutosAsignatura();
             }
           } else {
-            console.error('Error al eliminar la fila:', data);
+            console.error('Error al eliminar la Asignatura:', data);
             alert(
-              'Ocurrió un error al eliminar la fila en la base de datos. Por favor, inténtalo de nuevo más tarde.'
+              'Ocurrió un error al eliminar la Asignatura en la base de datos. Por favor, inténtalo de nuevo más tarde.'
             );
           }
         },
         (error) => {
-          console.error('Error al eliminar la fila:', error);
+          console.error('Error al eliminar la Asignatura:', error);
           alert(
-            'Ocurrió un error al eliminar la fila. Por favor, inténtalo de nuevo más tarde.'
+            'Ocurrió un error al eliminar la Asignatura. Por favor, inténtalo de nuevo más tarde.'
           );
         }
       );
