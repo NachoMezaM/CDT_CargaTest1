@@ -102,11 +102,10 @@
           </tbody>
           
         </table>
-        <tr>Total: {{totalasignaturas}}</tr>
+        <tr>Horas Docente: {{totalasignaturas}} / Maximo Horas Docente: {{horasxdocencia}}</tr>
         <button type="submit" id="guardar-button" class="boton" (click)="guardarDatos()">Guardar</button>
       </div>
     </form>
-
     <h1 class="titulo" >Trabajo Administrativo</h1>
     <form>
       <div class="containerflex3">
@@ -141,7 +140,7 @@
           </tbody>
           
         </table>
-        <tr>Total: {{totalcarga}}</tr>
+        <tr> Horas Administrativas: {{totalcarga}} + Horas Docente: {{totalasignaturas}} = {{totalasignaturas+totalcarga}} / Horas de contrato: {{horasxcontrato}}</tr>
         <!-- <button type="button" class="boton" (click)="agregarFilaAdministrativa1()">Agregar</button> -->
         <button type="submit" class="boton" id="guardar-button" (click)="guardarDatosAdministrativos()">Guardar</button>
       </div>

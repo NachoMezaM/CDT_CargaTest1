@@ -36,6 +36,8 @@ export class CargaHorariaComponent implements AfterViewInit {
   rut: string = '';
   totalcarga: number = 0;
   totalasignaturas: number = 0;
+  horasxcontrato: number = 0;
+  horasxdocencia: number = 0;
 
   constructor(private http: HttpClient) {}
 
@@ -135,6 +137,9 @@ export class CargaHorariaComponent implements AfterViewInit {
       this.totalasignaturas += minutos;
     }
   }
+  calcularcontratoxasignatura(){
+    
+  }
   //-------------------------------------Ingresar Carga----------------------------------------------
   buscarDatos() {
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
@@ -181,6 +186,7 @@ export class CargaHorariaComponent implements AfterViewInit {
               document.getElementById('grado')!.innerText = data.Grado;
               document.getElementById('jerarquizacion')!.innerText = jerarquia;
               document.getElementById('horascontrato')!.innerText = data.Horas;
+              this.horasxcontrato = data.Horas * 60;
               // Aquí obtenemos las horas máximas de docencia desde la tabla jerarquia
               this.obtenerHoraMaximaDocencia(data.idJerarquia);
             } else {
@@ -213,6 +219,7 @@ export class CargaHorariaComponent implements AfterViewInit {
           if (response && response.horaMaximaDeDocencia) {
             document.getElementById('PosibleHorasDeDocencia')!.innerText =
               response.horaMaximaDeDocencia;
+              this.horasxdocencia = response.horaMaximaDeDocencia * 60;
           } else {
             console.error('No se encontraron las horas máximas de docencia.');
           }
