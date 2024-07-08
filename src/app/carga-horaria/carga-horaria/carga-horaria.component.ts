@@ -7,6 +7,8 @@ import { RouterOutlet, RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { map, catchError, throwError } from 'rxjs';
 import { parse } from 'node:path';
+import { clearScreenDown } from 'node:readline';
+import { eventNames } from 'node:process';
 
 @Component({
   selector: 'app-carga-horaria',
@@ -232,7 +234,52 @@ export class CargaHorariaComponent implements AfterViewInit {
       );
     this.buscarDatosProfesor();
     this.limpiarPagina();
-    this.agregarFilaAdministrativa(rut);
+    this.agregarFilaAdministrativa(this.rut);
+  }
+
+  procesarRespuestaBusqueda(response: any, rut: string) {
+    console.log('Respuesta del servidor:', response); // Verifica la respuesta del servidor
+    if (Array.isArray(response) && response.length > 0) {
+      const data = response.find(item => item.idProfesor === rut);
+      if (data) {
+        const nombreCompleto = data.Nombre + ' ' + data.Apellido;
+        let jerarquia = '';
+        switch (data.idJerarquia) {
+          case 1:
+            jerarquia = 'Instructor';
+            break;
+          case 2:
+            jerarquia = 'Asistente';
+            break;
+          case 3:
+            jerarquia = 'Asociado';
+            break;
+          case 4:
+            jerarquia = 'Titular';
+            break;
+        }
+        (document.getElementById('nombre') as HTMLInputElement).value = nombreCompleto;
+        (document.getElementById('rut') as HTMLInputElement).value = data.idProfesor;
+        document.getElementById('grado')!.innerText = data.Grado;
+        document.getElementById('jerarquizacion')!.innerText = jerarquia;
+        document.getElementById('horascontrato')!.innerText = data.Horas;
+        this.horasxcontrato = data.Horas * 60
+  
+        // Actualiza el valor de this.rut solo si la búsqueda se hizo por rut
+        if (response.length === 1 && response[0].idProfesor === rut) {
+          this.rut = rut;
+        }
+  
+        this.obtenerHoraMaximaDocencia(data.idJerarquia);
+        this.buscarDatosProfesor();
+        this.agregarFilaAdministrativa(data.idProfesor);
+        this.obtenerObservaciones(data.idProfesor);
+      } else {
+        console.error('No se encontraron registros con el rut proporcionado.');
+      }
+    } else {
+      console.error('La respuesta del servidor no es un array o está vacía.');
+    }
   }
 
   obtenerHoraMaximaDocencia(idJerarquia: string) {
@@ -605,10 +652,16 @@ guardarDatos() {
         return;
       }
 
-
       tbody.innerHTML = '';
 
       response.forEach((item: { carga: any; horas: any; minutos: any }) => {
+
+        const isDuplicate = Array.from(tbody.querySelectorAll('tr')).some (row => {
+          const cells = row.querySelectorAll('td');
+          return cells[0].textContent === item.carga;
+        });
+
+        if (!isDuplicate){
         const newRow = document.createElement('tr');
         const totalCarga = Math.floor(item.minutos);
 
@@ -638,6 +691,7 @@ guardarDatos() {
             this.actualizarBotonGuardar();
           });
         }
+      }
       });
     });
   }
@@ -660,12 +714,18 @@ guardarDatos() {
         const minutos = Horas * 60; // Calcular los minutos
         const totalCarga = Math.floor(minutos);
 
+        const isDuplicate = Array.from(tbody.querySelectorAll('tr')).some(row => {
+          const cells = row.querySelectorAll('td');
+          return cells[0].innerText === Carga;
+        });
+
         
         // Verificar si al agregar estos horas se exceden las 42 horas
         // if (this.totalcarga + Horas > 42) {
         //   alert('No se puede agregar esta carga. El total de horas no puede exceder las 42 horas.');
         //   return; // Salir de la función si se excede el límite
         // }
+        if (!isDuplicate) {
 
         newRow.innerHTML = `
           <td>${Carga}</td>
@@ -701,7 +761,10 @@ guardarDatos() {
             this.actualizarBotonGuardar();
           });
         }
-      });
+      } else {
+        alert('No se puede agregar esta carga. Ya existe una carga con el mismo nombre.');
+      }
+    });
   }
 
   buscarDatosAdministrativos(rut: string) {
@@ -718,17 +781,21 @@ guardarDatos() {
 
   guardarDatosAdministrativos() {
     const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
-    const filaAdministrativa = document.querySelectorAll('#carga-administrativa-body tr');
-    const promesas: any[] = [];
+    const año = (document.getElementById('año') as HTMLInputElement).value;
+    
+    const filasA = document.querySelectorAll('#carga-administrativa-body tr');
+    let algunaFilaGuardadaAd = false;
 
-    filaAdministrativa.forEach((filaA) => {
+    const promises = Array.from(filasA).map((filaA) => {
       const checkbox = filaA.querySelector('.confirm-checkbox') as HTMLInputElement;
       if (checkbox.checked) {
         const columnas = filaA.querySelectorAll('td');
         const Carga = columnas[0].innerText; // Ajuste el índice si es necesario
         const Hora = parseInt(columnas[1].innerText); // Ajuste el índice si es necesario
         const Hora_Minutos = parseInt(columnas[2].innerText); // Ajuste el índice si es necesario
+
         console.log(Carga);
+
         let carga = 0;
         switch (Carga) {
           case 'Claustro':
@@ -747,15 +814,28 @@ guardarDatos() {
             carga = 5;
             break;
         }
-        if (Carga) {
-          // Verifica que idTrabajoAdministrativo no sea null
-          const promesa = this.guardarCargaAdministrativa(idProfesor, carga, Hora, Hora_Minutos);
-          promesas.push(promesa);
-        } else {
-          console.error('idTrabajoAdministrativo es null o undefined');
-        }
+
+        return this.guardarCargaAdministrativa(idProfesor, carga, Hora, Hora_Minutos)
+        .then((guardadoAd) => {
+          if (guardadoAd) {
+            algunaFilaGuardadaAd = true;
+          }
+        });
       }
+      return Promise.resolve();
     });
+    Promise.all(promises).then(() => {
+      if (algunaFilaGuardadaAd) {
+        alert('Se guardaron las cargas correctamente');
+        this.limpiarFilasGuardadas();
+        this.buscarDatosProfesor();
+      } else {
+        alert('No se guardaron cargas');
+      }
+      this.limpiarFilasGuardadas();
+    });
+    event?.preventDefault();
+
   }
 
   guardarCargaAdministrativa(idProfesor: string,carga: number,Hora: number,Hora_Minutos: number): Promise<boolean> {
