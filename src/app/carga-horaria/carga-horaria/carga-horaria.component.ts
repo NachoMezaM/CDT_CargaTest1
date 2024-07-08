@@ -13,13 +13,7 @@ import { parse } from 'node:path';
   templateUrl: './carga-horaria.component.html',
   styleUrls: ['./carga-horaria.component.css'],
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    RouterOutlet,
-    RouterLink,
-    BarranavegacionComponent,
-  ],
+  imports: [CommonModule, RouterModule, RouterOutlet, RouterLink, BarranavegacionComponent],
 })
 export class CargaHorariaComponent implements AfterViewInit {
   asignaturas: any[] = [];
@@ -58,12 +52,14 @@ export class CargaHorariaComponent implements AfterViewInit {
       this.buscarDatosAdministrativos(rut);
     });
 
+    const nombreInput = document.getElementById('nombre') as HTMLInputElement;
+    if (nombreInput) {
+      nombreInput.addEventListener('textarea', () => {
+        this.buscarDatos(); // Llamar a buscarDatos cuando se ingrese un nombre
+      });
+    }
 
-
-
-    const guardarButton = document.getElementById(
-      'guardar-button'
-    ) as HTMLButtonElement;
+    const guardarButton = document.getElementById('guardar-button') as HTMLButtonElement;
     if (guardarButton) {
       guardarButton.addEventListener('click', () => {
         this.guardarDatosAdministrativos();
@@ -96,44 +92,53 @@ export class CargaHorariaComponent implements AfterViewInit {
   }
 
   limpiarPagina() {
-    // Limpiar los campos del formulario
     (document.getElementById('nombre') as HTMLInputElement).value = '';
     (document.getElementById('rut') as HTMLInputElement).value = '';
-    (document.getElementById('grado') as HTMLElement).innerText = '';
-    (document.getElementById('jerarquizacion') as HTMLElement).innerText = '';
-    (document.getElementById('horascontrato') as HTMLElement).innerText = '';
-    (
-      document.getElementById('PosibleHorasDeDocencia') as HTMLElement
-    ).innerText = '';
-
-    // Limpiar la tabla de asignaturas
-    const tbody = document.getElementById('asignaturas-body');
-    if (tbody) {
-      tbody.innerHTML = '';
+    document.getElementById('grado')!.innerText = '';
+    document.getElementById('jerarquizacion')!.innerText = '';
+    document.getElementById('horascontrato')!.innerText = '';
+    this.limpiarTablaCargaAdministrativa();
+    this.observacion = '';
+    if (this.Notas && this.Notas.nativeElement) {
+      this.Notas.nativeElement.value = '';
     }
-    // const tbodyAdmin = document.getElementById('carga-administrativa-body');
-    // if (tbodyAdmin) {
-    //   tbodyAdmin.innerHTML='';
-    // }
   }
-
 
   
-  calcularTotalMinutosCarga() {
+  calcularTotalHorasCarga() {
     const filas = this.tabla.nativeElement.rows;
     this.totalcarga = 0;
+    const horasContrato = parseInt(document.getElementById('horascontrato')!.innerText, 10);
+  
     for (let i = 1; i < filas.length; i++) {
-      const minutosTd = filas[i].cells[2]; // suponiendo que la columna de minutos es la tercera
-      const minutos = parseInt(minutosTd.textContent, 10);
-      this.totalcarga += minutos;
+      const horasTd = filas[i].cells[1]; // suponiendo que la columna de horas es la segunda
+      const horas = parseInt(horasTd.textContent, 10);
+  
+      if (this.totalcarga + horas > horasContrato) {
+        alert('El total de horas de carga no puede exceder las horas de contrato.');
+        this.eliminarFila1(filas[i]);
+        return;
+      }
+  
+      this.totalcarga += horas;
     }
   }
+
   calcularTotalMinutosAsignatura() {
     const filas = this.tabla1.nativeElement.rows;
     this.totalasignaturas = 0;
+    const minutosasignatura = parseInt(document.getElementById('PosibleHorasDeDocencia')!.innerText, 10);
+  
     for (let i = 1; i < filas.length; i++) {
-      const minutosTd = filas[i].cells[6]; // suponiendo que la columna de minutos es la tercera
+      const minutosTd = filas[i].cells[6]; // suponiendo que la columna de horas es la segunda
       const minutos = parseInt(minutosTd.textContent, 10);
+  
+      if (this.totalasignaturas + minutos > minutosasignatura * 60) {
+        alert('El total de minutos de docencia no puede exceder las horas de docencia.');
+        this.eliminarFila1(filas[i]);
+        return;
+      }
+  
       this.totalasignaturas += minutos;
     }
   }
@@ -142,23 +147,44 @@ export class CargaHorariaComponent implements AfterViewInit {
   }
   //-------------------------------------Ingresar Carga----------------------------------------------
   buscarDatos() {
-    const rut = (document.getElementById('rut') as HTMLInputElement).value;
+    const rut = (document.getElementById('rut') as HTMLInputElement).value.trim();
     const nombre = (document.getElementById('nombre') as HTMLInputElement).value.trim();
     const año = (document.getElementById('año') as HTMLInputElement).value;
-    this.rut = rut;
-
-    this.http
-      .post<any>('http://localhost:3000/buscar-datos', { rut, nombre, año })
+  
+    if (!rut && !nombre) {
+      console.error('Debe ingresar un RUT o un nombre para buscar.');
+      return;
+    }
+  
+    // Limpiar los campos y la tabla antes de realizar la búsqueda
+    this.limpiarPagina();
+  
+    if (rut) {
+      this.buscarPorRut(rut, año);
+    } else if (nombre) {
+      this.buscarPorNombre(nombre, año);
+    }
+  }
+  
+  buscarPorRut(rut: string, año: string) {
+    this.http.post<any>('http://localhost:3000/buscar-datos', { rut})
       .subscribe(
         (response) => {
-          this.obtenerObservaciones();
-          // Verificar si la respuesta es un array y contiene al menos un elemento
+          this.procesarRespuestaBusqueda(response, rut);
+        },
+        (error) => {
+          console.error('Error al buscar datos por RUT:', error);
+        }
+      );
+  }
+  
+  buscarPorNombre(nombre: string, año: string) {
+    this.http.post<any>('http://localhost:3000/buscar-datos', { nombre})
+      .subscribe(
+        (response) => {
           if (Array.isArray(response) && response.length > 0) {
-            // Buscar el resultado que coincide con el rut buscado o el nombre y apellido
             const data = response.find(
-              (item) =>
-                item.idProfesor === rut ||
-                item.Nombre + ' ' + item.Apellido === nombre
+              (item) => (item.Nombre + ' ' + item.Apellido).trim() === nombre
             );
             if (data) {
               // Concatenar nombre y apellido
@@ -210,10 +236,7 @@ export class CargaHorariaComponent implements AfterViewInit {
   }
 
   obtenerHoraMaximaDocencia(idJerarquia: string) {
-    this.http
-      .get<any>(
-        `http://localhost:3000/obtener-hora-maxima-docencia/${idJerarquia}`
-      )
+    this.http.get<any>(`http://localhost:3000/obtener-hora-maxima-docencia/${idJerarquia}`)
       .subscribe(
         (response) => {
           if (response && response.horaMaximaDeDocencia) {
@@ -225,10 +248,7 @@ export class CargaHorariaComponent implements AfterViewInit {
           }
         },
         (error) => {
-          console.error(
-            'Error al obtener las horas máximas de docencia:',
-            error
-          );
+          console.error('Error al obtener las horas máximas de docencia:',error);
         }
       );
   }
@@ -237,17 +257,12 @@ export class CargaHorariaComponent implements AfterViewInit {
 
   // Método para agregar una fila a la tabla de docencia directa
   agregarFila() {
-    const codigo = (document.getElementById('codigo') as HTMLInputElement)
-      .value;
-    const seccion = (document.getElementById('seccion') as HTMLSelectElement)
-      .value;
+    const codigo = (document.getElementById('codigo') as HTMLInputElement).value;
+    const seccion = (document.getElementById('seccion') as HTMLSelectElement).value;
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
     const año = (document.getElementById('año') as HTMLInputElement).value;
 
-    this.http
-      .get<any>(
-        `http://localhost:3000/detalles-asignatura/${codigo}/${seccion}`
-      )
+    this.http.get<any>(`http://localhost:3000/detalles-asignatura/${codigo}/${seccion}`)
       .subscribe(
         (data) => {
           const tbody = document.getElementById('asignaturas-body');
@@ -272,7 +287,9 @@ export class CargaHorariaComponent implements AfterViewInit {
           <td><input type="checkbox" class="confirm-checkbox"></td>
           <td><label class="remove-checkbox">✘</label></td>`;
           tbody.appendChild(newRow);
+
           this.calcularTotalMinutosAsignatura();
+
           // Centrar el texto en todas las celdas de la nueva fila
           const cells = newRow.querySelectorAll('td');
           cells.forEach((cell) => {
@@ -295,14 +312,11 @@ export class CargaHorariaComponent implements AfterViewInit {
             deleteButton.addEventListener('click', () => {
               this.eliminarFila1(newRow);
               this.actualizarBotonGuardar();
-              
             });
           }
 
           // Agregar el evento de cambio al checkbox de confirmación
-          const confirmCheckbox = newRow.querySelector(
-            '.confirm-checkbox'
-          ) as HTMLInputElement;
+          const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
           if (confirmCheckbox) {
             confirmCheckbox.addEventListener('change', () => {
               this.actualizarBotonGuardar();
@@ -310,13 +324,8 @@ export class CargaHorariaComponent implements AfterViewInit {
           }
         },
         (error) => {
-          console.error(
-            'Error al obtener los detalles de la asignatura:',
-            error
-          );
-          alert(
-            'Ocurrió un error al obtener los detalles de la asignatura. Por favor, inténtalo de nuevo más tarde.'
-          );
+          console.error('Error al obtener los detalles de la asignatura:',error);
+          alert('Ocurrió un error al obtener los detalles de la asignatura. Por favor, inténtalo de nuevo más tarde.');
         }
       );
   }
@@ -327,9 +336,7 @@ export class CargaHorariaComponent implements AfterViewInit {
   }
 
   actualizarBotonGuardar() {
-    const checkboxes = document.querySelectorAll(
-      '.confirm-checkbox'
-    ) as NodeListOf<HTMLInputElement>;
+    const checkboxes = document.querySelectorAll('.confirm-checkbox') as NodeListOf<HTMLInputElement>;
     let alMenosUnoMarcado = false;
     checkboxes.forEach((checkbox) => {
       if (checkbox.checked) {
@@ -337,57 +344,58 @@ export class CargaHorariaComponent implements AfterViewInit {
       }
     });
 
-    const guardarButton = document.getElementById(
-      'guardar-button'
-    ) as HTMLButtonElement;
+    const guardarButton = document.getElementById('guardar-button') as HTMLButtonElement;
     if (guardarButton) {
       guardarButton.disabled = !alMenosUnoMarcado;
     }
   }
 
-  guardarDatos() {
-    const idProfesor = (document.getElementById('rut') as HTMLInputElement)
-      .value;
+guardarDatos() {
+    const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
     const año = (document.getElementById('año') as HTMLInputElement).value;
 
     const filas = document.querySelectorAll('#asignaturas-body tr');
     let algunaFilaGuardada = false; // Variable para controlar si al menos una fila se guardó con éxito
 
-    filas.forEach((fila) => {
-      const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
-      if (checkbox.checked) {
-        const columnas = fila.querySelectorAll('td');
-        const codigo = columnas[0].innerText;
-        const seccion = columnas[1].innerText;
-        const planificacion = parseInt(columnas[5].innerText);
-        const minutos = parseInt(columnas[4].innerText);
+    const promises = Array.from(filas).map((fila) => {
+        const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
+        if (checkbox.checked) {
+            const columnas = fila.querySelectorAll('td');
+            const codigo = columnas[0].innerText;
+            const seccion = columnas[1].innerText;
+            const planificacion = parseInt(columnas[5].innerText);
+            const minutos = parseInt(columnas[4].innerText);
 
-        this.guardarCargaDocente(idProfesor,`${codigo}${seccion}`,planificacion,minutos,año)
-        .then((guardado) => {
-          if (guardado) {
-            algunaFilaGuardada = true;
-          }
-        });
-      }
+            return this.guardarCargaDocente(idProfesor, `${codigo}${seccion}`, planificacion, minutos, año)
+                .then((guardado) => {
+                    if (guardado) {
+                        algunaFilaGuardada = true;
+                    }
+                });
+        }
+        return Promise.resolve();
     });
 
-    // Mostrar mensaje dependiendo de si se guardó al menos una fila o no
-    if (algunaFilaGuardada) {
-      alert('Se guardaron las filas correctamente.');
-      this.limpiarFilasGuardadas();
-    } else {
-      // alert('No se guardaron filas duplicadas.');
-    }
-    // Limpiar las filas guardadas después de guardar
-    this.limpiarFilasGuardadas();
-  }
+    Promise.all(promises).then(() => {
+        // Mostrar mensaje dependiendo de si se guardó al menos una fila o no
+        if (algunaFilaGuardada) {
+            alert('Se guardaron las Asignaturas correctamente.');
+            this.limpiarFilasGuardadas();
+            this.buscarDatosProfesor(); // Llamar a buscarDatosProfesor después de guardar
+        } else {
+            // alert('No se guardaron filas duplicadas.');
+        }
+        // Limpiar las filas guardadas después de guardar
+        this.limpiarFilasGuardadas();
+    });
+
+    event?.preventDefault();
+}
 
   limpiarFilasGuardadas() {
     const filasGuardadas = document.querySelectorAll('#asignaturas-body tr');
     filasGuardadas.forEach((fila) => {
-      const checkbox = fila.querySelector(
-        '.confirm-checkbox'
-      ) as HTMLInputElement;
+      const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
       if (checkbox.checked) {
         fila.remove();
       }
@@ -396,8 +404,7 @@ export class CargaHorariaComponent implements AfterViewInit {
 
   guardarCargaDocente(idProfesor: string,idAsignaturaSeccion: string,planificacion: number,minutos: number,año: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.http
-        .post<any>('http://localhost:3000/guardar-carga-docente', {idProfesor,idAsignaturaSeccion,HorasPlanificacion: planificacion,Horas_Minutos: minutos,Anio: año,})
+      this.http.post<any>('http://localhost:3000/guardar-carga-docente', {idProfesor,idAsignaturaSeccion,HorasPlanificacion: planificacion,Horas_Minutos: minutos,Anio: año,})
         .subscribe(
           (data) => {
             console.log('Carga docente guardada exitosamente:', data);
@@ -407,11 +414,11 @@ export class CargaHorariaComponent implements AfterViewInit {
             console.error('Error al guardar la carga docente:', error);
             if (
               error.status === 400 &&
-              error.error.message === 'No se guardaron filas duplicadas'
+              error.error.message === 'No se guardaron Asignaturas duplicadas'
             ) {
               resolve(false); // Indicar que la fila no se guardó debido a duplicados
             } else {
-              alert('fila o filas duplicadas.');
+              alert('Asignatura o Asignaturas duplicadas.');
               reject(error);
             }
           }
@@ -436,34 +443,30 @@ export class CargaHorariaComponent implements AfterViewInit {
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
 
     // Realizar una solicitud POST al servidor para eliminar la fila
-    this.http
-      .post<any>('http://localhost:3000/eliminar-fila', {
-        codigo,
-        seccion,
-        rut,
-      })
+    this.http.post<any>('http://localhost:3000/eliminar-fila', {codigo, seccion, rut })
       .subscribe(
         (data) => {
           
           // Manejar la respuesta del servidor
           console.log('Respuesta del servidor:', data);
-          if (data && data.message === 'Fila eliminada exitosamente') {
-            console.log('Fila eliminada exitosamente:', data);
+          if (data && data.message === 'Asignatura eliminada exitosamente') {
+            console.log('Asignatura eliminada exitosamente:', data);
             // Eliminar la fila del DOM si se eliminó con éxito de la base de datos
             if (row.parentNode) {
               row.parentNode.removeChild(row);
+              this.calcularTotalMinutosAsignatura();
             }
           } else {
-            console.error('Error al eliminar la fila:', data);
+            console.error('Error al eliminar la Asignatura:', data);
             alert(
-              'Ocurrió un error al eliminar la fila en la base de datos. Por favor, inténtalo de nuevo más tarde.'
+              'Ocurrió un error al eliminar la Asignatura en la base de datos. Por favor, inténtalo de nuevo más tarde.'
             );
           }
         },
         (error) => {
-          console.error('Error al eliminar la fila:', error);
+          console.error('Error al eliminar la Asignatura:', error);
           alert(
-            'Ocurrió un error al eliminar la fila. Por favor, inténtalo de nuevo más tarde.'
+            'Ocurrió un error al eliminar la Asignatura. Por favor, inténtalo de nuevo más tarde.'
           );
         }
       );
@@ -472,8 +475,7 @@ export class CargaHorariaComponent implements AfterViewInit {
   buscarDatosProfesor() {
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
 
-    this.http
-      .post<any>('http://localhost:3000/buscar-datos-profesor', { rut })
+    this.http.post<any>('http://localhost:3000/buscar-datos-profesor', { rut })
       .subscribe(
         (data) => {
           const tbody = document.getElementById('asignaturas-body');
@@ -486,14 +488,8 @@ export class CargaHorariaComponent implements AfterViewInit {
 
           // Iterar sobre los datos y agregar una fila por cada resultado
           data.forEach(
-            (profesor: {
-              HorasPlanificacion: string;
-              Horas_Minutos: string;
-              idAsignatura: string;
-              idSeccion: string;
-              Nombre: any;
-              Horas: any;
-            }) => {
+            (profesor: {HorasPlanificacion: string; Horas_Minutos: string; idAsignatura: string; idSeccion: string; Nombre: any; Horas: any; }) => {
+
               const newRow = document.createElement('tr');
               const horas = parseInt(profesor.HorasPlanificacion);
               const minutos = parseInt(profesor.Horas_Minutos); // Se obtienen los minutos directamente
@@ -518,6 +514,7 @@ export class CargaHorariaComponent implements AfterViewInit {
               cells.forEach((cell) => {
                 cell.style.textAlign = 'center';
               });
+
               // Agregar el evento de clic a la "x" para eliminar la fila
               const removeLabel = newRow.querySelector('.remove-checkbox');
               if (removeLabel) {
@@ -537,12 +534,10 @@ export class CargaHorariaComponent implements AfterViewInit {
               }
 
               // Agregar el evento de cambio al checkbox de confirmación
-              const confirmCheckbox = newRow.querySelector(
-                '.confirm-checkbox'
-              ) as HTMLInputElement;
+              const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
               if (confirmCheckbox) {
                 confirmCheckbox.addEventListener('change', () => {
-                  this.actualizarBotonGuardar();
+                this.actualizarBotonGuardar();
                 });
               }
             }
@@ -563,16 +558,12 @@ export class CargaHorariaComponent implements AfterViewInit {
 
   // Método para buscar las secciones disponibles para un código de asignatura dado
   buscarSecciones() {
-    const codigo = (document.getElementById('codigo') as HTMLInputElement)
-      .value;
+    const codigo = (document.getElementById('codigo') as HTMLInputElement).value;
 
-    this.http
-      .post<any>('http://localhost:3000/obtener-secciones', { codigo })
+    this.http.post<any>('http://localhost:3000/obtener-secciones', { codigo })
       .subscribe(
         (data) => {
-          const seccionSelect = document.getElementById(
-            'seccion'
-          ) as HTMLSelectElement;
+          const seccionSelect = document.getElementById('seccion') as HTMLSelectElement;
           seccionSelect.innerHTML = ''; // Limpiar opciones anteriores
 
           // Agregar opción predeterminada "Seleccionar"
@@ -610,9 +601,7 @@ export class CargaHorariaComponent implements AfterViewInit {
       console.log('Datos recibidos:', response);
       const tbody = document.getElementById('carga-administrativa-body');
       if (!tbody) {
-        console.error(
-          'No se encontró el elemento tbody para carga administrativa.'
-        );
+        console.error('No se encontró el elemento tbody para carga administrativa.');
         return;
       }
 
@@ -633,7 +622,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         `;
 
         tbody.appendChild(newRow);
-        this.calcularTotalMinutosCarga();
+        this.calcularTotalHorasCarga();
         // Centrar el texto en todas las celdas de la nueva fila
         const cells = newRow.querySelectorAll('td');
         cells.forEach((cell) => {
@@ -645,7 +634,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         if (removeLabel) {
           removeLabel.addEventListener('click', () => {
             this.eliminarFilaAdministrativa1(newRow);
-            this.calcularTotalMinutosCarga();
+            this.calcularTotalHorasCarga();
             this.actualizarBotonGuardar();
           });
         }
@@ -657,14 +646,11 @@ export class CargaHorariaComponent implements AfterViewInit {
     const CargaInput = document.getElementById('Carga') as HTMLInputElement;
     const HorasInput = document.getElementById('Horas') as HTMLInputElement;
 
-    this.http
-      .get<any>('http://localhost:3000/trabajos-administrativos')
+    this.http.get<any>('http://localhost:3000/trabajos-administrativos')
       .subscribe((data) => {
         const tbody = document.getElementById('carga-administrativa-body');
         if (!tbody) {
-          console.error(
-            'No se encontró el elemento tbody para carga administrativa.'
-          );
+          console.error('No se encontró el elemento tbody para carga administrativa.');
           return;
         }
         
@@ -673,6 +659,13 @@ export class CargaHorariaComponent implements AfterViewInit {
         const Horas = parseInt(HorasInput.value);
         const minutos = Horas * 60; // Calcular los minutos
         const totalCarga = Math.floor(minutos);
+
+        
+        // Verificar si al agregar estos horas se exceden las 42 horas
+        // if (this.totalcarga + Horas > 42) {
+        //   alert('No se puede agregar esta carga. El total de horas no puede exceder las 42 horas.');
+        //   return; // Salir de la función si se excede el límite
+        // }
 
         newRow.innerHTML = `
           <td>${Carga}</td>
@@ -690,7 +683,8 @@ export class CargaHorariaComponent implements AfterViewInit {
         cells.forEach((cell) => {
           cell.style.textAlign = 'center';
         });
-        this.calcularTotalMinutosCarga();
+        this.calcularTotalHorasCarga();
+
         // Agregar el evento de clic a la "x" para eliminar la fila
         const removeLabel = newRow.querySelector('.remove-checkbox');
         if (removeLabel) {
@@ -810,7 +804,7 @@ export class CargaHorariaComponent implements AfterViewInit {
   eliminarFilaAdministrativa(row: HTMLElement) {
     if (row.parentNode) {
       row.parentNode.removeChild(row);
-      this.calcularTotalMinutosCarga();
+      this.calcularTotalHorasCarga();
     }
   }
 
@@ -835,6 +829,7 @@ export class CargaHorariaComponent implements AfterViewInit {
             // Eliminar la fila del DOM si se eliminó con éxito de la base de datos
             if (row.parentNode) {
               row.parentNode.removeChild(row);
+              this.calcularTotalHorasCarga();
             }
           } else {
             console.error('Error al eliminar la fila:', data);
@@ -843,9 +838,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         },
         (error) => {
           console.error('Error al eliminar la fila:', error);
-          alert(
-            'Ocurrió un error al eliminar la fila. Por favor, inténtalo de nuevo más tarde.'
-          );
+          alert('Ocurrió un error al eliminar la fila. Por favor, inténtalo de nuevo más tarde.');
         }
       );
   }
@@ -857,34 +850,32 @@ export class CargaHorariaComponent implements AfterViewInit {
     }
   }
 
-
-
-
-
   //-------------------------------Notas-------------------------------
-
-@ViewChild('floatingButton') floatingButton!: ElementRef;
-@ViewChild('popup') popup!: ElementRef;
-@ViewChild('closePopupButton') closePopupButton!: ElementRef;
-@ViewChild('Notas') Notas!: ElementRef;
-
-observacion: string = '';
-
-ngAfterViewInit(): void {
+  
+  @ViewChild('floatingButton') floatingButton!: ElementRef;
+  @ViewChild('popup') popup!: ElementRef;
+  @ViewChild('closePopupButton') closePopupButton!: ElementRef;
+  @ViewChild('Notas') Notas!: ElementRef;
+  
+  observacion: string = '';
+  
+  ngAfterViewInit(): void {
     if (this.floatingButton && this.popup && this.closePopupButton && this.Notas) {
-        this.floatingButton.nativeElement.addEventListener('click', () => {
-            this.popup.nativeElement.style.display = 'block';
-            this.obtenerObservaciones();
-        });
-        this.closePopupButton.nativeElement.addEventListener('click', () => {
-            this.popup.nativeElement.style.display = 'none';
-        });
-        this.Notas.nativeElement.addEventListener('input', (event: Event) => {
-            const input = event.target as HTMLTextAreaElement;
-            this.observacion = input.value;
-            this.adjustTextareaHeight();
-        });
-    } else {
+      this.floatingButton.nativeElement.addEventListener('click', () => {
+      this.popup.nativeElement.style.display = 'block';
+      this.obtenerObservaciones(this.rut);
+    });
+    
+    this.closePopupButton.nativeElement.addEventListener('click', () => {
+    this.popup.nativeElement.style.display = 'none';
+  });
+  
+  this.Notas.nativeElement.addEventListener('input', (event: Event) => {
+  const input = event.target as HTMLTextAreaElement;
+  this.observacion = input.value;
+  this.adjustTextareaHeight();
+});
+} else {
         console.error('Error: Uno o más elementos HTML no se encontraron');
     }
 }
@@ -907,7 +898,7 @@ guardarNota() {
       .subscribe(
           (response) => {
               console.log('Nota guardada correctamente:', response);
-              this.obtenerObservaciones();
+              this.obtenerObservaciones(this.rut);
           },
           (error) => {
               console.error('Error al guardar la nota:', error);
@@ -917,34 +908,34 @@ guardarNota() {
   this.popup.nativeElement.style.display = 'none';
 }
 
-obtenerObservaciones() {
-  if (!this.rut) {
-      console.error('RUT no está definido.');
-      return;
+obtenerObservaciones(rut: string) {
+  if (!rut) {
+    console.error('RUT no está definido.');
+    return;
   }
 
-  this.http.get<any>(`http://localhost:3000/obtener-observaciones/${this.rut}`)
-      .subscribe(
-          (response) => {
-              console.log('Response de obtenerObservaciones:', response);
+  this.http.get<any>(`http://localhost:3000/obtener-observaciones/${rut}`)
+    .subscribe(
+      (response) => {
+        console.log('Response de obtenerObservaciones:', response);
 
-              // Verificar si la respuesta contiene observaciones
-              if (response.length > 0) {
-                  console.log('Primera observacion en la respuesta:', response[0]);
-                  this.observacion = response[0].Observacion; // Asegúrate de que el nombre del campo coincida con la respuesta de la API
-                  this.Notas.nativeElement.value = this.observacion; // Actualiza el área de texto con la nota obtenida
-                  console.log('Nota obtenida:', this.observacion);
-              } else {
-                  this.observacion = '';
-                  this.Notas.nativeElement.value = this.observacion; // Limpia el área de texto si no hay notas
-                  console.log('No se encontraron notas, textarea limpiada');
-              }
-              this.adjustTextareaHeight();
-          },
-          (error) => {
-              console.error('Error al obtener las observaciones:', error);
-          }
-      );
+        // Verificar si la respuesta contiene observaciones
+        if (response.length > 0) {
+          console.log('Primera observacion en la respuesta:', response[0]);
+          this.observacion = response[0].Observacion; // Asegúrate de que el nombre del campo coincida con la respuesta de la API
+          this.Notas.nativeElement.value = this.observacion; // Actualiza el área de texto con la nota obtenida
+          console.log('Nota obtenida:', this.observacion);
+        } else {
+          this.observacion = '';
+          this.Notas.nativeElement.value = this.observacion; // Limpia el área de texto si no hay notas
+          console.log('No se encontraron notas, textarea limpiada');
+        }
+        this.adjustTextareaHeight();
+      },
+      (error) => {
+        console.error('Error al obtener las observaciones:', error);
+      }
+    );
 }
 
 

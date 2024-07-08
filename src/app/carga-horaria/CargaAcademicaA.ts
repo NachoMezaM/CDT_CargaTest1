@@ -7,4 +7,4 @@ export interface CargaAcademica1{
     HorasdePlanificacion:number;
     idProfesor: string;
     idAsignatura: string;
-}
+}   
