@@ -15,7 +15,13 @@ import { eventNames } from 'node:process';
   templateUrl: './carga-horaria.component.html',
   styleUrls: ['./carga-horaria.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterModule, RouterOutlet, RouterLink, BarranavegacionComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    RouterOutlet,
+    RouterLink,
+    BarranavegacionComponent,
+  ],
 })
 export class CargaHorariaComponent implements AfterViewInit {
   asignaturas: any[] = [];
@@ -73,8 +79,7 @@ export class CargaHorariaComponent implements AfterViewInit {
   handleEnterKey(event: KeyboardEvent) {
     // Verificar si el foco está en uno de los campos de entrada antes de ejecutar la búsqueda
     const activeElement = document.activeElement;
-    if (
-      activeElement &&
+    if (activeElement &&
       (activeElement.tagName === 'INPUT' ||
         activeElement.tagName === 'TEXTAREA')
     ) {
@@ -106,22 +111,21 @@ export class CargaHorariaComponent implements AfterViewInit {
     }
   }
 
-  
   calcularTotalHorasCarga() {
     const filas = this.tabla.nativeElement.rows;
     this.totalcarga = 0;
-    const horasContrato = parseInt(document.getElementById('horascontrato')!.innerText, 10);
-  
+    const horasContrato = parseInt(document.getElementById('horascontrato')!.innerText,10);
+
     for (let i = 1; i < filas.length; i++) {
       const horasTd = filas[i].cells[1]; // suponiendo que la columna de horas es la segunda
       const horas = parseInt(horasTd.textContent, 10);
-  
+
       if (this.totalcarga + horas > horasContrato) {
         alert('El total de horas de carga no puede exceder las horas de contrato.');
         this.eliminarFila1(filas[i]);
         return;
       }
-  
+
       this.totalcarga += horas;
     }
   }
@@ -129,47 +133,45 @@ export class CargaHorariaComponent implements AfterViewInit {
   calcularTotalMinutosAsignatura() {
     const filas = this.tabla1.nativeElement.rows;
     this.totalasignaturas = 0;
-    const minutosasignatura = parseInt(document.getElementById('PosibleHorasDeDocencia')!.innerText, 10);
-  
+    const minutosasignatura = parseInt(document.getElementById('PosibleHorasDeDocencia')!.innerText,10);
+
     for (let i = 1; i < filas.length; i++) {
       const minutosTd = filas[i].cells[6]; // suponiendo que la columna de horas es la segunda
       const minutos = parseInt(minutosTd.textContent, 10);
-  
+
       if (this.totalasignaturas + minutos > minutosasignatura * 60) {
         alert('El total de minutos de docencia no puede exceder las horas de docencia.');
         this.eliminarFila1(filas[i]);
         return;
       }
-  
+
       this.totalasignaturas += minutos;
     }
   }
-  calcularcontratoxasignatura(){
-    
-  }
+  calcularcontratoxasignatura() {}
   //-------------------------------------Ingresar Carga----------------------------------------------
   buscarDatos() {
     const rut = (document.getElementById('rut') as HTMLInputElement).value.trim();
     const nombre = (document.getElementById('nombre') as HTMLInputElement).value.trim();
     const año = (document.getElementById('año') as HTMLInputElement).value;
-  
+
     if (!rut && !nombre) {
       console.error('Debe ingresar un RUT o un nombre para buscar.');
       return;
     }
-  
+
     // Limpiar los campos y la tabla antes de realizar la búsqueda
     this.limpiarPagina();
-  
+
     if (rut) {
       this.buscarPorRut(rut, año);
     } else if (nombre) {
       this.buscarPorNombre(nombre, año);
     }
   }
-  
+
   buscarPorRut(rut: string, año: string) {
-    this.http.post<any>('http://localhost:3000/buscar-datos', { rut})
+    this.http.post<any>('http://localhost:3000/buscar-datos', { rut })
       .subscribe(
         (response) => {
           this.procesarRespuestaBusqueda(response, rut);
@@ -179,9 +181,9 @@ export class CargaHorariaComponent implements AfterViewInit {
         }
       );
   }
-  
+
   buscarPorNombre(nombre: string, año: string) {
-    this.http.post<any>('http://localhost:3000/buscar-datos', { nombre})
+    this.http.post<any>('http://localhost:3000/buscar-datos', { nombre })
       .subscribe(
         (response) => {
           if (Array.isArray(response) && response.length > 0) {
@@ -207,10 +209,8 @@ export class CargaHorariaComponent implements AfterViewInit {
                   break;
               }
               // Actualizar los campos del formulario con los datos encontrados
-              (document.getElementById('nombre') as HTMLInputElement).value =
-                nombreCompleto;
-              (document.getElementById('rut') as HTMLInputElement).value =
-                data.idProfesor;
+              (document.getElementById('nombre') as HTMLInputElement).value =nombreCompleto;
+              (document.getElementById('rut') as HTMLInputElement).value =data.idProfesor;
               document.getElementById('grado')!.innerText = data.Grado;
               document.getElementById('jerarquizacion')!.innerText = jerarquia;
               document.getElementById('horascontrato')!.innerText = data.Horas;
@@ -218,14 +218,10 @@ export class CargaHorariaComponent implements AfterViewInit {
               // Aquí obtenemos las horas máximas de docencia desde la tabla jerarquia
               this.obtenerHoraMaximaDocencia(data.idJerarquia);
             } else {
-              console.error(
-                'No se encontraron registros con el rut o nombre/apellido proporcionados.'
-              );
+              console.error('No se encontraron registros con el rut o nombre/apellido proporcionados.');
             }
           } else {
-            console.error(
-              'La respuesta del servidor no es un array o está vacía.'
-            );
+            console.error('La respuesta del servidor no es un array o está vacía.');
           }
         },
         (error) => {
@@ -240,7 +236,7 @@ export class CargaHorariaComponent implements AfterViewInit {
   procesarRespuestaBusqueda(response: any, rut: string) {
     console.log('Respuesta del servidor:', response); // Verifica la respuesta del servidor
     if (Array.isArray(response) && response.length > 0) {
-      const data = response.find(item => item.idProfesor === rut);
+      const data = response.find((item) => item.idProfesor === rut);
       if (data) {
         const nombreCompleto = data.Nombre + ' ' + data.Apellido;
         let jerarquia = '';
@@ -263,13 +259,13 @@ export class CargaHorariaComponent implements AfterViewInit {
         document.getElementById('grado')!.innerText = data.Grado;
         document.getElementById('jerarquizacion')!.innerText = jerarquia;
         document.getElementById('horascontrato')!.innerText = data.Horas;
-        this.horasxcontrato = data.Horas * 60
-  
+        this.horasxcontrato = data.Horas * 60;
+
         // Actualiza el valor de this.rut solo si la búsqueda se hizo por rut
         if (response.length === 1 && response[0].idProfesor === rut) {
           this.rut = rut;
         }
-  
+
         this.obtenerHoraMaximaDocencia(data.idJerarquia);
         this.buscarDatosProfesor();
         this.agregarFilaAdministrativa(data.idProfesor);
@@ -289,7 +285,7 @@ export class CargaHorariaComponent implements AfterViewInit {
           if (response && response.horaMaximaDeDocencia) {
             document.getElementById('PosibleHorasDeDocencia')!.innerText =
               response.horaMaximaDeDocencia;
-              this.horasxdocencia = response.horaMaximaDeDocencia * 60;
+            this.horasxdocencia = response.horaMaximaDeDocencia * 60;
           } else {
             console.error('No se encontraron las horas máximas de docencia.');
           }
@@ -350,7 +346,6 @@ export class CargaHorariaComponent implements AfterViewInit {
               this.eliminarFila1(newRow);
               this.actualizarBotonGuardar();
             });
-            
           }
 
           // Agregar el evento de clic al botón de eliminación
@@ -397,7 +392,7 @@ export class CargaHorariaComponent implements AfterViewInit {
     }
   }
 
-guardarDatos() {
+  guardarDatos() {
     const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
     const año = (document.getElementById('año') as HTMLInputElement).value;
 
@@ -405,39 +400,39 @@ guardarDatos() {
     let algunaFilaGuardada = false; // Variable para controlar si al menos una fila se guardó con éxito
 
     const promises = Array.from(filas).map((fila) => {
-        const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
-        if (checkbox.checked) {
-            const columnas = fila.querySelectorAll('td');
-            const codigo = columnas[0].innerText;
-            const seccion = columnas[1].innerText;
-            const planificacion = parseInt(columnas[5].innerText);
-            const minutos = parseInt(columnas[4].innerText);
+      const checkbox = fila.querySelector('.confirm-checkbox') as HTMLInputElement;
+      if (checkbox.checked) {
+        const columnas = fila.querySelectorAll('td');
+        const codigo = columnas[0].innerText;
+        const seccion = columnas[1].innerText;
+        const planificacion = parseInt(columnas[5].innerText);
+        const minutos = parseInt(columnas[4].innerText);
 
-            return this.guardarCargaDocente(idProfesor, `${codigo}${seccion}`, planificacion, minutos, año)
-                .then((guardado) => {
-                    if (guardado) {
-                        algunaFilaGuardada = true;
-                    }
-                });
-        }
-        return Promise.resolve();
+        return this.guardarCargaDocente(idProfesor, `${codigo}${seccion}`, planificacion, minutos, año )
+        .then((guardado) => {
+          if (guardado) {
+            algunaFilaGuardada = true;
+          }
+        });
+      }
+      return Promise.resolve();
     });
 
     Promise.all(promises).then(() => {
-        // Mostrar mensaje dependiendo de si se guardó al menos una fila o no
-        if (algunaFilaGuardada) {
-            alert('Se guardaron las Asignaturas correctamente.');
-            this.limpiarFilasGuardadas();
-            this.buscarDatosProfesor(); // Llamar a buscarDatosProfesor después de guardar
-        } else {
-            // alert('No se guardaron filas duplicadas.');
-        }
-        // Limpiar las filas guardadas después de guardar
+      // Mostrar mensaje dependiendo de si se guardó al menos una fila o no
+      if (algunaFilaGuardada) {
+        alert('Se guardaron las Asignaturas correctamente.');
         this.limpiarFilasGuardadas();
+        this.buscarDatosProfesor(); // Llamar a buscarDatosProfesor después de guardar
+      } else {
+        // alert('No se guardaron filas duplicadas.');
+      }
+      // Limpiar las filas guardadas después de guardar
+      this.limpiarFilasGuardadas();
     });
 
     event?.preventDefault();
-}
+  }
 
   limpiarFilasGuardadas() {
     const filasGuardadas = document.querySelectorAll('#asignaturas-body tr');
@@ -449,9 +444,9 @@ guardarDatos() {
     });
   }
 
-  guardarCargaDocente(idProfesor: string,idAsignaturaSeccion: string,planificacion: number,minutos: number,año: string): Promise<boolean> {
+  guardarCargaDocente(idProfesor: string, idAsignaturaSeccion: string, planificacion: number, minutos: number,año: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.http.post<any>('http://localhost:3000/guardar-carga-docente', {idProfesor,idAsignaturaSeccion,HorasPlanificacion: planificacion,Horas_Minutos: minutos,Anio: año,})
+      this.http.post<any>('http://localhost:3000/guardar-carga-docente', {idProfesor, idAsignaturaSeccion, HorasPlanificacion: planificacion, Horas_Minutos: minutos, Anio: año,})
         .subscribe(
           (data) => {
             console.log('Carga docente guardada exitosamente:', data);
@@ -483,17 +478,14 @@ guardarDatos() {
 
   eliminarFila(row: HTMLElement) {
     // Obtener los datos necesarios para identificar la fila
-    const codigo = (row.querySelector('td:nth-child(1)') as HTMLElement)
-      .innerText;
-    const seccion = (row.querySelector('td:nth-child(2)') as HTMLElement)
-      .innerText;
+    const codigo = (row.querySelector('td:nth-child(1)') as HTMLElement).innerText;
+    const seccion = (row.querySelector('td:nth-child(2)') as HTMLElement).innerText;
     const rut = (document.getElementById('rut') as HTMLInputElement).value;
 
     // Realizar una solicitud POST al servidor para eliminar la fila
-    this.http.post<any>('http://localhost:3000/eliminar-fila', {codigo, seccion, rut })
+    this.http.post<any>('http://localhost:3000/eliminar-fila', {codigo,seccion,rut,})
       .subscribe(
         (data) => {
-          
           // Manejar la respuesta del servidor
           console.log('Respuesta del servidor:', data);
           if (data && data.message === 'Asignatura eliminada exitosamente') {
@@ -512,9 +504,7 @@ guardarDatos() {
         },
         (error) => {
           console.error('Error al eliminar la Asignatura:', error);
-          alert(
-            'Ocurrió un error al eliminar la Asignatura. Por favor, inténtalo de nuevo más tarde.'
-          );
+          alert('Ocurrió un error al eliminar la Asignatura. Por favor, inténtalo de nuevo más tarde.');
         }
       );
   }
@@ -535,8 +525,7 @@ guardarDatos() {
 
           // Iterar sobre los datos y agregar una fila por cada resultado
           data.forEach(
-            (profesor: {HorasPlanificacion: string; Horas_Minutos: string; idAsignatura: string; idSeccion: string; Nombre: any; Horas: any; }) => {
-
+            (profesor: {HorasPlanificacion: string; Horas_Minutos: string; idAsignatura: string; idSeccion: string; Nombre: any; Horas: any;}) => {
               const newRow = document.createElement('tr');
               const horas = parseInt(profesor.HorasPlanificacion);
               const minutos = parseInt(profesor.Horas_Minutos); // Se obtienen los minutos directamente
@@ -584,7 +573,7 @@ guardarDatos() {
               const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
               if (confirmCheckbox) {
                 confirmCheckbox.addEventListener('change', () => {
-                this.actualizarBotonGuardar();
+                  this.actualizarBotonGuardar();
                 });
               }
             }
@@ -634,9 +623,7 @@ guardarDatos() {
         },
         (error) => {
           console.error('Error al obtener secciones:', error);
-          alert(
-            'Ocurrió un error al obtener las secciones. Por favor, inténtalo de nuevo más tarde.'
-          );
+          alert('Ocurrió un error al obtener las secciones. Por favor, inténtalo de nuevo más tarde.');
         }
       );
   }
@@ -655,17 +642,18 @@ guardarDatos() {
       tbody.innerHTML = '';
 
       response.forEach((item: { carga: any; horas: any; minutos: any }) => {
+        const isDuplicate = Array.from(tbody.querySelectorAll('tr')).some(
+          (row) => {
+            const cells = row.querySelectorAll('td');
+            return cells[0].textContent === item.carga;
+          }
+        );
 
-        const isDuplicate = Array.from(tbody.querySelectorAll('tr')).some (row => {
-          const cells = row.querySelectorAll('td');
-          return cells[0].textContent === item.carga;
-        });
+        if (!isDuplicate) {
+          const newRow = document.createElement('tr');
+          const totalCarga = Math.floor(item.minutos);
 
-        if (!isDuplicate){
-        const newRow = document.createElement('tr');
-        const totalCarga = Math.floor(item.minutos);
-
-        newRow.innerHTML = `
+          newRow.innerHTML = `
           <td>${item.carga}</td>
           <td>${item.horas}</td>
           <td>${item.minutos}</td>
@@ -674,24 +662,41 @@ guardarDatos() {
           <td><label class="remove-checkbox">✘</label></td>
         `;
 
-        tbody.appendChild(newRow);
-        this.calcularTotalHorasCarga();
-        // Centrar el texto en todas las celdas de la nueva fila
-        const cells = newRow.querySelectorAll('td');
-        cells.forEach((cell) => {
-          cell.style.textAlign = 'center';
-        });
-
-        // Agregar el evento de clic a la "x" para eliminar la fila
-        const removeLabel = newRow.querySelector('.remove-checkbox');
-        if (removeLabel) {
-          removeLabel.addEventListener('click', () => {
-            this.eliminarFilaAdministrativa1(newRow);
-            this.calcularTotalHorasCarga();
-            this.actualizarBotonGuardar();
+          tbody.appendChild(newRow);
+          this.calcularTotalHorasCarga();
+          // Centrar el texto en todas las celdas de la nueva fila
+          const cells = newRow.querySelectorAll('td');
+          cells.forEach((cell) => {
+            cell.style.textAlign = 'center';
           });
+
+          // Agregar el evento de clic a la "x" para eliminar la fila
+          const removeLabel = newRow.querySelector('.remove-checkbox');
+          if (removeLabel) {
+            removeLabel.addEventListener('click', () => {
+              this.eliminarFilaAdministrativa1(newRow);
+              this.calcularTotalHorasCarga();
+              this.actualizarBotonGuardar();
+            });
+          }
+
+          // Agregar el evento de clic al botón de eliminación
+          const deleteButton = newRow.querySelector('.remove-btn');
+          if (deleteButton) {
+            deleteButton.addEventListener('click', () => {
+              this.eliminarFila1(newRow);
+              this.actualizarBotonGuardar();
+            });
+          }
+
+          // Agregar el evento de cambio al checkbox de confirmación
+          const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
+          if (confirmCheckbox) {
+            confirmCheckbox.addEventListener('change', () => {
+              this.actualizarBotonGuardar();
+            });
+          }
         }
-      }
       });
     });
   }
@@ -707,27 +712,26 @@ guardarDatos() {
           console.error('No se encontró el elemento tbody para carga administrativa.');
           return;
         }
-        
+
         const newRow = document.createElement('tr');
         const Carga = CargaInput.value;
         const Horas = parseInt(HorasInput.value);
         const minutos = Horas * 60; // Calcular los minutos
         const totalCarga = Math.floor(minutos);
 
-        const isDuplicate = Array.from(tbody.querySelectorAll('tr')).some(row => {
-          const cells = row.querySelectorAll('td');
-          return cells[0].innerText === Carga;
-        });
+        const isDuplicate = Array.from(tbody.querySelectorAll('tr')).some((row) => {
+            const cells = row.querySelectorAll('td');
+            return cells[0].innerText === Carga;
+          }
+        );
 
-        
         // Verificar si al agregar estos horas se exceden las 42 horas
         // if (this.totalcarga + Horas > 42) {
         //   alert('No se puede agregar esta carga. El total de horas no puede exceder las 42 horas.');
         //   return; // Salir de la función si se excede el límite
         // }
         if (!isDuplicate) {
-
-        newRow.innerHTML = `
+          newRow.innerHTML = `
           <td>${Carga}</td>
           <td>${Horas}</td>
           <td>${minutos}</td>
@@ -735,41 +739,42 @@ guardarDatos() {
           <td><input type="checkbox" class="confirm-checkbox"></td>
           <td><label class="remove-checkbox">✘</label></td>
         `;
-          
-        tbody.appendChild(newRow);
-        
-        // Centrar el texto en todas las celdas de la nueva fila
-        const cells = newRow.querySelectorAll('td');
-        cells.forEach((cell) => {
-          cell.style.textAlign = 'center';
-        });
-        this.calcularTotalHorasCarga();
 
-        // Agregar el evento de clic a la "x" para eliminar la fila
-        const removeLabel = newRow.querySelector('.remove-checkbox');
-        if (removeLabel) {
-          removeLabel.addEventListener('click', () => {
-            this.eliminarFilaAdministrativa(newRow);
-            this.actualizarBotonGuardar();
-          });
-        }
+          tbody.appendChild(newRow);
 
-        // Agregar el evento de cambio al checkbox de confirmación
-        const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
-        if (confirmCheckbox) {
-          confirmCheckbox.addEventListener('change', () => {
-            this.actualizarBotonGuardar();
+          // Centrar el texto en todas las celdas de la nueva fila
+          const cells = newRow.querySelectorAll('td');
+          cells.forEach((cell) => {
+            cell.style.textAlign = 'center';
           });
+          this.calcularTotalHorasCarga();
+
+          // Agregar el evento de clic a la "x" para eliminar la fila
+          const removeLabel = newRow.querySelector('.remove-checkbox');
+          if (removeLabel) {
+            removeLabel.addEventListener('click', () => {
+              this.eliminarFilaAdministrativa(newRow);
+              this.actualizarBotonGuardar();
+            });
+          }
+
+          // Agregar el evento de cambio al checkbox de confirmación
+          const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
+          if (confirmCheckbox) {
+            confirmCheckbox.addEventListener('change', () => {
+              this.actualizarBotonGuardar();
+            });
+          }
+        } else {
+          alert('No se puede agregar esta carga. Ya existe una carga con el mismo nombre.');
         }
-      } else {
-        alert('No se puede agregar esta carga. Ya existe una carga con el mismo nombre.');
-      }
-    });
+      });
   }
 
   buscarDatosAdministrativos(rut: string) {
     return this.http.get<any>(`http://localhost:3000/buscar-datos-administrativos/${rut}`)
-    .pipe( map((response: any) => { console.log('Datos recibidos:', response);
+    .pipe(map((response: any) => {
+          console.log('Datos recibidos:', response);
           return response;
         }),
         catchError((error: any) => {
@@ -782,17 +787,21 @@ guardarDatos() {
   guardarDatosAdministrativos() {
     const idProfesor = (document.getElementById('rut') as HTMLInputElement).value;
     const año = (document.getElementById('año') as HTMLInputElement).value;
-    
+
     const filasA = document.querySelectorAll('#carga-administrativa-body tr');
     let algunaFilaGuardadaAd = false;
 
     const promises = Array.from(filasA).map((filaA) => {
-      const checkbox = filaA.querySelector('.confirm-checkbox') as HTMLInputElement;
+    const checkbox = filaA.querySelector('.confirm-checkbox') as HTMLInputElement;
+
       if (checkbox.checked) {
         const columnas = filaA.querySelectorAll('td');
         const Carga = columnas[0].innerText; // Ajuste el índice si es necesario
         const Hora = parseInt(columnas[1].innerText); // Ajuste el índice si es necesario
         const Hora_Minutos = parseInt(columnas[2].innerText); // Ajuste el índice si es necesario
+
+        const confirmCheckbox = filaA.querySelector('.confirm-checkbox') as HTMLInputElement;
+        confirmCheckbox.disabled = true; // Deshabilitar el checkbox después de guardar
 
         console.log(Carga);
 
@@ -815,7 +824,7 @@ guardarDatos() {
             break;
         }
 
-        return this.guardarCargaAdministrativa(idProfesor, carga, Hora, Hora_Minutos)
+        return this.guardarCargaAdministrativa(idProfesor,carga,Hora,Hora_Minutos)
         .then((guardadoAd) => {
           if (guardadoAd) {
             algunaFilaGuardadaAd = true;
@@ -835,12 +844,11 @@ guardarDatos() {
       this.limpiarFilasGuardadas();
     });
     event?.preventDefault();
-
   }
 
-  guardarCargaAdministrativa(idProfesor: string,carga: number,Hora: number,Hora_Minutos: number): Promise<boolean> {
+  guardarCargaAdministrativa(idProfesor: string, carga: number, Hora: number, Hora_Minutos: number ): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor, carga, Hora, Hora_Minutos,})
+      this.http.post<any>('http://localhost:3000/guardar-carga-administrativa', {idProfesor,carga,Hora,Hora_Minutos,})
         .subscribe(
           (data) => {
             console.log('Carga administrativa guardada exitosamente:', data);
@@ -856,7 +864,7 @@ guardarDatos() {
 
   cargarTrabajosAdministrativos() {
     this.http.get<any[]>('http://localhost:3000/trabajos-administrativos')
-      .subscribe(
+    .subscribe(
         (data) => {
           const selectElement = document.getElementById('Carga') as HTMLSelectElement;
 
@@ -899,7 +907,7 @@ guardarDatos() {
     }
 
     // Realizar una solicitud POST al servidor para eliminar la fila
-    this.http.post<any>('http://localhost:3000/eliminar-carga-administrativa', {carga, rut,})
+    this.http.post<any>('http://localhost:3000/eliminar-carga-administrativa', {carga,rut,})
       .subscribe(
         (data) => {
           // Manejar la respuesta del servidor
@@ -931,97 +939,96 @@ guardarDatos() {
   }
 
   //-------------------------------Notas-------------------------------
-  
+
   @ViewChild('floatingButton') floatingButton!: ElementRef;
   @ViewChild('popup') popup!: ElementRef;
   @ViewChild('closePopupButton') closePopupButton!: ElementRef;
   @ViewChild('Notas') Notas!: ElementRef;
-  
+
   observacion: string = '';
-  
+
   ngAfterViewInit(): void {
     if (this.floatingButton && this.popup && this.closePopupButton && this.Notas) {
       this.floatingButton.nativeElement.addEventListener('click', () => {
       this.popup.nativeElement.style.display = 'block';
       this.obtenerObservaciones(this.rut);
-    });
-    
-    this.closePopupButton.nativeElement.addEventListener('click', () => {
-    this.popup.nativeElement.style.display = 'none';
-  });
-  
-  this.Notas.nativeElement.addEventListener('input', (event: Event) => {
-  const input = event.target as HTMLTextAreaElement;
-  this.observacion = input.value;
-  this.adjustTextareaHeight();
-});
-} else {
-        console.error('Error: Uno o más elementos HTML no se encontraron');
-    }
-}
+      });
 
-guardarNota() {
-  const nota = this.observacion;
-  if (!nota.trim()) {
+      this.closePopupButton.nativeElement.addEventListener('click', () => {
+      this.popup.nativeElement.style.display = 'none';
+      });
+
+      this.Notas.nativeElement.addEventListener('input', (event: Event) => {
+        const input = event.target as HTMLTextAreaElement;
+        this.observacion = input.value;
+        this.adjustTextareaHeight();
+      });
+    } else {
+      console.error('Error: Uno o más elementos HTML no se encontraron');
+    }
+  }
+
+  guardarNota() {
+    const nota = this.observacion;
+    if (!nota.trim()) {
       console.error('La nota no puede estar vacía');
       return;
-  }
+    }
 
-  const datos = {
+    const datos = {
       rut: this.rut,
-      observacion: nota
-  };
+      observacion: nota,
+    };
 
-  console.log('Datos que se enviarán al backend:', datos);
+    console.log('Datos que se enviarán al backend:', datos);
 
-  this.http.post<any>('http://localhost:3000/guardar-observacion', datos)
+    this.http.post<any>('http://localhost:3000/guardar-observacion', datos)
       .subscribe(
-          (response) => {
-              console.log('Nota guardada correctamente:', response);
-              this.obtenerObservaciones(this.rut);
-          },
-          (error) => {
-              console.error('Error al guardar la nota:', error);
-          }
+        (response) => {
+          console.log('Nota guardada correctamente:', response);
+          this.obtenerObservaciones(this.rut);
+        },
+        (error) => {
+          console.error('Error al guardar la nota:', error);
+        }
       );
 
-  this.popup.nativeElement.style.display = 'none';
-}
-
-obtenerObservaciones(rut: string) {
-  if (!rut) {
-    console.error('RUT no está definido.');
-    return;
+    this.popup.nativeElement.style.display = 'none';
   }
 
-  this.http.get<any>(`http://localhost:3000/obtener-observaciones/${rut}`)
-    .subscribe(
-      (response) => {
-        console.log('Response de obtenerObservaciones:', response);
+  obtenerObservaciones(rut: string) {
+    if (!rut) {
+      console.error('RUT no está definido.');
+      return;
+    }
 
-        // Verificar si la respuesta contiene observaciones
-        if (response.length > 0) {
-          console.log('Primera observacion en la respuesta:', response[0]);
-          this.observacion = response[0].Observacion; // Asegúrate de que el nombre del campo coincida con la respuesta de la API
-          this.Notas.nativeElement.value = this.observacion; // Actualiza el área de texto con la nota obtenida
-          console.log('Nota obtenida:', this.observacion);
-        } else {
-          this.observacion = '';
-          this.Notas.nativeElement.value = this.observacion; // Limpia el área de texto si no hay notas
-          console.log('No se encontraron notas, textarea limpiada');
+    this.http.get<any>(`http://localhost:3000/obtener-observaciones/${rut}`)
+      .subscribe(
+        (response) => {
+          console.log('Response de obtenerObservaciones:', response);
+
+          // Verificar si la respuesta contiene observaciones
+          if (response.length > 0) {
+            console.log('Primera observacion en la respuesta:', response[0]);
+            this.observacion = response[0].Observacion; // Asegúrate de que el nombre del campo coincida con la respuesta de la API
+            this.Notas.nativeElement.value = this.observacion; // Actualiza el área de texto con la nota obtenida
+            console.log('Nota obtenida:', this.observacion);
+          } else {
+            this.observacion = '';
+            this.Notas.nativeElement.value = this.observacion; // Limpia el área de texto si no hay notas
+            console.log('No se encontraron notas, textarea limpiada');
+          }
+          this.adjustTextareaHeight();
+        },
+        (error) => {
+          console.error('Error al obtener las observaciones:', error);
         }
-        this.adjustTextareaHeight();
-      },
-      (error) => {
-        console.error('Error al obtener las observaciones:', error);
-      }
-    );
-}
+      );
+  }
 
-
-private adjustTextareaHeight(): void {
-  const textarea = this.Notas.nativeElement;
-  textarea.style.height = 'auto';
-  textarea.style.height = textarea.scrollHeight + 'px';
-}
+  private adjustTextareaHeight(): void {
+    const textarea = this.Notas.nativeElement;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
 }
