@@ -114,19 +114,19 @@ export class CargaHorariaComponent implements AfterViewInit {
   calcularTotalHorasCarga() {
     const filas = this.tabla.nativeElement.rows;
     this.totalcarga = 0;
-    const horasContrato = parseInt(document.getElementById('horascontrato')!.innerText,10);
+    const minutosContrato = parseInt(document.getElementById('horascontrato')!.innerText,10);
 
     for (let i = 1; i < filas.length; i++) {
-      const horasTd = filas[i].cells[1]; // suponiendo que la columna de horas es la segunda
-      const horas = parseInt(horasTd.textContent, 10);
+      const minutosTd = filas[i].cells[2]; // suponiendo que la columna de horas es la segunda
+      const minutos = parseInt(minutosTd.textContent, 10);
 
-      if (this.totalcarga + horas > horasContrato) {
+      if (this.totalcarga + minutos > minutosContrato * 60 - this.totalasignaturas) {
         alert('El total de horas de carga no puede exceder las horas de contrato.');
         this.eliminarFila1(filas[i]);
         return;
       }
 
-      this.totalcarga += horas;
+      this.totalcarga += minutos;
     }
   }
 
@@ -302,9 +302,20 @@ export class CargaHorariaComponent implements AfterViewInit {
   agregarFila() {
     const codigo = (document.getElementById('codigo') as HTMLInputElement).value;
     const seccion = (document.getElementById('seccion') as HTMLSelectElement).value;
-    const rut = (document.getElementById('rut') as HTMLInputElement).value;
-    const año = (document.getElementById('año') as HTMLInputElement).value;
-
+  
+    // Verificar si la combinación de código y sección ya existe en la tabla
+    const filasExistentes = document.querySelectorAll('#asignaturas-body tr');
+    for (let i = 0; i < filasExistentes.length; i++) {
+      const fila = filasExistentes[i];
+      const codigoExistente = (fila.querySelector('td:nth-child(1)') as HTMLElement).innerText;
+      const seccionExistente = (fila.querySelector('td:nth-child(2)') as HTMLElement).innerText;
+  
+      if (codigoExistente === codigo && seccionExistente === seccion) {
+        alert('La seccion de la asignatura ya fue agregada.');
+        return; // Salir del método si se encuentra una fila duplicada
+      }
+    }
+  
     this.http.get<any>(`http://localhost:3000/detalles-asignatura/${codigo}/${seccion}`)
       .subscribe(
         (data) => {
@@ -318,27 +329,27 @@ export class CargaHorariaComponent implements AfterViewInit {
           const minutos = horas * 45; // Calcular los minutos
           const planificacion = Math.floor(minutos); // Calcular las horas
           const totalHoras = Math.floor(minutos + planificacion);
-
+  
           newRow.innerHTML = `
-          <td>${codigo}</td>
-          <td>${seccion}</td>
-          <td>${data.Nombre}</td>
-          <td>${data.Horas}</td>
-          <td>${minutos}</td>
-          <td>${planificacion}</td>
-          <td>${totalHoras}</td>
-          <td><input type="checkbox" class="confirm-checkbox"></td>
-          <td><label class="remove-checkbox">✘</label></td>`;
+            <td>${codigo}</td>
+            <td>${seccion}</td>
+            <td>${data.Nombre}</td>
+            <td>${data.Horas}</td>
+            <td>${minutos}</td>
+            <td>${planificacion}</td>
+            <td>${totalHoras}</td>
+            <td><input type="checkbox" class="confirm-checkbox"></td>
+            <td><label class="remove-checkbox">✘</label></td>`;
           tbody.appendChild(newRow);
-
+  
           this.calcularTotalMinutosAsignatura();
-
+  
           // Centrar el texto en todas las celdas de la nueva fila
           const cells = newRow.querySelectorAll('td');
           cells.forEach((cell) => {
             cell.style.textAlign = 'center';
           });
-
+  
           // Agregar el evento de clic a la "x" para eliminar la fila
           const removeLabel = newRow.querySelector('.remove-checkbox');
           if (removeLabel) {
@@ -347,7 +358,7 @@ export class CargaHorariaComponent implements AfterViewInit {
               this.actualizarBotonGuardar();
             });
           }
-
+  
           // Agregar el evento de clic al botón de eliminación
           const deleteButton = newRow.querySelector('.remove-btn');
           if (deleteButton) {
@@ -356,7 +367,7 @@ export class CargaHorariaComponent implements AfterViewInit {
               this.actualizarBotonGuardar();
             });
           }
-
+  
           // Agregar el evento de cambio al checkbox de confirmación
           const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
           if (confirmCheckbox) {
@@ -366,7 +377,7 @@ export class CargaHorariaComponent implements AfterViewInit {
           }
         },
         (error) => {
-          console.error('Error al obtener los detalles de la asignatura:',error);
+          console.error('Error al obtener los detalles de la asignatura:', error);
           alert('Ocurrió un error al obtener los detalles de la asignatura. Por favor, inténtalo de nuevo más tarde.');
         }
       );
@@ -822,6 +833,9 @@ export class CargaHorariaComponent implements AfterViewInit {
           case 'Contrato':
             carga = 5;
             break;
+          case 'hola':
+          carga = 6;
+          break;
         }
 
         return this.guardarCargaAdministrativa(idProfesor,carga,Hora,Hora_Minutos)
