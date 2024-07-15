@@ -506,19 +506,46 @@ app.post("/eliminar-fila", (req, res) => {
 // Guardar carga administrativa
 app.post('/guardar-carga-administrativa', (req, res) => {
   const { idProfesor, carga, Hora, Hora_Minutos } = req.body;
-  console.log(req.body)
-console.log('funca')
 
-  const query = `INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos) VALUES (?, ?, ?, ?)`;
-  const values = [idProfesor, carga, Hora, Hora_Minutos ];
+  // Primero verifica si ya existe un registro para este idProfesor y carga
+  const checkQuery = `SELECT * FROM cargaacademica.CargaAdministrativa WHERE idProfesor = ? AND idTrabajoAdministrativo = ?`;
+  const checkValues = [idProfesor, carga];
 
-  db.query(query, values, (err, result) => {
+  db.query(checkQuery, checkValues, (err, result) => {
     if (err) {
-      console.error('Error al guardar la carga administrativa:', err);
-      res.status(500).send('Error al guardar la carga administrativa');
+      console.error('Error al verificar la existencia de la carga administrativa:', err);
+      res.status(500).send('Error al verificar la existencia de la carga administrativa');
+      return;
+    }
+
+    if (result.length > 0) {
+      // Si ya existe, actualiza el registro existente
+      const updateQuery = `UPDATE cargaacademica.CargaAdministrativa SET Hora = ?, Hora_Minutos = ? WHERE idProfesor = ? AND idTrabajoAdministrativo = ?`;
+      const updateValues = [Hora, Hora_Minutos, idProfesor, carga];
+
+      db.query(updateQuery, updateValues, (err, result) => {
+        if (err) {
+          console.error('Error al actualizar la carga administrativa:', err);
+          res.status(500).send('Error al actualizar la carga administrativa');
+        } else {
+          console.log('Carga administrativa actualizada exitosamente:', result);
+          res.send('Carga administrativa actualizada exitosamente');
+        }
+      });
     } else {
-      console.log('Carga administrativa guardada exitosamente:', result);
-      res.send('Carga administrativa guardada exitosamente');
+      // Si no existe, inserta un nuevo registro
+      const insertQuery = `INSERT INTO cargaacademica.CargaAdministrativa (idProfesor, idTrabajoAdministrativo, Hora, Hora_Minutos) VALUES (?, ?, ?, ?)`;
+      const insertValues = [idProfesor, carga, Hora, Hora_Minutos];
+
+      db.query(insertQuery, insertValues, (err, result) => {
+        if (err) {
+          console.error('Error al guardar la carga administrativa:', err);
+          res.status(500).send('Error al guardar la carga administrativa');
+        } else {
+          console.log('Carga administrativa guardada exitosamente:', result);
+          res.send('Carga administrativa guardada exitosamente');
+        }
+      });
     }
   });
 });

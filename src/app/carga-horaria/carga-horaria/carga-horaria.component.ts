@@ -649,9 +649,9 @@ export class CargaHorariaComponent implements AfterViewInit {
         console.error('No se encontró el elemento tbody para carga administrativa.');
         return;
       }
-
+  
       tbody.innerHTML = '';
-
+  
       response.forEach((item: { carga: any; horas: any; minutos: any }) => {
         const isDuplicate = Array.from(tbody.querySelectorAll('tr')).some(
           (row) => {
@@ -659,28 +659,40 @@ export class CargaHorariaComponent implements AfterViewInit {
             return cells[0].textContent === item.carga;
           }
         );
-
+  
         if (!isDuplicate) {
           const newRow = document.createElement('tr');
           const totalCarga = Math.floor(item.minutos);
-
+  
           newRow.innerHTML = `
-          <td>${item.carga}</td>
-          <td>${item.horas}</td>
-          <td>${item.minutos}</td>
-          <td>${totalCarga}</td>
-          <td><input type="checkbox" class="confirm-checkbox" disabled></td>
-          <td><label class="remove-checkbox">✘</label></td>
-        `;
-
+            <td>${item.carga}</td>
+            <td contenteditable="true" class="horas">${item.horas}</td>
+            <td class="minutos">${item.minutos}</td>
+            <td class="total-carga">${totalCarga}</td>
+            <td><input type="checkbox" class="confirm-checkbox" disabled></td>
+            <td><label class="remove-checkbox">✘</label></td>
+          `;
+  
           tbody.appendChild(newRow);
           this.calcularTotalHorasCarga();
+  
           // Centrar el texto en todas las celdas de la nueva fila
           const cells = newRow.querySelectorAll('td');
           cells.forEach((cell) => {
             cell.style.textAlign = 'center';
           });
-
+  
+          // Agregar el evento de cambio al campo editable de horas
+          const horasCell = newRow.querySelector('.horas') as HTMLElement;
+          if (horasCell) {
+            horasCell.addEventListener('input', () => {
+              this.recalcularMinutosYTotal(newRow);
+              const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
+              confirmCheckbox.disabled = false;
+              confirmCheckbox.checked = false;
+            });
+          }
+  
           // Agregar el evento de clic a la "x" para eliminar la fila
           const removeLabel = newRow.querySelector('.remove-checkbox');
           if (removeLabel) {
@@ -690,16 +702,7 @@ export class CargaHorariaComponent implements AfterViewInit {
               this.actualizarBotonGuardar();
             });
           }
-
-          // Agregar el evento de clic al botón de eliminación
-          const deleteButton = newRow.querySelector('.remove-btn');
-          if (deleteButton) {
-            deleteButton.addEventListener('click', () => {
-              this.eliminarFila1(newRow);
-              this.actualizarBotonGuardar();
-            });
-          }
-
+  
           // Agregar el evento de cambio al checkbox de confirmación
           const confirmCheckbox = newRow.querySelector('.confirm-checkbox') as HTMLInputElement;
           if (confirmCheckbox) {
@@ -710,6 +713,21 @@ export class CargaHorariaComponent implements AfterViewInit {
         }
       });
     });
+  }
+  
+  recalcularMinutosYTotal(row: HTMLTableRowElement) {
+    const horasCell = row.querySelector('.horas') as HTMLElement;
+    const minutosCell = row.querySelector('.minutos') as HTMLElement;
+    const totalCargaCell = row.querySelector('.total-carga') as HTMLElement;
+  
+    const horas = parseInt(horasCell.innerText);
+    const minutos = horas * 60;
+    const totalCarga = Math.floor(minutos);
+  
+    minutosCell.textContent = minutos.toString();
+    totalCargaCell.textContent = totalCarga.toString();
+  
+    this.calcularTotalHorasCarga();
   }
 
   agregarFilaAdministrativa1() {
@@ -853,7 +871,7 @@ export class CargaHorariaComponent implements AfterViewInit {
         this.limpiarFilasGuardadas();
         this.buscarDatosProfesor();
       } else {
-        alert('No se guardaron cargas');
+        // alert('No se guardaron cargas');
       }
       this.limpiarFilasGuardadas();
     });
