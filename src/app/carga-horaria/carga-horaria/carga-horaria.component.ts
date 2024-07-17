@@ -217,6 +217,9 @@ export class CargaHorariaComponent implements AfterViewInit {
               this.horasxcontrato = data.Horas * 60;
               // Aquí obtenemos las horas máximas de docencia desde la tabla jerarquia
               this.obtenerHoraMaximaDocencia(data.idJerarquia);
+              this.buscarDatosProfesor();
+              this.agregarFilaAdministrativa(data.idProfesor);
+              this.obtenerObservaciones(data.idProfesor);
             } else {
               console.error('No se encontraron registros con el rut o nombre/apellido proporcionados.');
             }
