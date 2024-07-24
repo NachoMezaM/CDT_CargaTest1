@@ -715,7 +715,7 @@ export class CargaHorariaComponent implements AfterViewInit {
           }
         }
       });
-    });
+    })
   }
   
   recalcularMinutosYTotal(row: HTMLTableRowElement) {
@@ -857,6 +857,9 @@ export class CargaHorariaComponent implements AfterViewInit {
           case 'hola':
           carga = 6;
           break;
+          default:
+            carga = +1;
+            break;
         }
 
         return this.guardarCargaAdministrativa(idProfesor,carga,Hora,Hora_Minutos)
@@ -1065,5 +1068,40 @@ export class CargaHorariaComponent implements AfterViewInit {
     const textarea = this.Notas.nativeElement;
     textarea.style.height = 'auto';
     textarea.style.height = textarea.scrollHeight + 'px';
+  }
+
+  //............................Agregar Carga.............................
+
+  @ViewChild('nuevoPopup') nuevoPopup!: ElementRef;
+  idTrabajo: string = '';
+  trabajo: string = '';
+  
+  abrirNuevoPopup() {
+    const nuevoPopup = this.nuevoPopup.nativeElement;
+    nuevoPopup.style.display = 'block';
+  }
+
+  cerrarNuevoPopup() {
+    const nuevoPopup = this.nuevoPopup.nativeElement;
+    nuevoPopup.style.display = 'none';
+  }
+
+  guardarNuevaNota() {
+    // Obtener los valores de los campos
+    const idTrabajoInput = (document.getElementById('idTrabajo') as HTMLInputElement).value;
+    const TrabajoInput = (document.getElementById('trabajo') as HTMLInputElement).value;
+
+    // Crear el objeto a enviar
+    const nuevoTrabajo = { idTrabajo: idTrabajoInput, trabajo:TrabajoInput };
+
+    // Hacer la solicitud HTTP para guardar en la base de datos
+    this.http.post('http://localhost:3000/trabajo-administrativo', nuevoTrabajo)
+      .subscribe(response => {
+        console.log('Trabajo Administrativo guardado:', response);
+        // Aquí puedes agregar lógica adicional después de guardar, si es necesario
+        this.cerrarNuevoPopup();
+      }, error => {
+        console.error('Error al guardar el Trabajo Administrativo:', error);
+      });
   }
 }

@@ -687,6 +687,23 @@ app.get('/obtener-observaciones/:rut', (req, res) => {
   });
 });
 
+app.post('/trabajo-administrativo', (req, res) => {
+  const { idTrabajo, trabajo } = req.body;
+
+  if (!idTrabajo || !trabajo) {
+    return res.status(400).send({ message: 'idTrabajo y nombre son requeridos' });
+  }
+
+  const query = 'INSERT INTO TrabajoAdministrativo (idTrabajo, Nombre) VALUES (?, ?)';
+  db.query(query, [idTrabajo, trabajo], (err, results) => {
+    if (err) {
+      console.error('Error al guardar Trabajo Administrativo:', err);
+      return res.status(500).send('Error al guardar Trabajo Administrativo');
+    }
+    res.status(201).send({ message: 'Trabajo Administrativo guardado correctamente' });
+  });
+});
+
 
 //Llamado de carrera por idFacultad
 app.get("/facultad/:idFacultad", (req, res) => {
@@ -735,7 +752,7 @@ app.post("/filtro/", (req, res) => {
   console.log(idFacultad, idCarrera, AnioPlan, Semestre); 
 
   db.query(`
-    SELECT ASi.Nombre, ASiS.idAsignaturaSeccion, Pr.Nombre, Pr.idProfesor, CD.HorasPlanificacion, ASi.idAsignatura
+    SELECT ASi.Nombre, ASiS.idAsignaturaSeccion, Pr.Nombre, Pr.Apellido, Pr.idProfesor, CD.HorasPlanificacion, ASi.idAsignatura
 FROM cargaacademica.Facultad AS FA
 JOIN cargaacademica.Carrera AS CA ON FA.idFacultad = CA.idFacultad
 JOIN cargaacademica.PlanAcademico AS PL ON CA.idCarrera = PL.idCarrera

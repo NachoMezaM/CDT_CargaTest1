@@ -143,6 +143,7 @@
         <tr> Horas Administrativas: {{totalcarga}} / Maximo Horas Administrativas: {{horasxcontrato - totalasignaturas}}</tr>
         <!-- <button type="button" class="boton" (click)="agregarFilaAdministrativa1()">Agregar</button> -->
         <button type="submit" class="boton" id="guardar-button" (click)="guardarDatosAdministrativos()">Guardar</button>
+        <button type="button" class="boton" id="nuevo-observacion-button" (click)="abrirNuevoPopup()">Nuevo Trabajo</button>
       </div>
     </form>
   </div>
@@ -160,5 +161,26 @@
   </div>
 </div>
 
+ <!-- Nueva ventana emergente -->
+ <div id="nuevo-popup" #nuevoPopup class="popup1">
+  <div class="popup-content1">
+    <div class="form-group">
+      <div class="row">
+        <div class="col1">
+          <label for="idTrabajo"><strong>IDTrabajo: </strong></label>
+          <input formControlName="idTrabajo" id="idTrabajo" class="form-control1" placeholder="ID Trabajo">
+        </div>
+        
+        <div class="col1">
+          <label for="trabajo"><strong>Trabajo: </strong></label>
+          <input formControlName="trabajo" id="trabajo" class="form-control1" placeholder="Trabajo">
+        </div>
+      </div>
+    </div>
+
+    <button class="boton" id="guardar-nueva-nota-button" (click)="guardarNuevaNota()">Guardar</button>
+    <button class="boton" id="close-nuevo-popup" (click)="cerrarNuevoPopup()">Cerrar</button>
+  </div>
+</div>
 </body>
 </html>

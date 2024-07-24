@@ -76,7 +76,7 @@
         <tr *ngFor="let visualizarCA of filteredPosts">
           <td>{{ visualizarCA.idAsignaturaSeccion }}</td>
           <td>{{ visualizarCA.idProfesor }}</td>
-          <td>{{ visualizarCA.Nombre +" " +visualizarCA.Apellido }}</td>
+          <td>{{ (visualizarCA.Nombre || 'docente no asignado' ) +" " + (visualizarCA.Apellido || '') }}</td>
           <td>{{ visualizarCA.HorasPlanificacion }}</td>
         </tr>
   </tbody>
